@@ -1,3 +1,5 @@
+import Loader from "../shared/Loader";
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export default function SubmitButton({ isLoading, canSubmit }: any) {
   return (
@@ -8,7 +10,7 @@ export default function SubmitButton({ isLoading, canSubmit }: any) {
         !canSubmit ? "cursor-not-allowed opacity-70" : "hover:opacity-90"
       }`}
     >
-      {isLoading ? "Sending..." : "Send Reset Link"}
+      {isLoading ? <Loader /> : "Send Reset Link"}
     </button>
   );
 }

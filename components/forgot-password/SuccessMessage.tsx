@@ -1,12 +1,21 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import ResendSection from "./ResendSection";
 
+interface SuccessMessageProps {
+  isSuccess: boolean;
+  handleResend: () => void | Promise<void>;
+  canResend: boolean;
+  formattedTime: string;
+}
+
+
+
 export default function SuccessMessage({
   isSuccess,
   handleResend,
   canResend,
   formattedTime,
-}: any) {
+}: SuccessMessageProps) {
   if (!isSuccess) return null;
 
   return (

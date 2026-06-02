@@ -1,17 +1,17 @@
+import RecoveryRedirect from "@/components/shared/RecoveryRedirect";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 
 export default async function Home() {
-  const cookieStore = await  cookies();
+  const cookieStore = await cookies();
   const token = cookieStore.get("access_token");
 
-  if (!token) {
-    redirect("/signup");
-  }
-
   return (
-    <div>
-      <h1>Home Page</h1>
-    </div>
+    <>
+      <RecoveryRedirect />
+
+      <div>
+        <h1>Home Page</h1>
+      </div>
+    </>
   );
 }

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import React from "react";
 import LeftArrowIcon from "../icons/LeftArrowIcon";
-import { ClipLoader } from "react-spinners";
+import Loader from "../shared/Loader";
 
 export default function ForgotActions({ isLoading }: { isLoading: boolean }) {
   return (
@@ -13,11 +13,7 @@ export default function ForgotActions({ isLoading }: { isLoading: boolean }) {
           isLoading ? "cursor-not-allowed opacity-70" : ""
         }`}
       >
-        {isLoading ? (
-          <ClipLoader size={18} color="#ffffff" />
-        ) : (
-          "Send Reset Link"
-        )}
+        {isLoading ? <Loader /> : "Send Reset Link"}
       </button>
 
       <Link

@@ -188,10 +188,39 @@ body {
     opacity: 1;
   }
 
- 
   .icon {
     width: 18px;
     height: 18px;
     color: #003d9b;
+  }
+
+  @keyframes toastIn {
+    from {
+      transform: translateX(120%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes toastOut {
+    from {
+      transform: translateX(0);
+      opacity: 1;
+    }
+    to {
+      transform: translateX(120%);
+      opacity: 0;
+    }
+  }
+
+  .toast-enter {
+    animation: toastIn 0.25s ease-out forwards;
+  }
+
+  .toast-exit {
+    animation: toastOut 0.25s ease-in forwards;
   }
 }
