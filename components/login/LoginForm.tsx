@@ -11,10 +11,10 @@ export default function LoginForm() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors , isSubmitted },
   } = form;
   return (
-    <main className=" w-120 h-[757px]  sm:h-146.5  rounded-lg px-6  pt-16 sm:p-12 sm:shadow-[0px_24px_48px_0px_#041B3C0F]">
+    <main className=" w-[390px] sm:w-120  h-[757px]  sm:h-146.5  rounded-lg px-6  pt-16 sm:p-12 sm:shadow-[0px_24px_48px_0px_#041B3C0F]">
       <AuthHeader
         title="welcome back"
         description="Please enter your details to access your workspace" 
@@ -28,7 +28,8 @@ export default function LoginForm() {
           placeholder="yourname@company.com"
           register={register("email")}
           error={errors.email?.message}
-          mode={'login'}
+          mode={'login'} 
+          isSubmitted={isSubmitted}
         />
 
         <FormField
@@ -39,6 +40,7 @@ export default function LoginForm() {
           register={register("password")}
           error={errors.password?.message} 
           mode={'login'}
+          isSubmitted={isSubmitted}
         />
         <div className="flex items-center justify-between mb-14">
           <label className="flex items-center gap-2 cursor-pointer">

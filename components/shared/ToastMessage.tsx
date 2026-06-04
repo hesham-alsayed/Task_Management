@@ -55,7 +55,7 @@ export default function ToastMessage({
   const style = styles[type];
 
   return (
-    <div className="fixed top-4 right-4 z-50">
+    <div className="fixed bottom-4 right-4 z-1001">
       <div
         className={`
           flex items-center gap-3 rounded-xl px-4 py-3 shadow-lg

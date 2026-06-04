@@ -8,11 +8,10 @@ import Link from "next/link";
 import LogoIcon from "../icons/LogoIcon";
 import { navLinks } from "../../lib/NavLinks";
 import { usePathname } from "next/navigation";
+import Avatar from "./Avatar";
+import { User } from "./NavbarDesktop";
 
-type User = {
-  name?: string;
-  job_title?: string;
-};
+
 
 type Props = {
   user: User;
@@ -40,9 +39,7 @@ export default function NavbarMobile({ user }: Props) {
           </span>
         </div>
 
-        <div className="w-10 h-10 rounded-xl bg-primary text-white flex items-center justify-center text-[16px] font-bold">
-          {shortName}
-        </div>
+        <Avatar user={user} />   
       </div>
 
       {/* OVERLAY */}

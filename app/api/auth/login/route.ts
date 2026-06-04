@@ -37,7 +37,6 @@ export async function POST(req: Request) {
     const rememberMe = body.rememberMe === true;
 
     const refreshMaxAge = 60 * 60 * 24 * 30;
-    const userMaxAge = rememberMe ? 60 * 60 * 24 * 30 : 60 * 60 * 24;
 
     cookieStore.set("access_token", data.access_token, {
       httpOnly: true,
@@ -53,14 +52,6 @@ export async function POST(req: Request) {
       sameSite: "lax",
       path: "/",
       maxAge: refreshMaxAge,
-    });
-
-    cookieStore.set("user", JSON.stringify(data.user), {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      path: "/",
-      maxAge: userMaxAge,
     });
 
     return Response.json({

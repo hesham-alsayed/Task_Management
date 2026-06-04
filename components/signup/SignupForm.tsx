@@ -12,11 +12,11 @@ export default function SignupForm() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors , isSubmitted },
   } = form;
 
   return (
-    <main className="w-xl mx-w-xl  sm:h-209.5  rounded-lg p-6 sm:p-12 sm:shadow-[0px_24px_48px_0px_#041B3C0F]">
+    <main className="w-[390px] sm:w-xl sm:mx-w-xl  sm:h-209.5  rounded-lg p-6 sm:p-12 sm:shadow-[0px_24px_48px_0px_#041B3C0F]">
       <AuthHeader
         title="Create your workspace"
         description="Join the editorial approach to task management."
@@ -31,6 +31,7 @@ export default function SignupForm() {
           helperText="3-50 characters, letters only."
           register={register("name")}
           error={errors.name?.message}
+          isSubmitted={isSubmitted}
         />
 
         <FormField
@@ -40,6 +41,7 @@ export default function SignupForm() {
           placeholder="yourname@company.com"
           register={register("email")}
           error={errors.email?.message}
+          isSubmitted={isSubmitted}
         />
 
         <FormField
@@ -48,6 +50,7 @@ export default function SignupForm() {
           placeholder="e.g. Project Manager"
           register={register("jobTitle")}
           error={errors.jobTitle?.message}
+          isSubmitted={isSubmitted}
         />
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -58,6 +61,7 @@ export default function SignupForm() {
             placeholder="Password"
             register={register("password")}
             error={errors.password?.message}
+            isSubmitted={isSubmitted}
           />
 
           <FormField
@@ -67,6 +71,7 @@ export default function SignupForm() {
             placeholder="Repeat your password"
             register={register("confirmPassword")}
             error={errors.confirmPassword?.message}
+            isSubmitted={isSubmitted}
           />
         </div>
 

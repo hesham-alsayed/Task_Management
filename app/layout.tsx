@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
+import ReduxProvider from "./store/provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -20,24 +21,27 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        {children}
-        <Toaster
-          position="bottom-right"
-          toastOptions={{
-            style: {
-              fontSize: "14px",
-            },
-          }}
-        />
+        <ReduxProvider>
+          {children}
+
+          <Toaster
+            position="bottom-right"
+            toastOptions={{
+              style: {
+                fontSize: "14px",
+              },
+            }}
+          />
+        </ReduxProvider>
       </body>
     </html>
   );

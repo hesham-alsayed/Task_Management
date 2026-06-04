@@ -17,6 +17,7 @@ type FormFieldProps = {
   error?: string;
   register?: UseFormRegisterReturn;
   mode?: string;
+  isSubmitted?: boolean;
 };
 
 export default function FormField({
@@ -28,6 +29,7 @@ export default function FormField({
   error,
   register,
   mode,
+  isSubmitted,
 }: FormFieldProps) {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -68,7 +70,7 @@ export default function FormField({
                 ? "current-password"
                 : undefined
           }
-          className={`input-form pr-10 ${error ? "border-red-500" : ""}`}
+          className={`input-form pr-10 ${error && isSubmitted ? "border-red-500" : ""}`}
           {...register}
         />
 
@@ -101,7 +103,7 @@ export default function FormField({
         )}
       </div>
 
-      {error ? (
+      {error && isSubmitted ? (
         <p className="text-[11px] text-red-500">{error}</p>
       ) : helperText ? (
         <p className="text-[11px] text-slate-350 pt-2">{helperText}</p>

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-export default function EmailField({ register, errors }: any) {
+export default function EmailField({ register, errors, isSubmitted }: any) {
   return (
     <div className="space-y-2">
       <label className="label-form">Email Address</label>
@@ -11,7 +11,7 @@ export default function EmailField({ register, errors }: any) {
         {...register("email")}
       />
 
-      {errors.email && (
+      {errors.email && isSubmitted && (
         <p className="text-xs text-red-500">{errors.email.message}</p>
       )}
     </div>

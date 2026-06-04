@@ -3,20 +3,21 @@
 import { useEffect, useState } from "react";
 import Loader from "./Loader";
 import { getShortName } from "@/lib/helper";
+import Avatar from "./Avatar";
 
 export type User = {
   name?: string;
   job_title?: string;
+  email_verified: boolean;
+  phone_verified: boolean;
+  sub: string;
 };
-
 type NavbarProps = {
-  collapsed: boolean; 
-  user: User
+  collapsed: boolean;
+  user: User;
 };
 
-
-export default function NavbarDesktop({ collapsed , user }: NavbarProps) {
-  const shortName = getShortName(user?.name);
+export default function NavbarDesktop({ collapsed, user }: NavbarProps) {
   return (
     <header
       className={`
@@ -41,9 +42,7 @@ export default function NavbarDesktop({ collapsed , user }: NavbarProps) {
           </div>
 
           {/* Avatar */}
-          <div className="w-10 h-10 rounded-xl bg-primary text-[#FFFFFF] flex items-center justify-center text-[16px] font-bold ">
-            {shortName}
-          </div>
+          <Avatar user={user} />
         </div>
       </div>
     </header>

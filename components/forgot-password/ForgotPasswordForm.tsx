@@ -24,7 +24,7 @@ export default function ForgotPasswordForm() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors , isSubmitted },
   } = form;
 
   return (
@@ -34,7 +34,7 @@ export default function ForgotPasswordForm() {
           <ForgotHeader />
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <EmailField register={register} errors={errors} />
+            <EmailField register={register} errors={errors} isSubmitted={isSubmitted} />
 
             <SubmitButton isLoading={isLoading} canSubmit={canSubmit} />
 

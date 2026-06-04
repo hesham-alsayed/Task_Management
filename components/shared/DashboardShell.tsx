@@ -4,10 +4,10 @@ import Navbar, { User } from "@/components/shared/NavbarDesktop";
 import Sidebar from "@/components/shared/Sidebar";
 import SidebarCollapsed from "../sidebar/SidebarCollapsed";
 import { useEffect, useState } from "react";
-import Loader from "./Loader";
 import NavbarDesktop from "@/components/shared/NavbarDesktop";
 import NavbarMobile from "./NavbarMobile";
 import MobileFooter from "./MobileFooter";
+import { useAppDispatch, useAppSelector } from "@/app/store/hooks";
 
 export default function DashboardShell({
   children,
@@ -15,33 +15,8 @@ export default function DashboardShell({
   children: React.ReactNode;
 }) {
   const [collapsed, setCollapsed] = useState(false);
-  const [user, setUser] = useState<User>({});
-  const [loading, setLoading] = useState(true);
+  const { user } = useAppSelector((state) => state.auth); 
 
-  useEffect(() => {
-    const getUser = async () => {
-      try {
-        const response = await fetch("/api/auth/user");
-        const data = await response.json();
-
-        const userData = data?.user?.user_metadata;
-        console.log(data);
-        setUser(userData ?? null);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    getUser();
-  }, []);
-
-  if (loading) {
-    return (
-      <div className="bg-white z-500 fixed inset-0 flex items-center justify-center">
-        <Loader />
-      </div>
-    );
-  }
   return (
     <div className="min-h-screen bg-background">
       {/* Sidebar Wrapper */}
