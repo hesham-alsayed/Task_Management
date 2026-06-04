@@ -1,10 +1,8 @@
-"use client";
-
 import React from "react";
 
-export default function ProjectPage() {
+export default function page() {
   return (
-    <main className="min-h-screen flex items-center justify-center bg-[#f9f9ff]">
+    <main className="min-h-screen flex items-center justify-center">
       <div className="text-center">
         <h1 className="text-2xl font-semibold text-[#041b3c]">
           Welcome to Projects
