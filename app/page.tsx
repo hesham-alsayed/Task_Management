@@ -32,7 +32,7 @@ export default function HomePage() {
   return (
     <AuthProvider>
       <DashboardShell>
-        <div>Your Dashboard Content</div>
+        <div>Task Management</div>
       </DashboardShell>
     </AuthProvider>
   );

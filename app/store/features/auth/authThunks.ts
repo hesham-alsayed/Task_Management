@@ -13,7 +13,7 @@ export const refreshToken = createAsyncThunk(
         return thunkAPI.rejectWithValue("refresh_failed");
       }
       const data  = await res.json()
-      return data
+      return data.user
     } catch  {
       return thunkAPI.rejectWithValue("network_error");
     }

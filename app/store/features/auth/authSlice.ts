@@ -45,7 +45,7 @@ export const authSlice = createSlice({
       })
       .addCase(getCurrentUser.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload;
+        state.user = action.payload.user_metadata;
         state.status = "authenticated";
       })
       .addCase(getCurrentUser.rejected, (state, action) => {
@@ -58,7 +58,7 @@ export const authSlice = createSlice({
     // ================= REFRESH =================
     builder
       .addCase(refreshToken.fulfilled, (state, action) => {
-        state.user = action.payload.user.user_metadata;
+        state.user = action.payload.user_metadata;
         state.status = "authenticated";
         state.error = null;
       })
@@ -81,8 +81,7 @@ export const authSlice = createSlice({
       })
       .addCase(logoutUser.rejected, (state, action) => {
         state.logoutLoading = false;
-        state.logoutError =
-          (action.payload as string) || "Logout failed";
+        state.logoutError = (action.payload as string) || "Logout failed";
       });
   },
 });

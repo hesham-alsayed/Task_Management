@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { ClipLoader } from "react-spinners";
 import ArrowRightIcon from "../icons/ArrowRightIcon";
+import Loader from "./Loader";
 
 type AuthFooterProps = {
   isLoading: boolean;
@@ -29,7 +29,7 @@ export default function AuthFooter({
         }`}
       >
         {isLoading ? (
-          <ClipLoader size={18} color="#ffffff" />
+          <Loader/>
         ) : (
           <>
             {mode === "login" ? (

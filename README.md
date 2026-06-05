@@ -1,36 +1,137 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Project Overview
 
-## Getting Started
+This is a Task Management Next.js application built using the App Router architecture.
 
-First, run the development server:
+## Setup Project
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
+cd client
+
+### Install pnpm (if not installed)
+
+npm install -g pnpm
+
+### Install dependencies
+
+pnpm install
+
+### Run project
+
 pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Architecture
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The root directory is `client`, which contains the entire frontend application.
 
-## Learn More
+The architecture is divided into:
 
-To learn more about Next.js, take a look at the following resources:
+- App Router layer (routing and pages)
+- UI component layer
+- State management layer
+- Business logic layer
+- Utility layer
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## App Structure
 
-## Deploy on Vercel
+The `app` directory handles all routing and application pages.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+It includes:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Page routes
+- Layouts
+- API routes (Next.js route handlers)
+- Authentication pages (login, signup, reset password)
+- Protected dashboard routes
+
+This layer is responsible for navigation and rendering structure.
+
+---
+
+## State Management
+
+State management is implemented using Redux Toolkit.
+
+### Structure
+
+- `store/` contains the global store
+- `store/features/` contains feature-based slices
+
+Each slice is responsible for a specific domain such as authentication or user data.
+
+This ensures predictable and centralized state management.
+
+---
+
+## Components Structure
+
+The `components` directory contains all UI components.
+
+### Structure
+
+- Feature-based components grouped by domain
+- `shared/` contains reusable components used across the application
+
+This prevents duplication and improves reusability.
+
+---
+
+## Hooks
+
+The `hooks` folder contains custom React hooks.
+
+These hooks are used to:
+
+- Encapsulate business logic
+- Handle reusable API calls
+- Manage complex state logic outside UI components
+
+This keeps components clean and focused only on rendering.
+
+---
+
+## Lib (Utilities)
+
+The `lib` folder contains shared utilities including:
+
+- Helper functions
+- Constants
+
+---
+
+### Features
+
+- Login
+- Signup
+- Reset password
+- Protected routes
+- Session refresh handling
+
+---
+
+## API Configuration
+
+The application communicates with Supabase backend.
+
+### Environment Configuration
+
+NEXT_PUBLIC_BASE_URL=https://ncwimnnefgulsncdfmog.supabase.co  
+NEXT_PUBLIC_API_KEY=sb_publishable_RB6pewojyq5EMtD_hfsHrw_QCJjwwGg  
+APP_PASSWORD=\*\*\*
+
+API calls are centralized to ensure consistency across the application.
+
+---
+
+## Project Structure
+
+client/
+
+- app/ (routes, pages, layouts, API routes)
+- components/ (UI components shared and feature-based)
+- store/ (Redux Toolkit slices and store)
+- hooks/ (custom business logic hooks)
+- lib/ (helpers, constants, utilities)
+- styles/ (global styles)
