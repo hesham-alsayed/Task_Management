@@ -1,17 +1,22 @@
-"use client";
-
 import ResetPasswordForm from "@/components/reset-password/ResetPasswordForm";
 import ToastMessage from "@/components/shared/ToastMessage";
-import { useSearchParams } from "next/navigation";
 
-export default function ResetPasswordPage() {
-  const searchParams = useSearchParams();
+type Props = {
+  searchParams: Promise<{
+    access_token?: string;
+    error?: string;
+  }>;
+};
 
-  const accessToken = searchParams.get("access_token");
-  const error = searchParams.get("error");
+export default async function ResetPasswordPage({
+  searchParams,
+}: Props) {
+  const params = await searchParams;
 
-  // ❌ error handling
-  if (error) {
+  const accessToken = params.access_token;
+  const error = params.error;
+
+  if (error || !accessToken ) {
     return (
       <ToastMessage
         type="error"
@@ -21,18 +26,6 @@ export default function ResetPasswordPage() {
     );
   }
 
-  // ❌ missing token
-  if (!accessToken) {
-    return (
-      <ToastMessage
-        type="error"
-        message="Invalid or expired reset link."
-        autoClose={false}
-      />
-    );
-  }
-
-  // ✅ success
   return (
     <main className="w-full min-h-screen flex items-center justify-center">
       <ResetPasswordForm />

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ClipLoader } from "react-spinners";
+import Loader from "../shared/Loader";
 
 export default function LoginFooter({ isLoading }: { isLoading: boolean }) {
   return (
@@ -12,7 +12,7 @@ export default function LoginFooter({ isLoading }: { isLoading: boolean }) {
         }`}
       >
         {isLoading ? (
-          <ClipLoader size={18} color="#ffffff" />
+          <Loader />
         ) : (
           "Create Account"
         )}

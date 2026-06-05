@@ -3,7 +3,7 @@ import { cookies } from "next/headers";
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-
+    console.log(body);
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/auth/v1/token?grant_type=password`,
       {
@@ -31,12 +31,13 @@ export async function POST(req: Request) {
       );
     }
 
+    console.log(data);
     const cookieStore = await cookies();
 
     // check rememberMe if true before save it in cookies
-    const rememberMe = body.rememberMe === true;
-
-    const refreshMaxAge = 60 * 60 * 24 * 30;
+    const rememberMe = body.rememberMe
+    console.log(rememberMe);
+    const refreshMaxAge = rememberMe ? 60 * 60 * 24 * 30 : 60 * 60 * 24 * 7;
 
     cookieStore.set("access_token", data.access_token, {
       httpOnly: true,

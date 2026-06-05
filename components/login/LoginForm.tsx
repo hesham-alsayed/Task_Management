@@ -31,7 +31,6 @@ export default function LoginForm() {
           mode={'login'} 
           isSubmitted={isSubmitted}
         />
-
         <FormField
           id="password"
           label="Password"

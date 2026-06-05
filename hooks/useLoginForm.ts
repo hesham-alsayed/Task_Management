@@ -49,7 +49,8 @@ export function useLoginForm() {
         },
         body: JSON.stringify({
           email: data.email,
-          password: data.password,
+          password: data.password, 
+          rememberMe: data.rememberMe,
         }),
       });
       console.log(response);
