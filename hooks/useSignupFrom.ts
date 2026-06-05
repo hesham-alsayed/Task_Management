@@ -4,9 +4,7 @@ import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import api from "@/lib/axios";
 import toast from "react-hot-toast";
-import axios from "axios";
 import { useRouter } from "next/navigation";
 
 const nameRegex: RegExp = /^[A-Za-z]+( [A-Za-z]+)*$/;
@@ -99,24 +97,37 @@ export function useSignupForm() {
   const onSubmit = async (data: SignupFormData) => {
     try {
       setIsLoading(true);
-      const body = {
-        email: data.email,
-        password: data.password,
-        data: {
-          name: data.name,
-          job_title: data.jobTitle,
-        },
-      };
 
-      await api.post("/auth/v1/signup", body);
-      router.push("/login");
-      toast.success("Account created successfully");
-    } catch (error: unknown) {
-      if (axios.isAxiosError(error)) {
-        toast.error(error.response?.data?.message || "Signup failed");
-      } else {
-        toast.error("Unexpected error occurred");
+      const response = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: data.email,
+          password: data.password,
+          data: {
+            name: data.name,
+            job_title: data.jobTitle,
+          },
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.message || "Signup failed");
       }
+
+      toast.success("Account created successfully");
+
+      router.push("/login");
+      router.refresh();
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Something went wrong";
+
+      toast.error(message);
     } finally {
       setIsLoading(false);
     }
