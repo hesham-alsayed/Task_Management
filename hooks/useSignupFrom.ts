@@ -108,10 +108,8 @@ export function useSignupForm() {
         },
       };
 
-      const response = await api.post("/auth/v1/signup", body);
-
-      console.log("SIGNUP RESPONSE:", response.data);
-      router.push("/project");
+      await api.post("/auth/v1/signup", body);
+      router.push("/login");
       toast.success("Account created successfully");
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {

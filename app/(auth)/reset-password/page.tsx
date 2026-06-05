@@ -1,22 +1,17 @@
+"use client";
+
+import { Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import ResetPasswordForm from "@/components/reset-password/ResetPasswordForm";
 import ToastMessage from "@/components/shared/ToastMessage";
 
-type Props = {
-  searchParams: Promise<{
-    access_token?: string;
-    error?: string;
-  }>;
-};
+function ResetPasswordContent() {
+  const searchParams = useSearchParams();
 
-export default async function ResetPasswordPage({
-  searchParams,
-}: Props) {
-  const params = await searchParams;
+  const accessToken = searchParams.get("access_token");
+  const error = searchParams.get("error");
 
-  const accessToken = params.access_token;
-  const error = params.error;
-
-  if (error || !accessToken ) {
+  if (error || !accessToken) {
     return (
       <ToastMessage
         type="error"
@@ -30,5 +25,13 @@ export default async function ResetPasswordPage({
     <main className="w-full min-h-screen flex items-center justify-center">
       <ResetPasswordForm />
     </main>
+  );
+}
+
+export default function ResetPasswordPage() {
+  return (
+    <Suspense fallback={null}>
+      <ResetPasswordContent />
+    </Suspense>
   );
 }
