@@ -6,6 +6,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { resetPasswordAction } from "@/app/server-actions/auth/resetPassword";
 
 // rules will check it with the password input and return true/false
 const passwordRules = {
@@ -35,17 +36,15 @@ const schema = z
     message: "Passwords do not match",
   });
 
-// type for form data based on the zod schema
 
 export type ResetPasswordFormData = z.infer<typeof schema>;
 
-//  type for requirements
 export type RequirementItem = {
   text: string;
   valid: boolean;
 };
 
-// custom hook
+
 export function useResetPasswordForm(token?: string) {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
@@ -60,7 +59,6 @@ export function useResetPasswordForm(token?: string) {
 
   const password = form.watch("password") || "";
 
-  // requirements for password validation,
   const requirements = useMemo(
     () => ({
       desktop: [
@@ -110,49 +108,31 @@ export function useResetPasswordForm(token?: string) {
     [password],
   );
 
-  // update password function
-  const onSubmit = async (data: ResetPasswordFormData) => {
-    try {
-      setIsLoading(true);
+ const onSubmit = async (data: ResetPasswordFormData) => {
+  try {
+    setIsLoading(true);
 
-      if (!token) {
-        toast.error("Invalid or expired reset link");
-        return;
-      }
-
-      const response = await fetch("/api/auth/reset-password", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          password: data.password,
-        }),
-      });
-
-      const result = await response.json();
-
-      if (!response.ok) {
-        throw new Error(result.message || "Failed");
-      }
-
-      toast.success(
-        "Your password has been updated successfully. You can now log in.",
-      );
-      setTimeout(() => {
-        router.replace("/login");
-      }, 3000);
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        toast.error(error.message);
-      } else {
-        toast.error("Unexpected error");
-      }
-    } finally {
-      setIsLoading(false);
+    if (!token) {
+      toast.error("Token not found or invalid");
+      return;
     }
-  };
+
+    const result = await resetPasswordAction({
+      password: data.password,
+      token,
+    });
+
+    toast.success(result.message);
+
+    setTimeout(() => {
+      router.replace("/login");
+    }, 3000);
+  } catch (error: any) {
+    toast.error(error.message || error.msg || "Failed to update password");
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   return {
     form,

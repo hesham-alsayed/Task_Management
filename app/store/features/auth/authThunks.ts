@@ -1,61 +1,67 @@
+import { getUserAction } from "@/app/server-actions/auth/getUser";
+import { login } from "@/app/server-actions/auth/login";
+import { logoutAction } from "@/app/server-actions/auth/logout";
+import signup, { SignupFormData } from "@/app/server-actions/auth/signup";
+import { LoginFormData } from "@/hooks/useLoginForm";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 
-export const refreshToken = createAsyncThunk(
-  "auth/refresh",
-  async (_, thunkAPI) => {
+export const getCurrentUser = createAsyncThunk(
+  "auth/getCurrentUser",
+  async (_, { rejectWithValue }) => {
     try {
-      const res = await fetch("/api/auth/refresh", {
-        method: "POST",
-      });
-
-      if (!res.ok) {
-        return thunkAPI.rejectWithValue("refresh_failed");
-      }
-      const data  = await res.json()
-      return data.user
-    } catch  {
-      return thunkAPI.rejectWithValue("network_error");
+      return await getUserAction();
+    } catch (error: any) {
+      return rejectWithValue(
+        error?.message || "Failed to get user"
+      );
     }
   }
 );
 
-export const getCurrentUser = createAsyncThunk(
-  "auth/getCurrentUser",
-  async (_, thunkAPI) => {
+
+export const signupUser = createAsyncThunk(
+  "auth/signupUser",
+  async (data: SignupFormData, { rejectWithValue }) => {
     try {
-      const response = await fetch("/api/auth/user");
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        return thunkAPI.rejectWithValue(data.message || "Failed to get user");
-      }
-
-      return data.user;
-    } catch {
-      return thunkAPI.rejectWithValue("Network error");
+      const user = await signup(data);
+      return user;
+    } catch (error : any) {
+      return rejectWithValue(error.message ||"Error in network or server try again later"
+      );
     }
-  },
+  }
+);
+
+
+export const loginUser = createAsyncThunk(
+  "auth/loginUser",
+  async (
+    data: LoginFormData,
+    { rejectWithValue }
+  ) => {
+    try {
+      const user = await login(data);
+
+      return user;
+    } catch (error: any) {
+    return rejectWithValue(error.message ||"Error in network or server try again later")
+    }
+  }
 );
 
 export const logoutUser = createAsyncThunk(
   "auth/logoutUser",
-  async (_, thunkAPI) => {
+  async (_, { rejectWithValue }) => {
     try {
-      const res = await fetch("/api/auth/logout", {
-        method: "POST",
-      });
-      console.log(res)
-      const data = await res.json();
-      console.log(data)
-      if (!res.ok) {
-        return thunkAPI.rejectWithValue(data.message || "Logout failed");
-      }
+      const result = await logoutAction();
 
-      return true;
-    } catch {
-      return thunkAPI.rejectWithValue("Network error");
+      return result;
+    } catch (error: any) {
+      return rejectWithValue(
+        error?.message || "Logout failed"
+      );
     }
-  },
+  }
 );
+

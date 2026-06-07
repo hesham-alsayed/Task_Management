@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
+import { forgotPasswordAction } from "@/app/server-actions/auth/forgotPassword";
 
 const schema = z.object({
   email: z.string().email("Invalid email format"),
@@ -22,7 +23,7 @@ export function useForgotPasswordForm() {
   const [timeLeft, setTimeLeft] = useState(0);
   const [tries, setTries] = useState(0);
 
-  const emailRef = useRef<string>("");
+  // const emailRef = useRef<string>("");
 
   const form = useForm<ForgotFormData>({
     resolver: zodResolver(schema),
@@ -30,42 +31,28 @@ export function useForgotPasswordForm() {
     mode: "onChange",
   });
 
-  const sendRequest = async (email: string) => {
-    const response = await fetch("/api/auth/forgot-password", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email }),
-    });
+ const sendRequest = async (email: string) => {
+  const result = await forgotPasswordAction({ email });
+  return result;
+};
 
-    const result = await response.json();
-
-    if (!response.ok) {
-      throw new Error(result.message || "Request failed");
-    }
-
-    return result;
-  };
-
-  // ================= STATES =================
-  const canSubmit = !isLoading && timeLeft === 0 && tries < MAX_TRIES; // submit always visible
+  const canSubmit = !isLoading && timeLeft === 0 && tries < MAX_TRIES;
   const canResend =
     isSuccess && !isLoading && timeLeft === 0 && tries < MAX_TRIES;
 
-  // ================= SUBMIT =================
   const onSubmit = async (data: ForgotFormData) => {
     try {
       setIsLoading(true);
 
-      emailRef.current = data.email;
+      // emailRef.current = data.email;
 
       await sendRequest(data.email);
 
       setIsSuccess(true);
       setTimeLeft(RESEND_TIME);
       setTries(1);
-    } catch (error) {
+    } catch (error) { 
+      console.log(error)
       const message =
         error instanceof Error ? error.message : "Something went wrong";
 
@@ -93,7 +80,7 @@ export function useForgotPasswordForm() {
     try {
       setIsLoading(true);
 
-      const email = emailRef.current || form.getValues("email");
+      const email = form.getValues("email");
 
       const result = await sendRequest(email);
 

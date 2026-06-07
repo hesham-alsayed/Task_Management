@@ -6,6 +6,8 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { useAppDispatch } from "@/app/store/hooks";
+import { signupUser } from "@/app/store/features/auth/authThunks";
 
 const nameRegex: RegExp = /^[A-Za-z]+( [A-Za-z]+)*$/;
 
@@ -78,7 +80,7 @@ const getRequirements = (password: string): Requirement[] => [
 export function useSignupForm() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-
+  const dispatch = useAppDispatch() 
   const form = useForm<SignupFormData>({
     resolver: zodResolver(signupSchema),
     defaultValues: {
@@ -94,45 +96,29 @@ export function useSignupForm() {
   const password = form.watch("password") || "";
 
   const requirements = useMemo(() => getRequirements(password), [password]);
-  const onSubmit = async (data: SignupFormData) => {
-    try {
-      setIsLoading(true);
+const onSubmit = async (data: SignupFormData) => {
+  try {
+    setIsLoading(true);
 
-      const response = await fetch("/api/auth/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: data.email,
-          password: data.password,
-          data: {
-            name: data.name,
-            job_title: data.jobTitle,
-          },
-        }),
-      });
+    const body = {
+      email: data.email,
+      password: data.password,
+      data: {
+        name: data.name,
+        jobTitle: data.jobTitle,
+      },
+    };
 
-      const result = await response.json();
-
-      if (!response.ok) {
-        throw new Error(result.message || "Signup failed");
-      }
-
-      toast.success("Account created successfully");
-
-      router.push("/login");
-      router.refresh();
-    } catch (error) {
-      const message =
-        error instanceof Error ? error.message : "Something went wrong";
-
-      toast.error(message);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
+    await dispatch(signupUser(body)).unwrap();
+    toast.success("Account created successfully");
+    router.push("/projects");
+  } catch (err) { 
+    console.log(err)
+    toast.error(typeof err === "string" ? err : "Something went wrong");
+  } finally {
+    setIsLoading(false);
+  }
+};
   return {
     form,
     onSubmit,

@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import NavbarDesktop from "@/components/shared/NavbarDesktop";
 import NavbarMobile from "./NavbarMobile";
 import MobileFooter from "./MobileFooter";
-import { useAppDispatch, useAppSelector } from "@/app/store/hooks";
+import { useAppSelector } from "@/app/store/hooks";
 
 export default function DashboardShell({
   children,
@@ -16,10 +16,9 @@ export default function DashboardShell({
 }) {
   const [collapsed, setCollapsed] = useState(false);
   const { user } = useAppSelector((state) => state.auth); 
-
+  console.log(user)
   return (
     <div className="min-h-screen bg-background">
-      {/* Sidebar Wrapper */}
       <div
         className={`
           hidden lg:block fixed left-0 top-0 z-50 h-screen bg-[#F1F3FF]
@@ -28,7 +27,6 @@ export default function DashboardShell({
           ${collapsed ? "w-20" : "w-64"}
         `}
       >
-        {/* Expanded */}
         <div
           className={`
             absolute inset-0
@@ -39,7 +37,6 @@ export default function DashboardShell({
           <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />
         </div>
 
-        {/* Collapsed */}
         <div
           className={`
             absolute inset-0
@@ -72,7 +69,7 @@ export default function DashboardShell({
       <main className="lg:hidden">
         <div className="p-6">{children}</div>
       </main>
-      {/* Mobile Footer */}
+  
       <div className="lg:hidden bg-[#F1F3FF] fixed bottom-0 left-0 right-0 z-50">
         <MobileFooter />
       </div>

@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getCurrentUser, refreshToken, logoutUser } from "./authThunks";
+import { getCurrentUser, logoutUser, signupUser, loginUser } from "./authThunks";
 
 type AuthState = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -30,61 +30,80 @@ export const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    logout: (state) => {
-      state.user = null;
-      state.status = "unauthenticated";
-    },
+     getUser: (state, action) => {
+    state.user = action.payload;
+    state.status = "authenticated";
+    state.loading = false;
+    state.error = null;
+  },
   },
   extraReducers: (builder) => {
     // ================= GET USER =================
     builder
       .addCase(getCurrentUser.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-        state.status = "loading";
-      })
-      .addCase(getCurrentUser.fulfilled, (state, action) => {
-        state.loading = false;
-        state.user = action.payload.user_metadata;
-        state.status = "authenticated";
-      })
-      .addCase(getCurrentUser.rejected, (state, action) => {
-        state.loading = false;
-        state.user = null;
-        state.status = "unauthenticated";
-        state.error = (action.payload as string) || "Unknown error";
-      });
+  state.loading = true;
+  state.error = null;
+})
 
-    // ================= REFRESH =================
-    builder
-      .addCase(refreshToken.fulfilled, (state, action) => {
-        state.user = action.payload.user_metadata;
-        state.status = "authenticated";
-        state.error = null;
-      })
-      .addCase(refreshToken.rejected, (state, action) => {
-        state.user = null;
-        state.status = "unauthenticated";
-        state.error = (action.payload as string) || "Refresh failed";
-      });
+.addCase(getCurrentUser.fulfilled, (state, action) => {
+  state.loading = false; 
+  console.log(action.payload)
+  state.user = action.payload.user_metadata;
+  state.status = "authenticated";
+})
+
+.addCase(getCurrentUser.rejected, (state, action) => {
+  state.loading = false;
+  state.user = null;
+  state.status = "unauthenticated";
+  state.error =
+    (action.payload as string) || "Unknown error";
+});
 
     // ================= LOGOUT =================
     builder
       .addCase(logoutUser.pending, (state) => {
         state.logoutLoading = true;
-        state.logoutError = null;
+        state.logoutError = null; 
       })
       .addCase(logoutUser.fulfilled, (state) => {
         state.logoutLoading = false;
         state.user = null;
-        state.status = "unauthenticated";
       })
       .addCase(logoutUser.rejected, (state, action) => {
         state.logoutLoading = false;
         state.logoutError = (action.payload as string) || "Logout failed";
-      });
+      })
+  .addCase(signupUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(signupUser.fulfilled, (state, action) => {
+        state.loading = false; 
+        console.log(action.payload)
+        state.user = action.payload;
+      })
+      .addCase(signupUser.rejected, (state, action) => {
+        state.loading = false; 
+        console.log(action)
+        state.error = (action.payload as string) || "Signup failed";
+      })
+  .addCase(loginUser.pending, (state) => {
+    state.loading = true;
+    state.error = null;
+  })
+  .addCase(loginUser.fulfilled, (state, action) => {
+    state.loading = false; 
+    console.log(action.payload)
+    state.user = action.payload;
+  })
+  .addCase(loginUser.rejected, (state, action) => {
+    state.loading = false;
+    state.error =
+      (action.payload as string) || "Login failed";
+  });
   },
 });
 
-export const { logout } = authSlice.actions;
+export const { getUser } = authSlice.actions;
 export default authSlice.reducer;

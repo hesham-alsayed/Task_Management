@@ -6,6 +6,8 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { useAppDispatch } from "@/app/store/hooks";
+import { loginUser } from "@/app/store/features/auth/authThunks";
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email format"),
@@ -24,6 +26,7 @@ export type LoginFormData = z.infer<typeof loginSchema>;
 export function useLoginForm() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useAppDispatch() 
 
   const form = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
@@ -37,41 +40,23 @@ export function useLoginForm() {
 
   
   const onSubmit = async (data: LoginFormData) => {
-    try {
-      setIsLoading(true);
+  try {
+    setIsLoading(true);
 
-      const response = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: data.email,
-          password: data.password, 
-          rememberMe: data.rememberMe,
-        }),
-      });
-      console.log(response);
+    await dispatch(loginUser(data)).unwrap();
 
-      const result: ApiResponse = await response.json();
-      console.log(result);
-      if (!response.ok) {
-        throw new Error(result.message || "Login failed");
-      }
-
-      toast.success("Login successful");
-
-      router.push("/");
-      router.refresh();
-    } catch (error) {
-      const message =
-        error instanceof Error ? error.message : "Something went wrong";
-
-      toast.error(message);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    toast.success("Logged in successfully");
+    router.push("/projects");
+  } catch (err) {
+    toast.error(
+      typeof err === "string"
+        ? err
+        : "Invalid credentials"
+    );
+  } finally {
+    setIsLoading(false);
+  }
+};
   return {
     form,
     onSubmit,

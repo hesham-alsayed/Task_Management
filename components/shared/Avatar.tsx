@@ -5,11 +5,11 @@ import { getShortName } from "@/lib/helper";
 import { useRouter } from "next/navigation";
 import { User } from "./NavbarDesktop";
 import { useAppDispatch, useAppSelector } from "@/app/store/hooks";
-import { logoutUser } from "@/app/store/features/auth/authThunks";
 import ToastMessage from "./ToastMessage";
 import LogoutIcon from "../icons/LogoutIcon";
 import Loader from "./Loader";
 import toast from "react-hot-toast";
+import { logoutUser } from "@/app/store/features/auth/authThunks";
 
 type Props = {
   user: User;
@@ -22,30 +22,34 @@ export default function Avatar({ user }: Props) {
   const shortName = getShortName(user?.name);
   const dispatch = useAppDispatch();
   const { logoutLoading, error } = useAppSelector((state) => state.auth);
-  // close on outside click
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (ref.current && !ref.current.contains(event.target as Node)) {
         setOpen(false);
       }
     };
-
     document.addEventListener("mousedown", handleClickOutside);
 
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleLogout = async () => {
-    const result = await dispatch(logoutUser());
-    console.log(result);
-    if (logoutUser.fulfilled.match(result)) {
-      toast.success("Logout successfully");
-      router.push("/login");
-      router.refresh(); // مهم جدًا
-    } else {
-      console.log(result.payload);
-    }
-  };
+ const handleLogout = async () => {
+  try {
+    const result = await dispatch(
+      logoutUser()
+    ).unwrap();
+
+    toast.success( result.message || "logout success");
+    router.replace("/login");
+  } catch (error) {
+    toast.error(
+      typeof error === "string"
+        ? error
+        : "Logout failed"
+    );
+  }
+};
 
   return (
     <div className="relative" ref={ref}>
