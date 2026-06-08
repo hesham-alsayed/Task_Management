@@ -5,7 +5,6 @@ type FetchOptions = RequestInit & {
   path: string;
 };
 
-
 export async function apiFetch({ path, ...options }: FetchOptions) {
   const res = await fetch(`${BASE_URL}${path}`, {
     ...options,
@@ -16,11 +15,13 @@ export async function apiFetch({ path, ...options }: FetchOptions) {
     },
   });
 
-  const data = await res.json(); 
-  console.log(data)
-  if (!res.ok) { 
-    throw data?.message || data.msg || "Something went wrong ";
+  const text = await res.text(); 
+
+  const data = text ? JSON.parse(text) : null;
+
+  if (!res.ok) {
+    throw data?.message || data?.msg || "Something went wrong";
   }
 
-  return data;
+  return data; 
 }

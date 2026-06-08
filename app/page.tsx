@@ -10,9 +10,11 @@ export default function HomePage() {
     const hash = window.location.hash.slice(1);
 
     if (hash) {
-      router.replace(`/reset-password?${hash}`);
+      const params = new URLSearchParams(hash);
+
+      router.replace(`/reset-password?${params.toString()}`);
     } else {
-      router.replace("/projects");
+      router.replace("/project");
     }
   }, [router]);
 

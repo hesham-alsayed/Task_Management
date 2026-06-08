@@ -23,33 +23,53 @@ export default function Sidebar({ collapsed, setCollapsed }: SidebarProps) {
   const navLinks = [
     {
       name: "Projects",
-      href: "/projects",
+      href: "/project",
       icon: <FolderIcon />,
-      isActive: pathName === "/projects",
+      isActive: pathName.startsWith("/project"),
     },
     {
       name: "Project Epics",
       href: "/project-epics",
-      icon: <EpicsIcon color={pathName === "/project-epics" ? "#003d9b" : "#041B3C" } />,
-      isActive: pathName === "/project-epics",
+      icon: (
+        <EpicsIcon
+          color={pathName.startsWith("/project-epics") ? "#003d9b" : "#041B3C"}
+        />
+      ),
+      isActive: pathName.startsWith("/project-epics"),
     },
     {
       name: "Project Tasks",
       href: "/project-tasks",
-      icon: <TaskIcon color={pathName === "/project-tasks" ? "#003d9b" : "#041B3C" } />,
-      isActive: pathName === "/project-tasks",
+      icon: (
+        <TaskIcon
+          color={pathName.startsWith("/project-tasks") ? "#003d9b" : "#041B3C"}
+        />
+      ),
+      isActive: pathName.startsWith("/project-tasks"),
     },
     {
       name: "Project Members",
       href: "/project-members",
-      icon: <MembersIcon color={pathName === "/project-members" ? "#003d9b" : "#041B3C" } />,
-      isActive: pathName === "/project-members",
+      icon: (
+        <MembersIcon
+          color={
+            pathName.startsWith("/project-members") ? "#003d9b" : "#041B3C"
+          }
+        />
+      ),
+      isActive: pathName.startsWith("/project-members"),
     },
     {
       name: "Project Details",
       href: "/project-details",
-      icon: <DetailsIcon color={pathName === "/project-details" ? "#003d9b" : "#041B3C" }  />,
-      isActive: pathName === "/project-details",
+      icon: (
+        <DetailsIcon
+          color={
+            pathName.startsWith("/project-details") ? "#003d9b" : "#041B3C"
+          }
+        />
+      ),
+      isActive: pathName.startsWith("/project-details"),
     },
   ];
 

@@ -14,7 +14,7 @@ export type NavItem = {
 export const navLinks: NavItem[] = [
   {
     name: "Projects",
-    href: "/projects",
+    href: "/project",
     icon: (active) => (
       <FolderIconMobile color={active ? "#0052CC" : "#041B3C99"} />
     ),

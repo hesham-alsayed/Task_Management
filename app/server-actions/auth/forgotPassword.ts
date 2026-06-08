@@ -1,7 +1,6 @@
 "use server";
 
 import { apiFetch } from "@/lib/api-client";
-import errorsToRecord from "@hookform/resolvers/io-ts/dist/errorsToRecord.js";
 
 type ForgotPasswordData = {
   email: string;

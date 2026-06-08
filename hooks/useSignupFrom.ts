@@ -111,7 +111,7 @@ const onSubmit = async (data: SignupFormData) => {
 
     await dispatch(signupUser(body)).unwrap();
     toast.success("Account created successfully");
-    router.push("/projects");
+    router.push("/project");
   } catch (err) { 
     console.log(err)
     toast.error(typeof err === "string" ? err : "Something went wrong");

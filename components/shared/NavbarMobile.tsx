@@ -25,7 +25,8 @@ export default function NavbarMobile({ user }: Props) {
   return (
     <>
       {/* NAVBAR */}
-      <div className="h-20 border-b border-b-[#0000001A] px-6 py-3 flex items-center justify-between">
+      <div className="h-16 border-b w-full  fixed top-0 right-0 z-40 px-6 py-3 bg-[#f9f9ff]
+        transition-all duration-300  border-b-[#0000001A]  flex items-center justify-between">
         <div className="flex items-center gap-4">
           <button
             onClick={() => setOpen(true)}

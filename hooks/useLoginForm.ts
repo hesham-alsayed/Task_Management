@@ -46,7 +46,7 @@ export function useLoginForm() {
     await dispatch(loginUser(data)).unwrap();
 
     toast.success("Logged in successfully");
-    router.push("/projects");
+    router.push("/project");
   } catch (err) {
     toast.error(
       typeof err === "string"

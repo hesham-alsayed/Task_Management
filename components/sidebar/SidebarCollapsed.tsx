@@ -29,7 +29,7 @@ export default function SidebarCollapsed({ setCollapsed }: Props) {
           </div>
           <div className="mt-8 flex  flex-col items-center ">
             {navLinks.map((item) => {
-              const isActive = pathname === item.href;
+              const isActive = pathname.startsWith(item.href);
               return (
                 <li key={item.href} className="list-none">
                   <Link

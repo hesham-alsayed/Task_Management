@@ -1,0 +1,19 @@
+import React from "react";
+
+export default function FragmentIcon() {
+  return (
+    <svg
+      width="4"
+      height="6"
+      viewBox="0 0 4 6"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M2.3 3L0 0.7L0.7 0L3.7 3L0.7 6L0 5.3L2.3 3Z"
+        fill="#434654"
+        fillOpacity="0.4"
+      />
+    </svg>
+  );
+}

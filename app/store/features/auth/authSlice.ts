@@ -30,15 +30,8 @@ export const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-     getUser: (state, action) => {
-    state.user = action.payload;
-    state.status = "authenticated";
-    state.loading = false;
-    state.error = null;
-  },
   },
   extraReducers: (builder) => {
-    // ================= GET USER =================
     builder
       .addCase(getCurrentUser.pending, (state) => {
   state.loading = true;
@@ -57,10 +50,9 @@ export const authSlice = createSlice({
   state.user = null;
   state.status = "unauthenticated";
   state.error =
-    (action.payload as string) || "Unknown error";
+    (action.payload as string) || "Error in get user";
 });
 
-    // ================= LOGOUT =================
     builder
       .addCase(logoutUser.pending, (state) => {
         state.logoutLoading = true;
@@ -105,5 +97,5 @@ export const authSlice = createSlice({
   },
 });
 
-export const { getUser } = authSlice.actions;
+export const {  } = authSlice.actions;
 export default authSlice.reducer;

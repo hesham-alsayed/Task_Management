@@ -18,10 +18,10 @@ export default function DashboardShell({
   const { user } = useAppSelector((state) => state.auth); 
   console.log(user)
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen ">
       <div
         className={`
-          hidden lg:block fixed left-0 top-0 z-50 h-screen bg-[#F1F3FF]
+          hidden lg:block fixed left-0 top-0 z-50 h-screen 
           overflow-hidden
           transition-all duration-300 ease-in-out
           ${collapsed ? "w-20" : "w-64"}
@@ -52,22 +52,22 @@ export default function DashboardShell({
         <NavbarDesktop user={user} collapsed={collapsed} />
       </div>
 
-      <div className="lg:hidden">
+      <div className="lg:hidden ">
         <NavbarMobile user={user} />
       </div>
 
       <main
         className={`
-          pt-16 hidden lg:block
-          transition-all duration-300 ease-in-out
+          pt-16 hidden lg:block  py-3 px-6 mb-10
+          transition-all duration-300 ease-in-out bg-[#f9f9ff]]
           ${collapsed ? "ml-20" : "ml-64"}
         `}
       >
-        <div className="p-6">{children}</div>
+        <div className="py-4">{children}</div>
       </main>
 
-      <main className="lg:hidden">
-        <div className="p-6">{children}</div>
+      <main className="lg:hidden mt-20 max-sm:mt-4">
+        <div className="p-2 mb-40">{children}</div>
       </main>
   
       <div className="lg:hidden bg-[#F1F3FF] fixed bottom-0 left-0 right-0 z-50">
