@@ -1,8 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import Loader from "./Loader";
-import { getShortName } from "@/lib/helper";
+import NavbarDesktopSkeleton from "../skeleton/NavbarDesktopSkeleton";
 import Avatar from "./Avatar";
 
 export type User = {
@@ -12,12 +10,22 @@ export type User = {
   phone_verified: boolean;
   sub: string;
 };
+
 type NavbarProps = {
   collapsed: boolean;
-  user: User;
+  user?: User; // مهم: optional
+  isLoading?: boolean;
 };
-export default function NavbarDesktop({ collapsed, user }: NavbarProps) {
-  console.log(user);
+
+export default function NavbarDesktop({
+  collapsed,
+  user,
+  isLoading,
+}: NavbarProps) {
+  if (isLoading || !user) {
+    return <NavbarDesktopSkeleton />;
+  }
+
   return (
     <header
       className={`
@@ -30,7 +38,7 @@ export default function NavbarDesktop({ collapsed, user }: NavbarProps) {
         <div className="flex items-center gap-4">
           {/* Text */}
           <div className="flex flex-col text-right">
-            <h2 className="text-sm font-semibold text[#041B3C] uppercase">
+            <h2 className="text-sm font-semibold text-[#041B3C] uppercase">
               {user?.name}
             </h2>
 

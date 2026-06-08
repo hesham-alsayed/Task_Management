@@ -11,15 +11,16 @@ import MembersIcon from "../icons/MembersIcon";
 import DetailsIcon from "../icons/DetailsIcon";
 import ArrowMenu from "./ArrowMenu";
 import LogoutIcon from "../icons/LogoutIcon";
+import { useAppDispatch } from "@/app/store/hooks";
+import { toggleSidebar } from "@/app/store/features/ui/uiSlice";
 
 type SidebarProps = {
   collapsed: boolean;
-  setCollapsed: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export default function Sidebar({ collapsed, setCollapsed }: SidebarProps) {
+export default function Sidebar({ collapsed }: SidebarProps) {
   const pathName = usePathname();
-
+  const dispatch = useAppDispatch();
   const navLinks = [
     {
       name: "Projects",
@@ -115,7 +116,7 @@ export default function Sidebar({ collapsed, setCollapsed }: SidebarProps) {
         {/* Bottom */}
         <div className="flex flex-col gap-2 pt-6 border-t border-[#C3C6D633]">
           <button
-            onClick={() => setCollapsed(true)}
+            onClick={() => dispatch(toggleSidebar())}
             className="flex items-center gap-3 p-2"
           >
             <ArrowMenu />

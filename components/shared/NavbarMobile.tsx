@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import BurgerIcon from "../icons/BurgerIcon";
-import { getShortName } from "@/lib/helper";
 import LogoutIcon from "../icons/LogoutIcon";
 import Link from "next/link";
 import LogoIcon from "../icons/LogoIcon";
@@ -10,6 +9,7 @@ import { navLinks } from "../../lib/NavLinks";
 import { usePathname } from "next/navigation";
 import Avatar from "./Avatar";
 import { User } from "./NavbarDesktop";
+import { getShortName } from "@/lib/helper/get-shortname";
 
 
 

@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import { getShortName } from "@/lib/helper";
 import { useRouter } from "next/navigation";
 import { User } from "./NavbarDesktop";
 import { useAppDispatch, useAppSelector } from "@/app/store/hooks";
@@ -10,6 +9,7 @@ import LogoutIcon from "../icons/LogoutIcon";
 import Loader from "./Loader";
 import toast from "react-hot-toast";
 import { logoutUser } from "@/app/store/features/auth/authThunks";
+import { getShortName } from "@/lib/helper/get-shortname";
 
 type Props = {
   user: User;

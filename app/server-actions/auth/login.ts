@@ -30,7 +30,8 @@ export async function login(loginData: LoginFormData) {
 
     cookieStore.set(accessToken, response.access_token,{
       ... ACCESS_TOKEN_OPTIONS , 
-      maxAge : response.expires_in || 3600
+      // maxAge : response.expires_in || 3600 
+      
     });
 
     cookieStore.set(refreshToken, response.refresh_token, {

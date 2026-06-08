@@ -14,9 +14,10 @@ export default function DashboardShell({
 }: {
   children: React.ReactNode;
 }) {
-  const [collapsed, setCollapsed] = useState(false);
-  const { user } = useAppSelector((state) => state.auth); 
-  console.log(user)
+  const collapsed = useAppSelector(
+  (state) => state.ui.sidebarCollapsed
+);
+  const { user } = useAppSelector((state) => state.auth);  
   return (
     <div className="min-h-screen ">
       <div
@@ -34,7 +35,7 @@ export default function DashboardShell({
             ${collapsed ? "opacity-0 pointer-events-none" : "opacity-100"}
           `}
         >
-          <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />
+          <Sidebar collapsed={collapsed} />
         </div>
 
         <div
@@ -44,7 +45,7 @@ export default function DashboardShell({
             ${collapsed ? "opacity-100" : "opacity-0 pointer-events-none"}
           `}
         >
-          <SidebarCollapsed setCollapsed={setCollapsed} />
+          <SidebarCollapsed  />
         </div>
       </div>
 

@@ -8,38 +8,39 @@ export async function proxy(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
   const authRoutes = ["/login", "/signup", "/reset-password"];
-  const protectedRoutes = ["/projects"];
+  const protectedRoutes = ["/project"];
 
   const isAuthRoute = authRoutes.some((route) => pathname.startsWith(route));
   const isProtectedRoute = protectedRoutes.some((route) =>
-    pathname.startsWith(route)
+    pathname.startsWith(route),
   );
 
-console.log(refresh)
   if (token && isAuthRoute) {
-    return NextResponse.redirect(new URL("/projects", request.url));
+    return NextResponse.redirect(new URL("/project", request.url));
   }
 
   if (!token && isProtectedRoute) {
-    
     if (refresh) {
       try {
-        const res = await fetch(`${process.env.BASE_URL}/auth/v1/token?grant_type=refresh_token`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "apikey": process.env.API_KEY || "", 
+        const res = await fetch(
+          `${process.env.BASE_URL}/auth/v1/token?grant_type=refresh_token`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              apikey: process.env.API_KEY || "",
+            },
+            body: JSON.stringify({ refresh_token: refresh }),
           },
-          body: JSON.stringify({ refresh_token: refresh }),
-        });
+        );
+
 
         if (!res.ok) {
           throw new Error("Refresh token expired or invalid");
         }
-        console.log(res)
         const data = await res.json(); 
-        console.log(data)
-        token = data.access_token; 
+        console.log(data);
+        token = data.access_token;
 
         const response = NextResponse.next();
 
@@ -48,20 +49,21 @@ console.log(refresh)
           value: token as string,
           httpOnly: true,
           path: "/",
-          maxAge: 3600, 
+          maxAge: 3600,
           sameSite: "lax",
           secure: process.env.NODE_ENV === "production",
         });
 
-        return response; 
-
+        return response;
       } catch (error) {
         console.error("Token refresh failed:", error);
-        
-        const loginRedirect = NextResponse.redirect(new URL("/login", request.url));
+
+        const loginRedirect = NextResponse.redirect(
+          new URL("/login", request.url),
+        );
         loginRedirect.cookies.delete(accessToken);
         loginRedirect.cookies.delete(refreshToken);
-        
+
         return loginRedirect;
       }
     }
@@ -73,7 +75,5 @@ console.log(refresh)
 }
 
 export const config = {
-  matcher: [
-    "/((?!api|_next/static|_next/image|favicon.ico).*)",
-  ],
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
 };

@@ -17,6 +17,9 @@
   --color-success: #6ef3b2;
   --color-error: #c21b1b;
   --color-warning: #ffb000;
+
+  --color-main: #041b3c; 
+  --color-white : #ffffff
 }
 
 /* Light mode base */

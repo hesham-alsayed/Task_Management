@@ -40,7 +40,6 @@ export const authSlice = createSlice({
 
 .addCase(getCurrentUser.fulfilled, (state, action) => {
   state.loading = false; 
-  console.log(action.payload)
   state.user = action.payload.user_metadata;
   state.status = "authenticated";
 })

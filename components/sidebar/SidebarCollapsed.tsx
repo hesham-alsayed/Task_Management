@@ -7,13 +7,14 @@ import LogoIcon from "../icons/LogoIcon";
 
 import { navLinks } from "../../lib/NavLinks";
 import LogoutIcon from "../icons/LogoutIcon";
-type Props = {
-  setCollapsed: React.Dispatch<React.SetStateAction<boolean>>;
-};
+import { useAppDispatch } from "@/app/store/hooks";
+import { toggleSidebar } from "@/app/store/features/ui/uiSlice";
 
-export default function SidebarCollapsed({ setCollapsed }: Props) {
-  const pathname = usePathname();
 
+export default function SidebarCollapsed() {
+  const pathname = usePathname(); 
+
+  const dispatch = useAppDispatch()
   return (
     <aside
       className="h-screen
@@ -51,7 +52,7 @@ export default function SidebarCollapsed({ setCollapsed }: Props) {
 
       {/* Bottom actions */}
       <div className="flex flex-col gap-3">
-        <button onClick={() => setCollapsed(false)} className="p-2">
+        <button onClick={() => dispatch(toggleSidebar())} className="p-2">
           <svg
             width="12"
             height="20"

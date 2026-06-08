@@ -3,6 +3,7 @@ import ExclamationIcon from "../icons/ExclamationIcon";
 import HeaderFormProject from "./HeaderFormProject";
 import Loader from "../shared/Loader";
 import { useAddNewProjectForm } from "@/hooks/useAddNewProjectForm";
+import { useRouter } from "next/navigation";
 
 export default function FormAddProject() {
   const { form, isLoading, onSubmit } = useAddNewProjectForm();
@@ -11,7 +12,7 @@ export default function FormAddProject() {
     handleSubmit,
     formState: { errors, isSubmitted },
   } = form;
-
+  const router = useRouter();
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
@@ -75,7 +76,10 @@ export default function FormAddProject() {
         </div>
 
         <div className="actions flex flex-col-reverse sm:flex-row items-center sm:justify-between py-6 gap-4">
-          <button className="text-sm font-bold max-sm:text-primary  text-[#4F5F7B] sm:mx-10 hover:cursor-pointer">
+          <button
+            onClick={() => router.push("/project")}
+            className="text-sm font-bold max-sm:text-primary  text-[#4F5F7B] sm:mx-10 hover:cursor-pointer"
+          >
             Back
           </button>
 
