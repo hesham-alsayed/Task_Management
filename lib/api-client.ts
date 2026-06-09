@@ -15,13 +15,16 @@ export async function apiFetch({ path, ...options }: FetchOptions) {
     },
   });
 
-  const text = await res.text(); 
+  const text = await res.text();
 
   const data = text ? JSON.parse(text) : null;
-
+  // console.log(res);
   if (!res.ok) {
     throw data?.message || data?.msg || "Something went wrong";
   }
 
-  return data; 
+  return {
+    data,
+    headers: Object.fromEntries(res.headers.entries()),
+  };
 }

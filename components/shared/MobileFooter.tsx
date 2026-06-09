@@ -12,54 +12,62 @@ export default function MobileFooter() {
   const pathName = usePathname();
   const navLinks = [
     {
-      name: "Projects",
+      name: "Project",
       href: "/projects",
       icon: (
         <FolderIconMobile
-          color={`${pathName === "/projects" ? "#0052CC" : "#041B3CB2"}`}
+          color={`${pathName.startsWith("/project") ? "#0052CC" : "#041B3CB2"}`}
         />
       ),
-      isActive: pathName === "/projects",
+      isActive: pathName.startsWith("/project"),
     },
     {
       name: "Epics",
       href: "/project-epics",
       icon: (
         <EpicsIcon
-          color={pathName === "/project-epics" ? "#0052CC" : "#041B3CB2"}
+          color={
+            pathName.startsWith("/project-epics") ? "#0052CC" : "#041B3CB2"
+          }
         />
       ),
-      isActive: pathName === "/project-epics",
+      isActive: pathName.startsWith("/project-epics"),
     },
     {
       name: "Tasks",
       href: "/project-tasks",
       icon: (
         <TaskIcon
-          color={pathName === "/project-tasks" ? "#0052CC" : "#041B3CB2"}
+          color={
+            pathName.startsWith("/project-tasks") ? "#0052CC" : "#041B3CB2"
+          }
         />
       ),
-      isActive: pathName === "/project-tasks",
+      isActive: pathName.startsWith("/project-tasks"),
     },
     {
       name: "Members",
       href: "/project-members",
       icon: (
         <MembersIcon
-          color={pathName === "/project-members" ? "#0052CC" : "#041B3CB2"}
+          color={
+            pathName.startsWith("/project-members") ? "#0052CC" : "#041B3CB2"
+          }
         />
       ),
-      isActive: pathName === "/project-members",
+      isActive: pathName.startsWith("/project-members"),
     },
     {
       name: "Details",
       href: "/project-details",
       icon: (
         <DetailsIcon
-          color={pathName === "/project-details" ? "#0052CC" : "#041B3CB2"}
+          color={
+            pathName.startsWith("/project-details") ? "#0052CC" : "#041B3CB2"
+          }
         />
       ),
-      isActive: pathName === "/project-details",
+      isActive: pathName.startsWith("/project-details"),
     },
   ];
   return (

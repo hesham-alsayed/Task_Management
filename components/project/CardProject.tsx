@@ -1,6 +1,7 @@
 import { formatDate } from "@/lib/helper/formate-date";
 import React from "react";
 import DateIcon from "../icons/DateIcon";
+import ThreeDotsIcon from "../icons/ThreeDotsIcon";
 
 type Project = {
   id: string;
@@ -19,9 +20,13 @@ export default function CardProject({ project }: Props) {
 
   return (
     <div className="w-full h-[220px] p-6 bg-white flex flex-col rounded-md">
-      <div className="space-y-2">
-        <h1 className="font-medium text-[18px] text-main">{name}</h1>
-
+      <div className="space-y-3">
+        <div className="flex items-center justify-between gap-1">
+          <h1 className="font-medium text-[18px] text-main">{name}</h1>
+          <span className="sm:hidden">
+            <ThreeDotsIcon />
+          </span>
+        </div>
         <p className="text-sm font-normal text-[#434654] min-h-[40px]">
           {description || ""}
         </p>

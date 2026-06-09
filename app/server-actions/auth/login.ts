@@ -28,18 +28,18 @@ export async function login(loginData: LoginFormData) {
     const refreshMaxAge = loginData.rememberMe ? 30 * 24 * 60 * 60 : 24 * 60 * 60 
     
 
-    cookieStore.set(accessToken, response.access_token,{
+    cookieStore.set(accessToken, response.data.access_token,{
       ... ACCESS_TOKEN_OPTIONS , 
       // maxAge : response.expires_in || 3600 
       
     });
 
-    cookieStore.set(refreshToken, response.refresh_token, {
+    cookieStore.set(refreshToken, response.data.refresh_token, {
       ...REFRESH_TOKEN_OPTIONS,
       maxAge: refreshMaxAge,
     });
 
-    return response.user.user_metadata;
+    return response.data.user.user_metadata;
   } catch (error) {
     throw typeof error === "string"
       ? error

@@ -16,7 +16,7 @@ export default async function addNewProjectAction(
   }
 
   try {
-    const data = await apiFetch({
+    const res = await apiFetch({
       method: "POST",
       path: "/rest/v1/projects",
       headers: {
@@ -25,7 +25,7 @@ export default async function addNewProjectAction(
       body: JSON.stringify(projectFormData),
     });
 
-    return data;
+    return res.data;
   } catch (error) {
     throw error || "Network or internal server error";
   }

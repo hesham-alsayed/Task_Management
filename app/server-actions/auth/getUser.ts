@@ -13,7 +13,7 @@ export async function getUserAction() {
       throw new Error("No access token found");
     }
 
-    const data = await apiFetch({
+    const res = await apiFetch({
       path: "/auth/v1/user",
       method: "GET",
       headers: {
@@ -21,7 +21,7 @@ export async function getUserAction() {
       },
     });
 
-    return data;
+    return res.data;
   } catch (error) {
     throw typeof error === "string" ? error : (error as Error).message || "Failed to fetch user";
   }

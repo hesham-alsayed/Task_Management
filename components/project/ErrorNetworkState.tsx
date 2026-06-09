@@ -31,7 +31,7 @@ export default function ErrorNetworkState({
       <button
         onClick={retryGetAllProjects}
         disabled={isLoading}
-        className="btn-primary px-6 py-2 disabled:opacity-60 w-45"
+        className="btn-primary px-6 py-2 disabled:opacity-60 w-55"
       >
         {isLoading ? <Loader /> : "Retry Connection"}
       </button>

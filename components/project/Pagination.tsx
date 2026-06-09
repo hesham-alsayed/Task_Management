@@ -1,27 +1,96 @@
+"use client";
+
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
+
 import NextArrow from "../icons/NextArrow";
 import PrevArrow from "../icons/PrevArrow";
 
-export default function Pagination() {
+type PaginationProps = {
+  currentPage: number;
+  totalCount: number;
+  totalPages: number;
+  hasNextPage: boolean;
+  hasPrevPage: boolean;
+  actualLength: number;
+};
+
+export default function Pagination({
+  currentPage,
+  totalCount,
+  totalPages,
+  hasNextPage,
+  hasPrevPage,
+  actualLength,
+}: PaginationProps) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const limit = searchParams.get("limit") || "5";
+
+  const changePage = (page: number) => {
+    const params = new URLSearchParams(searchParams.toString());
+
+    params.set("page", String(page));
+    params.set("limit", limit);
+
+    router.push(`${pathname}?${params.toString()}`);
+  };
+
+  const handleNext = () => {
+    if (!hasNextPage) return;
+
+    changePage(currentPage + 1);
+  };
+
+  const handlePrev = () => {
+    if (!hasPrevPage) return;
+
+    changePage(currentPage - 1);
+  };
+
   return (
-    <div className="mt-20 flex items-center justify-between ">
+    <div className="mt-20 flex items-center justify-between">
       <div className="text-[12px] font-medium text-[#434654]">
-        Showing 6 of 24 active projects
+        Showing {actualLength} of {totalCount} active projects
       </div>
 
       <div className="flex items-center gap-2 font-bold text-[12px]">
-        <button className="w-8 h-8 border border-[#C3C6D64D] flex items-center justify-center rounded bg-gray-100 cursor-not-allowed">
+        <button
+          onClick={handlePrev}
+          disabled={!hasPrevPage}
+          className={`w-8 h-8 border border-[#C3C6D64D] rounded   flex items-center justify-center ${
+            !hasPrevPage ? "cursor-not-allowed opacity-50" : "cursor-pointer"
+          }`}
+        >
           <PrevArrow />
         </button>
 
-        <button className="w-8 h-8 border border-[#C3C6D64D] rounded flex items-center justify-center bg-primary text-white">
-          1
-        </button>
+        {Array.from({ length: totalPages }, (_, index) => {
+          const pageNumber = index + 1;
 
-        <button className="w-8 h-8 border border-[#C3C6D64D] rounded flex items-center justify-center bg-white text-[#434654]">
-          2
-        </button>
+          return (
+            <button
+              key={pageNumber}
+              onClick={() => changePage(pageNumber)}
+              className={`w-8 h-8 border rounded flex items-center justify-center ${
+                currentPage === pageNumber
+                  ? "bg-primary text-white"
+                  : "bg-white text-[#434654]"
+              }`}
+            >
+              {pageNumber}
+            </button>
+          );
+        })}
 
-        <button className="w-8 h-8 border border-[#C3C6D64D] flex items-center justify-center rounded bg-white">
+        <button
+          onClick={handleNext}
+          disabled={!hasNextPage}
+          className={`w-8 h-8 border border-[#C3C6D64D] rounded flex items-center justify-center ${
+            !hasNextPage ? "cursor-not-allowed opacity-50" : "cursor-pointer"
+          }`}
+        >
           <NextArrow />
         </button>
       </div>

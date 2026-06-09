@@ -33,7 +33,7 @@ export default function FormAddProject() {
             className="input-form w-full"
           />
 
-          {errors.name && (
+          {errors.name && isSubmitted && (
             <span className="flex mt-2 items-center gap-2 text-[#BA1A1A] font-medium text-[12px]">
               <ExclamationIcon />
               {errors.name?.message}
@@ -77,6 +77,7 @@ export default function FormAddProject() {
 
         <div className="actions flex flex-col-reverse sm:flex-row items-center sm:justify-between py-6 gap-4">
           <button
+            type="button"
             onClick={() => router.push("/project")}
             className="text-sm font-bold max-sm:text-primary  text-[#4F5F7B] sm:mx-10 hover:cursor-pointer"
           >

@@ -8,12 +8,12 @@ export async function refreshAccessToken() {
   try {
     const cookieStore = await cookies();
     const refresh_token = cookieStore.get("refresh_token")?.value;
-    console.log(refresh_token)
+    console.log(refresh_token);
     if (!refresh_token) {
       throw "No refresh token";
     }
 
-    const data = await apiFetch({
+    const res = await apiFetch({
       path: `/auth/v1/token?grant_type=refresh_token`,
       method: "POST",
       headers: {
@@ -22,7 +22,7 @@ export async function refreshAccessToken() {
       body: JSON.stringify({ refresh_token }),
     });
 
-    cookieStore.set(accessToken, data.access_token, {
+    cookieStore.set(accessToken, res.data.access_token, {
       httpOnly: true,
       path: "/",
       maxAge: 120,
@@ -30,8 +30,7 @@ export async function refreshAccessToken() {
       secure: process.env.NODE_ENV === "production",
     });
 
-    console.log(data)
-    return data
+    return res.data;
   } catch (error) {
     throw typeof error === "string" ? error : "Refresh failed";
   }
