@@ -97,7 +97,6 @@ export default function GetAllProjects() {
           </div>
         </div>
 
-        {/* mobile floating button */}
         <div className="flex items-end justify-end sm:hidden">
           <button
             onClick={() => router.push("/project/add")}
@@ -122,7 +121,6 @@ export default function GetAllProjects() {
         )}
       </div>
 
-      {/* pagination desktop */}
       {!isMobile && (
         <div className="mt-auto pt-10 hidden sm:block">
           <Pagination

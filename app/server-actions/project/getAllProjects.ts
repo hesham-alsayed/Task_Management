@@ -26,7 +26,6 @@ export async function getAllProjectsAction(query: Props) {
       },
     });
 
-    console.log("result from action", result);
     return {
       projects: result.data,
       totalCount: Number(result.headers["content-range"]?.split("/")[1]),

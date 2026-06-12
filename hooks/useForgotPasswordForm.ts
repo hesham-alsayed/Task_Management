@@ -23,7 +23,6 @@ export function useForgotPasswordForm() {
   const [timeLeft, setTimeLeft] = useState(0);
   const [tries, setTries] = useState(0);
 
-  // const emailRef = useRef<string>("");
 
   const form = useForm<ForgotFormData>({
     resolver: zodResolver(schema),
@@ -44,7 +43,6 @@ export function useForgotPasswordForm() {
     try {
       setIsLoading(true);
 
-      // emailRef.current = data.email;
 
       await sendRequest(data.email);
 
@@ -62,7 +60,6 @@ export function useForgotPasswordForm() {
     }
   };
 
-  // ================= TIMER =================
   useEffect(() => {
     if (timeLeft <= 0) return;
 
@@ -73,7 +70,6 @@ export function useForgotPasswordForm() {
     return () => clearInterval(interval);
   }, [timeLeft]);
 
-  // ================= RESEND =================
   const handleResend = async () => {
     if (!canResend) return;
 

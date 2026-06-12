@@ -20,7 +20,6 @@ export async function editOneProjectAction(
       body: JSON.stringify(body),
     });
 
-    console.log(result.data);
     return result.data;
   } catch (error) {
     throw error || "Error in netwok or internal server";

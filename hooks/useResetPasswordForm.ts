@@ -8,7 +8,6 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { resetPasswordAction } from "@/app/server-actions/auth/resetPassword";
 
-// rules will check it with the password input and return true/false
 const passwordRules = {
   length: (v: string) => v.length >= 8 && v.length <= 64,
   lowercase: (v: string) => /[a-z]/.test(v),
