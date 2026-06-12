@@ -1,11 +1,11 @@
 "use client";
 
-import { getAllProjectsAction } from "@/app/server-actions/projects/getAllProjects";
+import { getAllProjectsAction } from "@/app/server-actions/project/getAllProjects";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState, useCallback } from "react";
 import toast from "react-hot-toast";
 
-type Status = "idle" | "loading" | "success" | "error";
+type Status = "loading" | "success" | "error";
 
 export const useGetAllProjects = () => {
   const searchParams = useSearchParams();
@@ -56,7 +56,7 @@ export const useGetAllProjects = () => {
   };
 
   useEffect(() => {
-    if (isMobile === null) return; 
+    if (isMobile === null) return;
 
     const loadInitial = async () => {
       try {

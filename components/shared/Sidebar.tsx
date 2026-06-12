@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useParams, usePathname, useSearchParams } from "next/navigation";
 
 import LogoIcon from "../icons/LogoIcon";
 import FolderIcon from "../icons/FolderIcon";
@@ -21,58 +21,66 @@ type SidebarProps = {
 export default function Sidebar({ collapsed }: SidebarProps) {
   const pathName = usePathname();
   const dispatch = useAppDispatch();
+  const params = useParams();
+  const pathname = usePathname();
+
+  const projectId = params.projectId as string;
+
   const navLinks = [
     {
       name: "Projects",
       href: "/project",
-      icon: <FolderIcon />,
-      isActive: pathName.startsWith("/project"),
-    },
-    {
-      name: "Project Epics",
-      href: "/project-epics",
       icon: (
-        <EpicsIcon
-          color={pathName.startsWith("/project-epics") ? "#003d9b" : "#041B3C"}
-        />
+        <FolderIcon color={pathname === "/project" ? "#003D9B" : "#041B3C"} />
       ),
-      isActive: pathName.startsWith("/project-epics"),
-    },
-    {
-      name: "Project Tasks",
-      href: "/project-tasks",
-      icon: (
-        <TaskIcon
-          color={pathName.startsWith("/project-tasks") ? "#003d9b" : "#041B3C"}
-        />
-      ),
-      isActive: pathName.startsWith("/project-tasks"),
-    },
-    {
-      name: "Project Members",
-      href: "/project-members",
-      icon: (
-        <MembersIcon
-          color={
-            pathName.startsWith("/project-members") ? "#003d9b" : "#041B3C"
-          }
-        />
-      ),
-      isActive: pathName.startsWith("/project-members"),
-    },
-    {
-      name: "Project Details",
-      href: "/project-details",
-      icon: (
-        <DetailsIcon
-          color={
-            pathName.startsWith("/project-details") ? "#003d9b" : "#041B3C"
-          }
-        />
-      ),
-      isActive: pathName.startsWith("/project-details"),
+      isActive: pathname === "/project" || pathname.includes('/add'),
     },
   ];
+
+  if (projectId) {
+    navLinks.push(
+      {
+        name: "Project Epics",
+        href: `/project/${projectId}/epics`,
+        icon: (
+          <EpicsIcon
+            color={pathname.includes("/epics") ? "#003D9B" : "#041B3C"}
+          />
+        ),
+        isActive: pathname.includes("/epics"),
+      },
+      {
+        name: "Project Tasks",
+        href: `/project/${projectId}/tasks`,
+        icon: (
+          <TaskIcon
+            color={pathname.includes("/tasks") ? "#003D9B" : "#041B3C"}
+          />
+        ),
+        isActive: pathname.includes("/tasks"),
+      },
+      {
+        name: "Project Members",
+        href: `/project/${projectId}/members`,
+        icon: (
+          <MembersIcon
+            color={pathname.includes("/members") ? "#003D9B" : "#041B3C"}
+          />
+        ),
+        isActive: pathname.includes("/members"),
+      },
+      {
+        name: "Project Details",
+        href: `/project/${projectId}/edit`,
+        icon: (
+          <DetailsIcon
+            color={pathname.includes("/edit") ? "#003D9B" : "#041B3C"}
+          />
+        ),
+        isActive: pathname.includes("/edit"),
+      },
+    );
+  }
 
   return (
     <aside

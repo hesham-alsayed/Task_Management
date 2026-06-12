@@ -1,4 +1,4 @@
-import GetAllProjects from "@/components/project/GetAllProjects";
+import GetAllProjects from "@/components/projects/GetAllProjects";
 
 
 export default function page() {

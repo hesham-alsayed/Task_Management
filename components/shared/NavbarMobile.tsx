@@ -5,13 +5,11 @@ import BurgerIcon from "../icons/BurgerIcon";
 import LogoutIcon from "../icons/LogoutIcon";
 import Link from "next/link";
 import LogoIcon from "../icons/LogoIcon";
-import { navLinks } from "../../lib/NavLinks";
-import { usePathname } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import Avatar from "./Avatar";
 import { User } from "./NavbarDesktop";
 import { getShortName } from "@/lib/helper/get-shortname";
-
-
+import { getNavLinks } from "@/lib/NavLinks";
 
 type Props = {
   user: User;
@@ -20,13 +18,16 @@ type Props = {
 export default function NavbarMobile({ user }: Props) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
   const shortName = getShortName(user?.name);
-
+  const params = useParams();
+  const projectId = params.projectId as string;
   return (
     <>
-      {/* NAVBAR */}
-      <div className="h-16 border-b w-full  fixed top-0 right-0 z-40 px-6 py-3 bg-[#f9f9ff]
-        transition-all duration-300  border-b-[#0000001A]  flex items-center justify-between">
+      <div
+        className="h-16 border-b w-full  fixed top-0 right-0 z-40 px-6 py-3 bg-[#f9f9ff]
+        transition-all duration-300  border-b-[#0000001A]  flex items-center justify-between"
+      >
         <div className="flex items-center gap-4">
           <button
             onClick={() => setOpen(true)}
@@ -40,10 +41,13 @@ export default function NavbarMobile({ user }: Props) {
           </span>
         </div>
 
-        <Avatar user={user} />   
+        {user ? (
+          <Avatar user={user} />
+        ) : (
+          <div className="w-10 h-10 rounded-full bg-skeleton animate-pulse" />
+        )}
       </div>
 
-      {/* OVERLAY */}
       {open && (
         <div
           onClick={() => setOpen(false)}
@@ -51,17 +55,13 @@ export default function NavbarMobile({ user }: Props) {
         />
       )}
 
-      {/* SIDEBAR */}
       <div
         className={`fixed top-0 left-0 h-full w-[288px] bg-[#F1F3FF] p-4 z-1000 shadow-xl transform transition-transform duration-300 ${
           open ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        {/* Header inside sidebar */}
         <div className="flex h-full flex-col justify-between">
-          {/* Top */}
           <div>
-            {/* Logo */}
             <div className="pb-8">
               <div className="flex items-center gap-3">
                 <LogoIcon />
@@ -73,21 +73,24 @@ export default function NavbarMobile({ user }: Props) {
 
             {/* Nav */}
             <ul className="flex flex-col gap-1">
-              {navLinks.map((item) => {
-                const isActive = pathname === item.href;
+              {getNavLinks(projectId, pathname).map((item) => {
+                const isActive = item.isActive;
                 return (
                   <li key={item.href} className="list-none ">
-                    <Link
-                      href={item.href}
-                      className={`flex items-center hover:bg-[#FFFFFF]  gap-3 p-2 rounded-sm font-medium ${
+                    <button
+                      onClick={() => {
+                        router.push(item.href);
+                        setOpen(false);
+                      }}
+                      className={`flex w-full items-center hover:bg-[#FFFFFF]  gap-3 p-2 rounded-sm font-medium ${
                         isActive
                           ? "bg-white text-[#0052CC]"
                           : "text-[#041B3C99]"
                       }`}
                     >
-                      {item.icon(isActive)}
+                      {item.icon(isActive!!)}
                       {item.name}
-                    </Link>
+                    </button>
                   </li>
                 );
               })}
