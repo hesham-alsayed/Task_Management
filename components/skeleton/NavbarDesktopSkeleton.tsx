@@ -13,14 +13,12 @@ export default function NavbarDesktopSkeleton() {
     >
       <div className="flex items-center justify-end h-full">
         <div className="flex items-center gap-4">
-          {/* Text skeleton */}
           <div className="flex flex-col items-end gap-2">
-            <div className="h-3 w-24 bg-[#E8EDFF] rounded" />
-            <div className="h-2 w-16 bg-[#E8EDFF] rounded" />
+            <div className="h-3 w-24 bg-skeleton rounded" />
+            <div className="h-2 w-16 bg-skeleton rounded" />
           </div>
 
-          {/* Avatar skeleton */}
-          <div className="h-10 w-10 bg-[#E8EDFF] rounded-full" />
+          <div className="h-10 w-10 bg-skeleton rounded-full" />
         </div>
       </div>
     </header>

@@ -1,6 +1,6 @@
 import BulmIcon from "../icons/BulmIcon";
 
-export default function FooterAddProject() {
+export default function FooterProject() {
   return (
     <div className=" max-sm:mx-4 max-sm:flex-col max-sm:text-start bg-[#F1F3FF] text-[#4F5F7B] p-8 flex sm:items-center gap-2 text-[12px] font-normal ">
       <span className="hidden sm:block">

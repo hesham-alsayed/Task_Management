@@ -1,12 +1,12 @@
 "use server";
 
-import { CreateProjectFormData } from "@/hooks/useAddNewProjectForm";
+import { ProjectFormData } from "@/hooks/useProjectForm";
 import { apiFetch } from "@/lib/api-client";
 import { accessToken } from "@/lib/constant";
 import { cookies } from "next/headers";
 
 export default async function addNewProjectAction(
-  projectFormData: CreateProjectFormData,
+  projectFormData: ProjectFormData,
 ) {
   const cookieStore = await cookies();
   const token = cookieStore.get(accessToken)?.value;

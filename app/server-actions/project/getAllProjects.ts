@@ -32,7 +32,6 @@ export async function getAllProjectsAction(query: Props) {
       totalCount: Number(result.headers["content-range"]?.split("/")[1]),
     };
   } catch (error) {
-    console.log(error);
     throw error || "Network or internal server error";
   }
 }

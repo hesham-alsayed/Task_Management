@@ -53,7 +53,6 @@ export default function Avatar({ user }: Props) {
 
   return (
     <div className="relative" ref={ref}>
-      {/* Avatar */}
       <div
         onClick={() => setOpen(!open)}
         className="w-10 h-10 rounded-xl bg-primary text-white flex items-center justify-center text-[16px] font-bold cursor-pointer hover:opacity-90 transition"
@@ -61,7 +60,6 @@ export default function Avatar({ user }: Props) {
         {shortName}
       </div>
 
-      {/* Dropdown */}
       {open && (
         <div className="absolute right-0 mt-2 w-44 bg-white border border-gray-100 shadow-lg rounded-xl overflow-hidden z-50 animate-in fade-in zoom-in-95">
           <div className="px-3 py-2 text-sm text-gray-500 border-b">

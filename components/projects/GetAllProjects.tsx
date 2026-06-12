@@ -63,7 +63,7 @@ export default function GetAllProjects() {
     return (
       <ErrorNetworkState
         isLoading={retryLoading}
-        retryGetAllProjects={retryGetAllProjects}
+        retryFunction={retryGetAllProjects}
       />
     );
   }
@@ -89,7 +89,7 @@ export default function GetAllProjects() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
           {projects.map((project: any) => (
-            <CardProject key={project.id} project={project} />
+            <CardProject project={project} key={project.id} />
           ))}
 
           <div className="hidden sm:block">
@@ -114,7 +114,7 @@ export default function GetAllProjects() {
         ref={loadMoreRef}
         className="h-20 flex items-center justify-center sm:hidden"
       >
-        {loadingMore  && (
+        {loadingMore && (
           <div className="flex items-center gap-2">
             <div className="w-5 h-5 border-2 border-gray-300 border-t-transparent rounded-full animate-spin" />
             <span>Load more...</span>

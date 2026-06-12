@@ -5,14 +5,19 @@ import ErrorNetworkIcon from "../icons/ErrorNetworkIcon";
 import Loader from "../shared/Loader";
 
 type Props = {
-  retryGetAllProjects: () => void;
+  retryFunction: () => void;
   isLoading: boolean;
+  error?: string;
 };
 
 export default function ErrorNetworkState({
-  retryGetAllProjects,
+  retryFunction,
   isLoading,
+  error,
 }: Props) {
+  const finalError =
+    error ||
+    "We're having trouble retrieving your projects right now. Please try again.";
   return (
     <div className="flex flex-col items-center my-20 justify-center gap-3">
       <div className="w-14 h-14 rounded-sm flex items-center justify-center bg-[#FFDAD6]">
@@ -24,12 +29,11 @@ export default function ErrorNetworkState({
       </h1>
 
       <p className="max-w-[320px] text-center text-[#434654] text-[16px] font-normal">
-        We're having trouble retrieving your projects right now. Please try
-        again.
+        {finalError}
       </p>
 
       <button
-        onClick={retryGetAllProjects}
+        onClick={retryFunction}
         disabled={isLoading}
         className="btn-primary px-6 py-2 disabled:opacity-60 w-55"
       >

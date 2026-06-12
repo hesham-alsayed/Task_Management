@@ -18,8 +18,11 @@
   --color-error: #c21b1b;
   --color-warning: #ffb000;
 
-  --color-main: #041b3c; 
-  --color-white : #ffffff
+  --color-main: #041b3c;
+  --color-white: #ffffff;
+  --color-skeleton: #d1d5dc;
+  --color-maingreen: #82f9be; 
+  --color-darkgreen:#004E32;
 }
 
 /* Light mode base */

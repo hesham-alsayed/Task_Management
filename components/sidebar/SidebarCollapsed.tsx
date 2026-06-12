@@ -1,20 +1,20 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 
 import LogoIcon from "../icons/LogoIcon";
 
-import { navLinks } from "../../lib/NavLinks";
+import { getNavLinks } from "../../lib/NavLinks";
 import LogoutIcon from "../icons/LogoutIcon";
 import { useAppDispatch } from "@/app/store/hooks";
 import { toggleSidebar } from "@/app/store/features/ui/uiSlice";
 
-
 export default function SidebarCollapsed() {
-  const pathname = usePathname(); 
-
-  const dispatch = useAppDispatch()
+  const pathname = usePathname();
+  const params = useParams();
+  const projectId = params.projectId as string;
+  const dispatch = useAppDispatch();
   return (
     <aside
       className="h-screen
@@ -29,8 +29,8 @@ export default function SidebarCollapsed() {
             <LogoIcon />
           </div>
           <div className="mt-8 flex  flex-col items-center ">
-            {navLinks.map((item) => {
-              const isActive = pathname.startsWith(item.href);
+            {getNavLinks(projectId, pathname).map((item) => {
+              const isActive = item.isActive;
               return (
                 <li key={item.href} className="list-none">
                   <Link
@@ -41,7 +41,7 @@ export default function SidebarCollapsed() {
                         : "text-[#041B3C99]"
                     }`}
                   >
-                    {item.icon(isActive)}
+                    {item.icon(isActive!!)}
                   </Link>
                 </li>
               );
