@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function MembersIcon({ color }: { color: string }) {
+export default function MembersIcon({ color }: { color?: string }) {
   const finalColor = color || "#041B3C";
   return (
     <svg

@@ -15,11 +15,7 @@ const loginSchema = z.object({
   rememberMe: z.boolean(),
 });
 
-type ApiResponse = {
-  success: boolean;
-  message?: string;
-  user?: unknown;
-};
+
 
 export type LoginFormData = z.infer<typeof loginSchema>;
 
@@ -35,7 +31,6 @@ export function useLoginForm() {
       password: "",
       rememberMe: false,
     },
-    mode: "onChange",
   });
 
   
