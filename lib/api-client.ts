@@ -16,7 +16,6 @@ export async function apiFetch({ path, ...options }: FetchOptions) {
   });
 
   const text = await res.text();
-
   const data = text ? JSON.parse(text) : null;
   if (!res.ok) {
     throw data?.message || data?.msg || "Something went wrong";

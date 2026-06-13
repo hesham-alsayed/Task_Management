@@ -5,20 +5,16 @@ import signup, { SignupFormData } from "@/app/server-actions/auth/signup";
 import { LoginFormData } from "@/hooks/useLoginForm";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-
 export const getCurrentUser = createAsyncThunk(
   "auth/getCurrentUser",
   async (_, { rejectWithValue }) => {
     try {
       return await getUserAction();
     } catch (error: any) {
-      return rejectWithValue(
-        error?.message || "Failed to get user"
-      );
+      return rejectWithValue(error?.message || "Failed to get user");
     }
-  }
+  },
 );
-
 
 export const signupUser = createAsyncThunk(
   "auth/signupUser",
@@ -26,28 +22,27 @@ export const signupUser = createAsyncThunk(
     try {
       const user = await signup(data);
       return user;
-    } catch (error : any) {
-      return rejectWithValue(error.message ||"Error in network or server try again later"
+    } catch (error: any) {
+      return rejectWithValue(
+        error.message || "Error in network or server try again later",
       );
     }
-  }
+  },
 );
-
 
 export const loginUser = createAsyncThunk(
   "auth/loginUser",
-  async (
-    data: LoginFormData,
-    { rejectWithValue }
-  ) => {
+  async (data: LoginFormData, { rejectWithValue }) => {
     try {
       const user = await login(data);
 
       return user;
     } catch (error: any) {
-    return rejectWithValue(error.message ||"Error in network or server try again later")
+      return rejectWithValue(
+        error.message || "Error in network or server try again later",
+      );
     }
-  }
+  },
 );
 
 export const logoutUser = createAsyncThunk(
@@ -58,10 +53,7 @@ export const logoutUser = createAsyncThunk(
 
       return result;
     } catch (error: any) {
-      return rejectWithValue(
-        error?.message || "Logout failed"
-      );
+      return rejectWithValue(error?.message || "Logout failed");
     }
-  }
+  },
 );
-

@@ -80,7 +80,7 @@ const getRequirements = (password: string): Requirement[] => [
 export function useSignupForm() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const dispatch = useAppDispatch() 
+  const dispatch = useAppDispatch();
   const form = useForm<SignupFormData>({
     resolver: zodResolver(signupSchema),
     defaultValues: {
@@ -96,29 +96,29 @@ export function useSignupForm() {
   const password = form.watch("password") || "";
 
   const requirements = useMemo(() => getRequirements(password), [password]);
-const onSubmit = async (data: SignupFormData) => {
-  try {
-    setIsLoading(true);
+  const onSubmit = async (data: SignupFormData) => {
+    try {
+      setIsLoading(true);
 
-    const body = {
-      email: data.email,
-      password: data.password,
-      data: {
-        name: data.name,
-        jobTitle: data.jobTitle,
-      },
-    };
+      const body = {
+        email: data.email,
+        password: data.password,
+        data: {
+          name: data.name,
+          jobTitle: data.jobTitle,
+        },
+      };
 
-    await dispatch(signupUser(body)).unwrap();
-    toast.success("Account created successfully");
-    router.push("/project");
-  } catch (err) { 
-    console.log(err)
-    toast.error(typeof err === "string" ? err : "Something went wrong");
-  } finally {
-    setIsLoading(false);
-  }
-};
+      await dispatch(signupUser(body)).unwrap();
+      toast.success("Account created successfully");
+      router.push("/project");
+    } catch (err: any) {
+      console.log(err);
+      toast.error(err || "internal server error");
+    } finally {
+      setIsLoading(false);
+    }
+  };
   return {
     form,
     onSubmit,

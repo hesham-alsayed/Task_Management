@@ -25,13 +25,13 @@ export async function login(loginData: LoginFormData) {
 
     const cookieStore = await cookies();
 
-    const refreshMaxAge = loginData.rememberMe ? 30 * 24 * 60 * 60 : 24 * 60 * 60 
-    
+    const refreshMaxAge = loginData.rememberMe
+      ? 30 * 24 * 60 * 60
+      : 24 * 60 * 60;
 
-    cookieStore.set(accessToken, response.data.access_token,{
-      ... ACCESS_TOKEN_OPTIONS , 
-      // maxAge : response.expires_in || 3600 
-      
+    cookieStore.set(accessToken, response.data.access_token, {
+      ...ACCESS_TOKEN_OPTIONS,
+      maxAge: response.data.expires_in || 3600,
     });
 
     cookieStore.set(refreshToken, response.data.refresh_token, {
@@ -41,8 +41,6 @@ export async function login(loginData: LoginFormData) {
 
     return response.data.user.user_metadata;
   } catch (error) {
-    throw typeof error === "string"
-      ? error
-      : "Invalid credentials";
+    throw error || "Network or internal server error";
   }
 }
