@@ -1,9 +1,8 @@
 "use client";
-import { getAllEpicsAction } from "@/app/server-actions/epics/getAllEpicList";
-import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
 
-type Status = "loading" | "success" | "error";
+import { useParams } from "next/navigation";
+import { usePaginationData } from "./usePaginationData";
+import { getAllEpicsAction } from "@/app/server-actions/epics/getAllEpicList";
 
 export type Epic = {
   id: string;
@@ -34,54 +33,15 @@ export type Epic = {
 };
 
 export const useGetAllEpics = () => {
-  const [status, setStatus] = useState<Status>("loading");
-  const [error, setError] = useState<string | null>(null);
-  const [retryLoading, setRetryLoading] = useState(false);
-  const [data, setData] = useState([]);
   const params = useParams();
+
   const projectId = params.projectId as string;
 
-  const fetchEpics = async () => {
-    return await getAllEpicsAction(projectId);
-  };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setStatus("loading");
-        setError(null);
-        const data = await fetchEpics();
-        console.log(data);
-        setData(data);
-        setStatus("success");
-      } catch (err: any) {
-        setError(err?.message || "Network Error");
-        setStatus("error");
-      }
-    };
-
-    fetchData();
-  }, [projectId]);
-
-  const retryGetAllEpics = async () => {
-    try {
-      setRetryLoading(true);
-      const data = await fetchEpics();
-      setData(data);
-      setError(null);
-      setStatus("success");
-    } catch (err: any) {
-      setError(err?.message || "Network Error");
-    } finally {
-      setRetryLoading(false);
-    }
-  };
+  const pagination = usePaginationData(getAllEpicsAction, 4, {
+    projectId,
+  });
 
   return {
-    data,
-    error,
-    retryGetAllEpics,
-    status,
-    retryLoading,
+    ...pagination,
   };
 };

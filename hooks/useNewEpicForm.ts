@@ -1,6 +1,6 @@
 import { addNewEpicAction } from "@/app/server-actions/epics/addNewEpic";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -31,7 +31,7 @@ export const useNewEpicForm = () => {
   const [loading, setLoading] = useState(false);
   const params = useParams();
   const projectId = params.projectId as string;
-
+  const router = useRouter();
   const form = useForm<NewEpicFormData>({
     resolver: zodResolver(newEpicSchema),
     defaultValues: {
@@ -53,16 +53,17 @@ export const useNewEpicForm = () => {
       setLoading(true);
       const body: RequestEpicBody = {
         title: data.title,
-        description: data.description,
-        assignee_id: data.assignee,
+        description: data.description ? data.description : undefined,
+        assignee_id: data.assignee ? data.assignee : undefined,
         project_id: projectId,
-        deadline: data.deadline,
+        deadline: data.deadline ? data.deadline : undefined,
       };
       console.log(body);
       const result = await addNewEpicAction(body);
       console.log(result);
       toast.success("new Epic Created successfully");
       form.reset({});
+      router.push(`/project/${projectId}/epics`);
     } catch (error: any) {
       toast.error(error.message || "Error in network or internal server error");
     } finally {

@@ -3,6 +3,7 @@ import React from "react";
 import CurrentLocation from "../shared/CurrentLocation";
 import SearchIcon from "../icons/SearchIcon";
 import PlusIcon from "../icons/PlusIcon";
+import { useParams, useRouter } from "next/navigation";
 
 type Props = {
   projectId: string;
@@ -10,6 +11,9 @@ type Props = {
 };
 
 export default function HeaderEpicList({ projectId, projectName }: Props) {
+  const router = useRouter();
+  const params = useParams();
+  const currentProjectId = (params.projectId as string) || projectId;
   const items = [
     {
       label: "projects",
@@ -45,7 +49,10 @@ export default function HeaderEpicList({ projectId, projectName }: Props) {
         </div>
 
         <div className="hidden sm:block">
-          <button className="flex items-center mt-1 h-[47px] justify-center gap-2 btn-primary w-30">
+          <button
+            onClick={() => router.push(`/project/${currentProjectId}/epics/new`)}
+            className="flex items-center mt-1 h-[47px] justify-center gap-2 btn-primary w-30"
+          >
             <PlusIcon />
             New Epic
           </button>

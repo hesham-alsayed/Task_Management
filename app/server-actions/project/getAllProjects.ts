@@ -5,8 +5,8 @@ import { accessToken } from "@/lib/constant";
 import { cookies } from "next/headers";
 
 type Props = {
-  limit: string;
-  offset: string;
+  limit?: string;
+  offset?: string;
 };
 export async function getAllProjectsAction(query: Props) {
   try {
@@ -27,7 +27,7 @@ export async function getAllProjectsAction(query: Props) {
     });
 
     return {
-      projects: result.data,
+      data: result.data,
       totalCount: Number(result.headers["content-range"]?.split("/")[1]),
     };
   } catch (error) {

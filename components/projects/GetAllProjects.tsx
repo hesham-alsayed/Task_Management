@@ -3,7 +3,7 @@
 import HeaderProject from "./HeaderProject";
 import CardNewProject from "./CardNewProject";
 import { useGetAllProjects } from "@/hooks/useGetAllProjects";
-import Pagination from "./Pagination";
+import Pagination from "../shared/Pagination";
 import CardProject from "./CardProject";
 import EmptyState from "./EmptyState";
 import CardProjectSkeleton from "../skeleton/CardProjectSkeleton";
@@ -11,19 +11,20 @@ import ButtonCreateProjectSkeleton from "../skeleton/ButtonCreateProjectSkeleton
 import ErrorNetworkState from "./ErrorNetworkState";
 import ButtonCreateProject from "./ButtonCreateProject";
 import { useRouter } from "next/navigation";
+import Loader from "../shared/Loader";
 
 export default function GetAllProjects() {
   const {
     projects,
     status,
     retryLoading,
-    retryGetAllProjects,
+    retryGetData,
     totalCount,
     totalPages,
     hasNextPage,
     hasPrevPage,
     page,
-    limit,
+    finalLimit,
     loadMoreRef,
     loadingMore,
     isMobile,
@@ -38,8 +39,8 @@ export default function GetAllProjects() {
   const isSuccess = status === "success";
   const isEmpty = isSuccess && !hasProjects && !loadingMore;
 
-  const skeletonArray = Array.from({ length: limit });
-
+  const skeletonArray = Array.from({ length: finalLimit });
+  console.log(projects);
   if (isLoading) {
     return (
       <main className="flex flex-col px-4">
@@ -63,7 +64,7 @@ export default function GetAllProjects() {
     return (
       <ErrorNetworkState
         isLoading={retryLoading}
-        retryFunction={retryGetAllProjects}
+        retryFunction={retryGetData}
       />
     );
   }
@@ -97,10 +98,19 @@ export default function GetAllProjects() {
           </div>
         </div>
 
-        <div className="flex items-end justify-end sm:hidden">
+        <div className="fixed bottom-26 right-6 z-50 sm:hidden">
           <button
             onClick={() => router.push("/project/add")}
-            className="w-14 h-14 rounded-lg flex items-center justify-center bg-primary"
+            className="
+      w-14 h-14
+      rounded-lg
+      flex items-center justify-center
+      bg-primary
+      shadow-lg
+      hover:scale-105
+      active:scale-95
+      transition
+    "
           >
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
               <path d="M6 8H0V6H6V0H8V6H14V8H8V14H6V8Z" fill="white" />
@@ -116,12 +126,14 @@ export default function GetAllProjects() {
         {loadingMore && (
           <div className="flex items-center gap-2">
             <div className="w-5 h-5 border-2 border-gray-300 border-t-transparent rounded-full animate-spin" />
-            <span>Load more...</span>
+            <span>
+              <Loader />
+            </span>
           </div>
         )}
       </div>
 
-      {!isMobile && (
+      {!isMobile && totalPages > 1 && (
         <div className="mt-auto pt-10 hidden sm:block">
           <Pagination
             currentPage={page}
@@ -130,6 +142,8 @@ export default function GetAllProjects() {
             hasPrevPage={hasPrevPage}
             totalPages={totalPages}
             totalCount={totalCount}
+            limit={finalLimit.toString()}
+            type="projects"
           />
         </div>
       )}

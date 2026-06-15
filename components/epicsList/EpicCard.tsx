@@ -26,7 +26,9 @@ export default function EpicCard({ epic }: Props) {
         </button>
       </div>
 
-      <h2 className="text-[20px] font-semibold capitalize text-main mt-4 ">{title}</h2>
+      <h2 className="text-[20px] font-semibold capitalize text-main mt-4 ">
+        {title}
+      </h2>
 
       <div className="flex items-center gap-3 mt-5">
         <div className="w-10 h-10 rounded-xl bg-maingreen text-darkgreen flex items-center justify-center font-semibold">
@@ -34,8 +36,12 @@ export default function EpicCard({ epic }: Props) {
         </div>
 
         <div>
-          <p className=" capitalize text-[12px] font-medium text-[#434654]">Assignee</p>
-          <p className=" capitalize font-semibold text-main text-sm">{assignee.name}</p>
+          <p className=" capitalize text-[12px] font-medium text-[#434654]">
+            Assignee
+          </p>
+          <p className=" capitalize font-semibold text-main text-sm">
+            {assignee.name || "un assigned"}{" "}
+          </p>
         </div>
       </div>
 

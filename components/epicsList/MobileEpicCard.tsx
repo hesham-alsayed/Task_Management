@@ -37,7 +37,7 @@ export default function MobileEpicCard({ epic }: Props) {
 
           <div>
             <p className="text-[12px] font-medium text-main ">
-              {assignee.name}
+              {assignee.name || "un assigned"}
             </p>
             <p className="text-[10px] text-[#737685] font-normal">Assignee</p>
           </div>
