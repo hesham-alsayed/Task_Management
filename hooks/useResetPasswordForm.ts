@@ -6,7 +6,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import { resetPasswordAction } from "@/app/server-actions/auth/resetPassword";
+import { resetPasswordAction } from "@/server-actions/auth/resetPassword";
 
 const passwordRules = {
   length: (v: string) => v.length >= 8 && v.length <= 64,
@@ -35,14 +35,12 @@ const schema = z
     message: "Passwords do not match",
   });
 
-
 export type ResetPasswordFormData = z.infer<typeof schema>;
 
 export type RequirementItem = {
   text: string;
   valid: boolean;
 };
-
 
 export function useResetPasswordForm(token?: string) {
   const [isLoading, setIsLoading] = useState(false);
@@ -107,31 +105,31 @@ export function useResetPasswordForm(token?: string) {
     [password],
   );
 
- const onSubmit = async (data: ResetPasswordFormData) => {
-  try {
-    setIsLoading(true);
+  const onSubmit = async (data: ResetPasswordFormData) => {
+    try {
+      setIsLoading(true);
 
-    if (!token) {
-      toast.error("Token not found or invalid");
-      return;
+      if (!token) {
+        toast.error("Token not found or invalid");
+        return;
+      }
+
+      const result = await resetPasswordAction({
+        password: data.password,
+        token,
+      });
+
+      toast.success(result.message);
+
+      setTimeout(() => {
+        router.replace("/login");
+      }, 3000);
+    } catch (error: any) {
+      toast.error(error.message || error.msg || "Failed to update password");
+    } finally {
+      setIsLoading(false);
     }
-
-    const result = await resetPasswordAction({
-      password: data.password,
-      token,
-    });
-
-    toast.success(result.message);
-
-    setTimeout(() => {
-      router.replace("/login");
-    }, 3000);
-  } catch (error: any) {
-    toast.error(error.message || error.msg || "Failed to update password");
-  } finally {
-    setIsLoading(false);
-  }
-};
+  };
 
   return {
     form,

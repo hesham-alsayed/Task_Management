@@ -2,7 +2,7 @@
 
 import { useParams } from "next/navigation";
 import { usePaginationData } from "./usePaginationData";
-import { getAllEpicsAction } from "@/app/server-actions/epics/getAllEpicList";
+import { getAllEpicsAction } from "@/server-actions/epics/getAllEpicList";
 
 export type Epic = {
   id: string;

@@ -1,4 +1,4 @@
-import { addNewEpicAction } from "@/app/server-actions/epics/addNewEpic";
+import { addNewEpicAction } from "@/server-actions/epics/addNewEpic";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";

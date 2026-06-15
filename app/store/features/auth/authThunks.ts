@@ -1,7 +1,7 @@
-import { getUserAction } from "@/app/server-actions/auth/getUser";
-import { login } from "@/app/server-actions/auth/login";
-import { logoutAction } from "@/app/server-actions/auth/logout";
-import signup, { SignupFormData } from "@/app/server-actions/auth/signup";
+import { getUserAction } from "@/server-actions/auth/getUser";
+import { login } from "@/server-actions/auth/login";
+import { logoutAction } from "@/server-actions/auth/logout";
+import signup, { SignupFormData } from "@/server-actions/auth/signup";
 import { LoginFormData } from "@/hooks/useLoginForm";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 

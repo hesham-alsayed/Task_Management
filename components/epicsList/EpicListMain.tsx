@@ -10,6 +10,7 @@ import ErrorNetworkState from "../projects/ErrorNetworkState";
 import Pagination from "../shared/Pagination";
 import Loader from "../shared/Loader";
 import { useParams, useRouter } from "next/navigation";
+import EpicModalDetails from "../epicDetails/EpicModalDetails";
 
 export default function EpicListMain() {
   const { initialProject } = useProjectForm();
@@ -98,6 +99,7 @@ export default function EpicListMain() {
           />
         </div>
       )}
+      <EpicModalDetails />
     </div>
   );
 }

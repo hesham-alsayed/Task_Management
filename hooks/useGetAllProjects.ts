@@ -1,4 +1,4 @@
-import { getAllProjectsAction } from "@/app/server-actions/project/getAllProjects";
+import { getAllProjectsAction } from "@/server-actions/project/getAllProjects";
 import { usePaginationData } from "./usePaginationData";
 
 export const useGetAllProjects = () => {

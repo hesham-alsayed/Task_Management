@@ -1,16 +1,14 @@
 "use client";
 
-import addNewProjectAction from "@/app/server-actions/project/addNewProject";
-import { editOneProjectAction } from "@/app/server-actions/project/editOneProject";
-import { getOneProjectAction } from "@/app/server-actions/project/getOneProject";
+import addNewProjectAction from "@/server-actions/project/addNewProject";
+import { editOneProjectAction } from "@/server-actions/project/editOneProject";
+import { getOneProjectAction } from "@/server-actions/project/getOneProject";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { z } from "zod";
-
-
 
 const schema = z.object({
   name: z.string().min(3),

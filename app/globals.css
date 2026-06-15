@@ -21,8 +21,8 @@
   --color-main: #041b3c;
   --color-white: #ffffff;
   --color-skeleton: #d1d5dc;
-  --color-maingreen: #82f9be; 
-  --color-darkgreen:#004E32;
+  --color-maingreen: #82f9be;
+  --color-darkgreen: #004e32;
 }
 
 /* Light mode base */
@@ -229,4 +229,53 @@ body {
   .toast-exit {
     animation: toastOut 0.25s ease-in forwards;
   }
+}
+
+/* ===== Chrome / Edge / Safari ===== */
+
+::-webkit-scrollbar {
+  width: 3px;
+  height: 3px;
+}
+
+/* track */
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* thumb */
+::-webkit-scrollbar-thumb {
+  background: #617b9b;
+  border-radius: 999px;
+}
+
+/* hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #062043;
+}
+
+/* ===== REMOVE ARROWS (IMPORTANT FIX) ===== */
+::-webkit-scrollbar-button {
+  width: 0;
+  height: 0;
+  display: none;
+  background: transparent;
+  appearance: none;
+}
+
+/* extra safety for old WebKit behavior */
+::-webkit-scrollbar-button:vertical:start:decrement,
+::-webkit-scrollbar-button:vertical:end:increment,
+::-webkit-scrollbar-button:horizontal:start:decrement,
+::-webkit-scrollbar-button:horizontal:end:increment {
+  display: none;
+  height: 0;
+  width: 0;
+  background: transparent;
+}
+
+/* ===== Firefox ===== */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #86888a transparent;
 }

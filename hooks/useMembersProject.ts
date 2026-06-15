@@ -1,5 +1,5 @@
 "use client";
-import { getMembersProjectAction } from "@/app/server-actions/members/getMembersProject";
+import { getMembersProjectAction } from "@/server-actions/members/getMembersProject";
 import { ProjectMember } from "@/components/projectMembers/MembersTable";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";

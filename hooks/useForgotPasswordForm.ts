@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
-import { forgotPasswordAction } from "@/app/server-actions/auth/forgotPassword";
+import { forgotPasswordAction } from "@/server-actions/auth/forgotPassword";
 
 const schema = z.object({
   email: z.string().email("Invalid email format"),
@@ -23,17 +23,16 @@ export function useForgotPasswordForm() {
   const [timeLeft, setTimeLeft] = useState(0);
   const [tries, setTries] = useState(0);
 
-
   const form = useForm<ForgotFormData>({
     resolver: zodResolver(schema),
     defaultValues: { email: "" },
     mode: "onChange",
   });
 
- const sendRequest = async (email: string) => {
-  const result = await forgotPasswordAction({ email });
-  return result;
-};
+  const sendRequest = async (email: string) => {
+    const result = await forgotPasswordAction({ email });
+    return result;
+  };
 
   const canSubmit = !isLoading && timeLeft === 0 && tries < MAX_TRIES;
   const canResend =
@@ -43,14 +42,13 @@ export function useForgotPasswordForm() {
     try {
       setIsLoading(true);
 
-
       await sendRequest(data.email);
 
       setIsSuccess(true);
       setTimeLeft(RESEND_TIME);
       setTries(1);
-    } catch (error) { 
-      console.log(error)
+    } catch (error) {
+      console.log(error);
       const message =
         error instanceof Error ? error.message : "Something went wrong";
 
