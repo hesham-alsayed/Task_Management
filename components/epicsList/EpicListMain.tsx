@@ -11,6 +11,7 @@ import Pagination from "../shared/Pagination";
 import Loader from "../shared/Loader";
 import { useParams, useRouter } from "next/navigation";
 import EpicModalDetails from "../epicDetails/EpicModalDetails";
+import { useEffect, useState } from "react";
 
 export default function EpicListMain() {
   const { initialProject } = useProjectForm();
@@ -41,6 +42,14 @@ export default function EpicListMain() {
   const isError = status === "error";
   const isSuccess = status === "success";
   const isEmpty = isSuccess && !hasEpics;
+
+  const [epics, setEpics] = useState(data);
+
+  useEffect(() => {
+    setEpics(data);
+  }, [data]);
+
+  console.log(data);
   if (isLoading) {
     return <EpicListSkeleton />;
   }
@@ -65,7 +74,7 @@ export default function EpicListMain() {
           projectName={initialProject?.name ?? ""}
         />
       </div>
-      <EpicList data={data} />
+      <EpicList data={epics} />
 
       <div
         ref={loadMoreRef}
@@ -99,7 +108,7 @@ export default function EpicListMain() {
           />
         </div>
       )}
-      <EpicModalDetails />
+      <EpicModalDetails epics={epics} setEpics={setEpics} />
     </div>
   );
 }

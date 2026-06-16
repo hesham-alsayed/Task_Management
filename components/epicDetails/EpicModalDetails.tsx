@@ -13,6 +13,7 @@ import React, { useEffect, useState } from "react";
 import HeaderEpicDetails from "./HeaderEpicDetails";
 import EpicMainInfo from "./EpicMainInfo";
 import EmptyTasks from "./EmptyTasks";
+import { Epic } from "@/hooks/useGetAllEpics";
 
 export type UserInfo = {
   sub: string;
@@ -36,7 +37,12 @@ export type EpicDetails = {
   created_by: UserInfo;
 };
 
-export default function EpicModalDetails() {
+type Props = {
+  epics: Epic[];
+  setEpics: React.Dispatch<React.SetStateAction<Epic[]>>;
+};
+
+export default function EpicModalDetails({ epics, setEpics }: Props) {
   const params = useParams();
   const projectId = params.projectId as string;
 
@@ -91,7 +97,7 @@ export default function EpicModalDetails() {
       <div className="relative z-10 mx-4 w-full max-w-[672px] max-h-[95vh] bg-white rounded-xl shadow-xl flex flex-col overflow-hidden">
         <div className="overflow-y-auto">
           <>
-            <HeaderEpicDetails epic={epic} />
+            <HeaderEpicDetails setEpics={setEpics} epic={epic} />
             <EpicMainInfo epic={epic} />
             <EmptyTasks />
           </>

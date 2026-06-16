@@ -1,14 +1,14 @@
 "use client";
 import React from "react";
 import HeaderNewEpics from "./HeaderNewEpics";
-import NewEpicsForm from "./NewEpicsForm";
+import NewEpicsForm from "./NewEpicForm";
 import { useProjectForm } from "@/hooks/useProjectForm";
 import { useNewEpicForm } from "@/hooks/useNewEpicForm";
 import HeaderNewEpicsSkeleton from "../skeleton/HeaderNewEpicSkeleton";
 import HeaderNewEpicSkeleton from "../skeleton/HeaderNewEpicSkeleton";
 import { useMembersProject } from "@/hooks/useMembersProject";
 
-export default function NewEpicsMain() {
+export default function NewEpicMain() {
   const { initialProject } = useProjectForm();
   const { form, onSubmit, loading, handleResetForm } = useNewEpicForm();
   const { data } = useMembersProject();

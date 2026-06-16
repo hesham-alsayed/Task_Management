@@ -16,7 +16,7 @@ type Props = {
   loading: boolean;
   members: ProjectMember[];
 };
-export default function NewEpicsForm({
+export default function NewEpicForm({
   form,
   loading,
   onSubmit,
