@@ -98,7 +98,7 @@ export default function EpicModalDetails({ epics, setEpics }: Props) {
         <div className="overflow-y-auto">
           <>
             <HeaderEpicDetails setEpics={setEpics} epic={epic} />
-            <EpicMainInfo epic={epic} />
+            <EpicMainInfo setEpics={setEpics} epic={epic} />
             <EmptyTasks />
           </>
         </div>

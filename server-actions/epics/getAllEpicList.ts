@@ -23,8 +23,17 @@ export const getAllEpicsAction = async ({
       throw "Unauthorized: missing access token";
     }
 
+    const fullDataPath = `/rest/v1/project_epics?project_id=eq.${projectId}`;
+    const PginationPath = `/rest/v1/project_epics?project_id=eq.${projectId}&limit=${limit}&offset=${offset}`;
+
+    let path;
+    if (limit && offset) {
+      path = PginationPath;
+    } else {
+      path = fullDataPath;
+    }
     const result = await apiFetch({
-      path: `/rest/v1/project_epics?project_id=eq.${projectId}&limit=${limit}&offset=${offset}`,
+      path: path,
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,

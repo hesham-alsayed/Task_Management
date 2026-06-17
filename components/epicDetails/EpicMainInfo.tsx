@@ -9,12 +9,15 @@ import EpicAssignee from "./EpicAssignee";
 import EpicDeadline from "./EpicDeadline";
 import EpicCreatedAt from "./EpicCreatedAt";
 import { useMembersProject } from "@/hooks/useMembersProject";
+import { Epic } from "@/hooks/useGetAllEpics";
 
 type Props = {
-  epic: EpicDetails;
+  epic: EpicDetails; 
+    setEpics: React.Dispatch<React.SetStateAction<Epic[]>>;
+  
 };
 
-export default function EpicMainInfo({ epic }: Props) {
+export default function EpicMainInfo({ epic , setEpics }: Props) {
   const { description, created_by, assignee, deadline, created_at } = epic;
   const { data } = useMembersProject();
   const [descriptionValue, setDescriptionValue] = useState(
@@ -45,6 +48,7 @@ export default function EpicMainInfo({ epic }: Props) {
           editingAssignee={editingAssignee}
           setEditingAssignee={setEditingAssignee}
           members={data}
+          setEpics={setEpics}
         />
 
         <EpicDeadline

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import EpicIcon from "../icons/EpicIcon";
 import { EpicDetails } from "./EpicModalDetails";
 import CloseIcon from "../icons/CloseIcon";
@@ -18,7 +18,7 @@ type Props = {
   setEpics: React.Dispatch<React.SetStateAction<Epic[]>>;
 };
 
-export default function HeaderEpicDetails({ epic , setEpics }: Props) {
+export default function HeaderEpicDetails({ epic, setEpics }: Props) {
   const { epic_id, title } = epic;
 
   const dispatch = useAppDispatch();
@@ -28,9 +28,12 @@ export default function HeaderEpicDetails({ epic , setEpics }: Props) {
   const [isFocused, setIsFocused] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  const initialValueRef = useRef(title);
+
   const handleSaveChange = async () => {
     setIsFocused(false);
 
+    if (value === initialValueRef.current) return;
     if (!selectedEpicId) return;
 
     const prevTitle = epic.title;
@@ -38,12 +41,7 @@ export default function HeaderEpicDetails({ epic , setEpics }: Props) {
 
     setEpics((prev) =>
       prev.map((item) =>
-        item.id === selectedEpicId
-          ? {
-              ...item,
-              title: newTitle,
-            }
-          : item,
+        item.id === selectedEpicId ? { ...item, title: newTitle } : item,
       ),
     );
 
@@ -56,24 +54,22 @@ export default function HeaderEpicDetails({ epic , setEpics }: Props) {
     if (!res?.success) {
       setEpics((prev) =>
         prev.map((item) =>
-          item.id === selectedEpicId
-            ? {
-                ...item,
-                title: prevTitle,
-              }
-            : item,
+          item.id === selectedEpicId ? { ...item, title: prevTitle } : item,
         ),
       );
 
-      setValue(prevTitle); 
+      setValue(prevTitle);
       toast.error("Failed to update epic. Please try again.");
       setLoading(false);
       return;
     }
 
+    initialValueRef.current = newTitle;
+
     setLoading(false);
     toast.success("Epic updated successfully");
   };
+
   return (
     <div className="space-y-3 md:border-b p-6 rounded-t-xl max-md:bg-[#F1F3FF] md:border-b-[#7a7a7a26] md:pb-8">
       <div className="flex items-center justify-between">
@@ -101,20 +97,26 @@ export default function HeaderEpicDetails({ epic , setEpics }: Props) {
       <input
         value={value}
         onChange={(e) => setValue(e.target.value)}
-        onFocus={() => setIsFocused(true)}
+        onFocus={() => !loading && setIsFocused(true)}
         onBlur={handleSaveChange}
-        disabled={loading} 
+        disabled={loading}
         className={`
           w-full
           text-[24px]
           font-bold
           text-main
           border-b
-          border-transparent
           transition-all
           duration-200
           outline-none
-          ${isFocused ? "border-b-2 border-[#7a7a7a26]" : "border-transparent"}
+
+          ${
+            loading
+              ? "opacity-50 cursor-not-allowed border-transparent"
+              : isFocused
+                ? "border-b border-[#7a7a7a26] cursor-text"
+                : "border-transparent cursor-text"
+          }
         `}
       />
     </div>

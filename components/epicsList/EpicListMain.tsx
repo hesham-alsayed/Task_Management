@@ -12,6 +12,8 @@ import Loader from "../shared/Loader";
 import { useParams, useRouter } from "next/navigation";
 import EpicModalDetails from "../epicDetails/EpicModalDetails";
 import { useEffect, useState } from "react";
+import { useAppDispatch } from "@/app/store/hooks";
+import { setAllEpics } from "@/app/store/features/epics/epicsSlice";
 
 export default function EpicListMain() {
   const { initialProject } = useProjectForm();
@@ -44,9 +46,11 @@ export default function EpicListMain() {
   const isEmpty = isSuccess && !hasEpics;
 
   const [epics, setEpics] = useState(data);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     setEpics(data);
+    dispatch(setAllEpics(data));
   }, [data]);
 
   console.log(data);

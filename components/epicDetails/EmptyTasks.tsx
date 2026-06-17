@@ -1,15 +1,23 @@
+"use client";
 import React from "react";
 import MenuEpicIcon from "../icons/MenuEpicIcon";
 import PlusIcon from "../icons/PlusIcon";
+import { useParams, useRouter } from "next/navigation";
 
 export default function EmptyTasks() {
+  const params = useParams();
+  const projectId = params.projectId as string;
+  const router = useRouter();
   return (
     <div className=" px-6 py-3">
       <div className="flex items-center justify-between ">
         <h1 className=" text-[11px] md:text-[18px] font-semibold text-[#4F5F7B] md:text-main">
           Tasks
         </h1>
-        <div className=" hidden md:flex items-center gap-2 text-sm text-primary font-semibold ">
+        <div
+          onClick={() => router.push(`/project/${projectId}/tasks/new`)}
+          className="hover:cursor-pointer hidden md:flex items-center gap-2 text-sm text-primary font-semibold"
+        >
           <span>
             <svg
               width="11"
@@ -38,10 +46,15 @@ export default function EmptyTasks() {
         <h1 className="text-[16px] font-medium text-main">
           No tasks have been added to this epic yet
         </h1>
-        <button className=" btn-primary w-[140px] flex items-center justify-center gap-2">
+        <div className=" btn-primary w-[140px] flex items-center justify-center gap-2">
           <PlusIcon />
-          <span className="text-sm font-semibold">Add Task</span>
-        </button>
+          <button
+            onClick={() => router.push(`/project/${projectId}/tasks/new`)}
+            className=" hover:cursor-pointer text-sm font-semibold"
+          >
+            Add Task
+          </button>
+        </div>
       </div>
     </div>
   );

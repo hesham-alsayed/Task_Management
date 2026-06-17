@@ -5,7 +5,6 @@ import DateEpicIcon from "../icons/DateEpicIcon";
 import { formatDate } from "@/lib/helper/formate-date";
 import { updateEpicAction } from "@/server-actions/epics/updateEpic";
 import { useAppSelector } from "@/app/store/hooks";
-import { Epic } from "@/hooks/useGetAllEpics";
 import toast from "react-hot-toast";
 
 type Props = {
@@ -45,9 +44,12 @@ export default function EpicDeadline({
     };
   }, [setEditingDeadline]);
 
-  const handleSave = async (value: string) => { 
+  const handleSave = async (value: string) => {
+    if (loading) return; // ✅ prevent double calls
+
     setDedlineValue(value);
     setEditingDeadline(false);
+
     if (!selectedEpicId) return;
 
     const prevValue = prevRef.current;
@@ -64,16 +66,16 @@ export default function EpicDeadline({
     });
 
     if (!res?.success) {
-      setDedlineValue(prevValue); 
+      setDedlineValue(prevValue);
       toast.error("Failed to update epic. Please try again.");
       setLoading(false);
       return;
-    } else {
-      prevRef.current = value; 
-      toast.success("Epic updated successfully");
     }
 
-    setLoading(false); 
+    prevRef.current = value;
+    toast.success("Epic updated successfully");
+
+    setLoading(false);
   };
 
   return (
@@ -83,21 +85,29 @@ export default function EpicDeadline({
       </span>
 
       {editingDeadline ? (
-        <div>
+        <div
+          className={`transition-opacity ${
+            loading ? "opacity-50 pointer-events-none" : ""
+          }`}
+        >
           <input
             ref={deadlineRef}
             type="date"
             value={deadlineValue}
             disabled={loading}
             onChange={(e) => handleSave(e.target.value)}
-            onFocus={(e) => e.currentTarget.showPicker?.()}
-            className="border-none focus:border-none focus:outline-none focus:ring-0"
+            onFocus={(e) => !loading && e.currentTarget.showPicker?.()}
+            className={`border-none focus:outline-none focus:ring-0 ${
+              loading ? "cursor-not-allowed" : "cursor-pointer"
+            }`}
           />
         </div>
       ) : (
         <div
-          onClick={() => setEditingDeadline(true)}
-          className="flex hover:cursor-pointer items-center gap-2 mt-2"
+          onClick={() => !loading && setEditingDeadline(true)}
+          className={`flex items-center gap-2 mt-2 ${
+            loading ? "opacity-60 cursor-not-allowed" : "cursor-pointer"
+          }`}
         >
           <DateEpicIcon />
 
