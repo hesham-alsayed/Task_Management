@@ -1,8 +1,8 @@
 "use server";
 
-import { NewTaskFormData } from "@/hooks/useAddNewTask";
 import { apiFetch } from "@/lib/api-client";
 import { accessToken } from "@/lib/constant";
+import { NewTaskFormData } from "@/schema/task.schema";
 import { cookies } from "next/headers";
 
 export const addNewTaskAction = async (body: NewTaskFormData) => {
@@ -22,6 +22,7 @@ export const addNewTaskAction = async (body: NewTaskFormData) => {
       body: JSON.stringify(body),
     });
 
+  
     return result.data;
   } catch (error) {
     throw error;

@@ -45,7 +45,7 @@ export default function EpicDeadline({
   }, [setEditingDeadline]);
 
   const handleSave = async (value: string) => {
-    if (loading) return; // ✅ prevent double calls
+    if (loading) return;
 
     setDedlineValue(value);
     setEditingDeadline(false);
@@ -112,7 +112,7 @@ export default function EpicDeadline({
           <DateEpicIcon />
 
           <span className="text-sm font-medium">
-            {formatDate(deadlineValue)}
+            {deadlineValue ? formatDate(deadlineValue) : "No Deadline"}
           </span>
         </div>
       )}

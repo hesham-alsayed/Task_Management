@@ -2,17 +2,18 @@
 
 import { useAppSelector } from "@/app/store/hooks";
 import { useEffect, useMemo, useState } from "react";
-import { Epic } from "./useGetAllEpics";
 import { useParams } from "next/navigation";
-import { ProjectMember } from "@/components/projectMembers/MembersTable";
 import { useMembersProject } from "./useMembersProject";
+
+import { Epic } from "./useGetAllEpics";
+import { formatEpicTitle } from "@/lib/helper/formatEpicTitle";
+import { ProjectMember } from "@/components/projectMembers/MembersTable";
 import { getAllEpicsAction } from "@/server-actions/epics/getAllEpicList";
 import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { formatEpicTitle } from "@/lib/helper/formatEpicTitle";
 import { addNewTaskAction } from "@/server-actions/tasks/addNewTask";
-import { taskSchema, NewTaskFormData } from "../schema/task.schema";
+import { taskSchema, NewTaskFormData } from "../schema/task.schema"; 
 
 export type MemberOptions = {
   value: string | null;
