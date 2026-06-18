@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import  { useRef, useState } from "react";
 import { updateEpicAction } from "@/server-actions/epics/updateEpic";
 import { useAppSelector } from "@/app/store/hooks";
 import toast from "react-hot-toast";
