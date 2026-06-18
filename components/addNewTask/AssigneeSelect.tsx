@@ -1,12 +1,13 @@
 "use client";
 
-import React from "react";
-import { Controller } from "react-hook-form";
+import { MemberOptions } from "@/hooks/useAddNewTask";
+import { NewTaskFormData } from "@/schema/task.schema";
+import { Control, Controller } from "react-hook-form";
 import Select from "react-select";
 
 type Props = {
-  control: any;
-  membersOptions: any[];
+  control: Control<NewTaskFormData>;
+  membersOptions: MemberOptions[];
   selectStyles: any;
 };
 
@@ -28,9 +29,7 @@ export default function AssigneeSelect({
             instanceId="task-assignee"
             placeholder="Select Team Member"
             styles={selectStyles}
-            value={
-              membersOptions.find((i) => i.value === field.value) || null
-            }
+            value={membersOptions.find((i) => i.value === field.value) || null}
             onChange={(option) => field.onChange(option?.value)}
           />
         )}

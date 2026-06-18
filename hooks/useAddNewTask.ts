@@ -8,28 +8,21 @@ import { ProjectMember } from "@/components/projectMembers/MembersTable";
 import { useMembersProject } from "./useMembersProject";
 import { getAllEpicsAction } from "@/server-actions/epics/getAllEpicList";
 import toast from "react-hot-toast";
-import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { formatEpicTitle } from "@/lib/helper/formatEpicTitle";
 import { addNewTaskAction } from "@/server-actions/tasks/addNewTask";
+import { taskSchema, NewTaskFormData } from "../schema/task.schema";
 
-const schema = z.object({
-  title: z
-    .string()
-    .min(3, { message: "Title is required (minimum 3 characters)" }),
+export type MemberOptions = {
+  value: string | null;
+  label: string;
+};
 
-  epic_id: z.string().nullable().optional(),
-
-  assignee_id: z.string().nullable().optional(),
-
-  description: z.string().nullable().optional(),
-  due_date: z.string().nullable().optional(),
-  status: z.string().optional(),
-  project_id: z.string(),
-});
-
-export type NewTaskFormData = z.infer<typeof schema>;
+export type EpicOptions = {
+  value: string | null;
+  label: string;
+};
 
 export const useAddNewTask = () => {
   const { data: members } = useMembersProject();
@@ -44,7 +37,7 @@ export const useAddNewTask = () => {
   const [epic, setEpic] = useState<Epic | null>(reduxEpic ?? null);
   const [loading, setLoading] = useState(false);
   const form = useForm<NewTaskFormData>({
-    resolver: zodResolver(schema),
+    resolver: zodResolver(taskSchema),
     defaultValues: {
       title: "",
       epic_id: null,
@@ -100,7 +93,7 @@ export const useAddNewTask = () => {
     getEpics();
   }, [projectId]);
 
-  const membersOptions = useMemo(() => {
+  const membersOptions: MemberOptions[] = useMemo(() => {
     return [
       {
         value: null,
@@ -113,7 +106,7 @@ export const useAddNewTask = () => {
     ];
   }, [members]);
 
-  const epicOptions = useMemo(() => {
+  const epicOptions: EpicOptions[] = useMemo(() => {
     return [
       {
         value: null,

@@ -1,9 +1,11 @@
 "use client";
 
-import React from "react";
+import { NewTaskFormData } from "@/schema/task.schema";
+import { UseFormRegister } from "react-hook-form";
+
 
 type Props = {
-  register: any;
+  register: UseFormRegister<NewTaskFormData>;
 };
 
 export default function TaskDescription({ register }: Props) {

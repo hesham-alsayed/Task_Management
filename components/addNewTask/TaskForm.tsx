@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import StatusSelect from "./StatusSelect";
 import AssigneeSelect from "./AssigneeSelect";
 import EpicSelect from "./EpicSelect";
@@ -8,17 +7,17 @@ import TaskTitleInput from "./TaskTitleInput";
 import TaskDateInput from "./TaskDateInput";
 import TaskDescription from "./TaskDescription";
 
-import { Controller } from "react-hook-form";
-import PlusIcon from "@/components/icons/PlusIcon";
-import Loader from "@/components/shared/Loader";
 import { useRouter } from "next/navigation";
 import TaskActions from "./TaskActions";
+import { EpicOptions, MemberOptions } from "@/hooks/useAddNewTask";
+import { UseFormReturn } from "react-hook-form";
+import { NewTaskFormData } from "@/schema/task.schema";
 
 type Props = {
-  form: any;
-  onSubmit: any;
-  membersOptions: any[];
-  epicOptions: any[];
+  form: UseFormReturn<NewTaskFormData>;
+  onSubmit: (data: NewTaskFormData) => Promise<void> | void;
+  membersOptions: MemberOptions[];
+  epicOptions: EpicOptions[];
   selectStyles: any;
   loading: boolean;
   projectId: string;

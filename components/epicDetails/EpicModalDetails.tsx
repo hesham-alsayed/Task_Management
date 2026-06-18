@@ -87,6 +87,7 @@ export default function EpicModalDetails({ epics, setEpics }: Props) {
   if (!open) return null;
 
   if (!epic) return null;
+  console.log(epic);
   return (
     <div className="fixed inset-0 z-[5000] flex items-center justify-center">
       <div
