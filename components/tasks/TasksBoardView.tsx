@@ -13,19 +13,13 @@ type OneStatus = {
 type Props = {
   formattedData: OneStatus[];
 };
+
 export default function TasksBoardView({ formattedData }: Props) {
   return (
     <div className="mt-4 overflow-x-auto">
-      <div className="flex gap-4 min-w-max">
+      <div className="flex gap-4 w-max">
         {formattedData.map((status: any) => (
-          <div
-            key={status.key}
-            className="
-                    shrink-0
-                    w-[calc((100vw-6rem)/4)]
-                    min-w-[280px]
-                  "
-          >
+          <div key={status.key} className="w-[320px] flex-shrink-0">
             <HeaderStatusColumn
               status={status.name}
               value={status.key}
