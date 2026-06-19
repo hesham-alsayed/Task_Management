@@ -7,7 +7,7 @@ import Loader from "../shared/Loader";
 type Props = {
   retryFunction: () => void;
   isLoading: boolean;
-  error?: string;
+  error?: string | null;
 };
 
 export default function ErrorNetworkState({

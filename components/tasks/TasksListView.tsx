@@ -1,0 +1,96 @@
+"use client";
+
+import { Task } from "@/components/epicDetails/EpicModalDetails";
+import { formatDate } from "@/lib/helper/formate-date";
+import { getShortName } from "@/lib/helper/get-shortname";
+import StatusBadge from "./StatusBadge";
+import UnAssignedIcon from "../icons/UnAssignedIcon";
+import ThreeDotsHorizontalIcon from "../icons/ThreeDotsHorizontalIcon";
+import PrevArrow from "../icons/PrevArrow";
+import NextArrow from "../icons/NextArrow";
+
+type Props = {
+  tasks: Task[];
+};
+
+export default function TasksListView({ tasks }: Props) {
+  return (
+    <div className=" mt-6 overflow-x-auto  ">
+      <table className="w-full  min-w-[1000px] ">
+        <thead className="bg-[#F1F3FF80]">
+          <tr className=" text-left text-[11px] font-bold text-[#434654] uppercase">
+            <th className="px-6 py-4 whitespace-nowrap">Task ID</th>
+            <th className="px-6 py-4 whitespace-nowrap">Title</th>
+            <th className="px-6 py-4 whitespace-nowrap">Status</th>
+            <th className="px-6 py-4 whitespace-nowrap">Due Date</th>
+            <th className="px-6 py-4 whitespace-nowrap">Assignee</th>
+            <th className="w-12"></th>
+          </tr>
+        </thead>
+
+        <tbody className="bg-[#FFFFFF] ">
+          {tasks.map((task) => (
+            <tr
+              key={task.id}
+              className="border-t border-gray-100 hover:bg-gray-50 "
+            >
+              <td className="px-6 py-5">
+                <span className="text-[12px] font-normal text-primary whitespace-nowrap">
+                  {task.task_id}
+                </span>
+              </td>
+
+              <td className="px-6 py-5">
+                <p className="max-w-md text-sm font-medium text-main">
+                  {task.title}
+                </p>
+              </td>
+
+              <td className="px-6 py-5 whitespace-nowrap">
+                <StatusBadge status={task.status} />
+              </td>
+
+              <td className="px-6 py-5 font-normal text-sm text-[#434654] whitespace-nowrap">
+                {task.due_date ? formatDate(task.due_date) : "No due date"}
+              </td>
+
+              <td className="px-6 py-5 whitespace-nowrap">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#DAE2FF] text-xs font-semibold text-main">
+                    {task.assignee?.name ? (
+                      getShortName(task.assignee.name)
+                    ) : (
+                      <UnAssignedIcon />
+                    )}
+                  </div>
+
+                  <span className="text-sm text-slate-700">
+                    {task.assignee?.name || "Unassigned"}
+                  </span>
+                </div>
+              </td>
+
+              <td className="px-3 py-5">
+                <button>
+                  <ThreeDotsHorizontalIcon />
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      <div className="flex py-10 items-center justify-between rounded-b-2xl bg-[#FFFFFF] border-t border-gray-100 px-6 py-4">
+        <p className="text-sm text-slate-500">
+          Showing 5 of {tasks.length} tasks
+        </p>
+
+        <div className="flex items-center gap-4 font-medium text-[12px] text-[#434654]">
+          <PrevArrow />
+          <span>Page 1 of 5</span>
+          <NextArrow />
+        </div>
+      </div>
+    </div>
+  );
+}

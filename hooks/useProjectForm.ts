@@ -86,6 +86,7 @@ export const useProjectForm = (mode?: string) => {
         await addNewProjectAction(body);
         toast.success("Project created successfully");
         form.reset();
+        router.push("/project");
       }
     } catch (err: any) {
       toast.error(err.message || "Error saving project");

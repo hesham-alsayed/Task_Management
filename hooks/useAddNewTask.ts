@@ -13,7 +13,7 @@ import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { addNewTaskAction } from "@/server-actions/tasks/addNewTask";
-import { taskSchema, NewTaskFormData } from "../schema/task.schema"; 
+import { taskSchema, NewTaskFormData } from "../schema/task.schema";
 
 export type MemberOptions = {
   value: string | null;
@@ -41,7 +41,7 @@ export const useAddNewTask = () => {
     resolver: zodResolver(taskSchema),
     defaultValues: {
       title: "",
-      epic_id: null,
+      epic_id: selectedEpicId || null,
       description: null,
       assignee_id: null,
       due_date: null,
@@ -49,6 +49,14 @@ export const useAddNewTask = () => {
       project_id: projectId,
     },
   });
+
+  useEffect(() => {
+    const storedStatus = localStorage.getItem("selectedStatus");
+
+    if (storedStatus) {
+      form.setValue("status", storedStatus as any);
+    }
+  }, []);
 
   useEffect(() => {
     if (epic?.id) {
@@ -126,11 +134,9 @@ export const useAddNewTask = () => {
       await addNewTaskAction(data);
       form.reset({
         title: "",
-        epic_id: null,
         description: null,
         assignee_id: null,
         due_date: null,
-        status: "TO_DO",
         project_id: projectId,
       });
       toast.success("task created successfully");

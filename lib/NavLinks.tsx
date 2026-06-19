@@ -37,7 +37,7 @@ export const getNavLinks = (
           },
           {
             name: "Project Tasks",
-            href: `/project/${projectId}/tasks`,
+            href: `/project/${projectId}/tasks?view=board`,
             isActive: pathname.includes("/tasks"),
             icon: (active: boolean) => (
               <TaskIcon color={active ? "#0052CC" : "#041B3C99"} />

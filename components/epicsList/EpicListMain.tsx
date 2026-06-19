@@ -33,7 +33,6 @@ export default function EpicListMain() {
     finalLimit,
     totalCount,
   } = useGetAllEpics();
-  //   const data: any[] = [];
   const router = useRouter();
   const params = useParams();
   const projectId = params.projectId as string;
