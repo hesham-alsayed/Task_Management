@@ -23,7 +23,6 @@ export default function SidebarCollapsed() {
     flex flex-col justify-between items-center"
     >
       <div>
-        {/* Icons */}
         <div className="flex flex-col items-center mt-2 gap-2 ">
           <div>
             <LogoIcon />
@@ -50,7 +49,6 @@ export default function SidebarCollapsed() {
         </div>
       </div>
 
-      {/* Bottom actions */}
       <div className="flex flex-col gap-3">
         <button onClick={() => dispatch(toggleSidebar())} className="p-2">
           <svg

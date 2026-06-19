@@ -37,7 +37,7 @@ export default function HeaderEpicList({ projectId, projectName }: Props) {
 
       <div className="flex items-center  mx-auto max-sm:mx-auto justify-center gap-4 w-full md:w-[50%]">
         <div className="relative w-full ">
-          <div className="absolute left-3 top-6 text-gray-400">
+          <div className="absolute left-3 top-3 text-gray-400">
             <SearchIcon />
           </div>
 

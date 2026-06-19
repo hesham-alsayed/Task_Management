@@ -71,7 +71,6 @@ export default function NavbarMobile({ user }: Props) {
               </div>
             </div>
 
-            {/* Nav */}
             <ul className="flex flex-col gap-1">
               {getNavLinks(projectId, pathname).map((item) => {
                 const isActive = item.isActive;
@@ -97,7 +96,6 @@ export default function NavbarMobile({ user }: Props) {
             </ul>
           </div>
 
-          {/* Bottom */}
           <div className="flex flex-col gap-2 pt-2 mx-2 border-t border-[#C3C6D633]">
             <div className=" pt-20 text-[#BA1A1A]">
               <button className="flex items-center gap-2 ">

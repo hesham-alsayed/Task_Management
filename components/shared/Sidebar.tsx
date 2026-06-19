@@ -51,7 +51,7 @@ export default function Sidebar({ collapsed }: SidebarProps) {
       },
       {
         name: "Project Tasks",
-        href: `/project/${projectId}/tasks`,
+        href: `/project/${projectId}/tasks?view=board`,
         icon: (
           <TaskIcon
             color={pathname.includes("/tasks") ? "#003D9B" : "#041B3C"}

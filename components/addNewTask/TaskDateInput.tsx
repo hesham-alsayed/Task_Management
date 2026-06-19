@@ -19,7 +19,7 @@ export default function TaskDateInput({ register }: Props) {
         type="date"
         id="duedate"
         className="input-form"
-        onFocus={(e) => e.currentTarget.showPicker?.()}
+        onClick={(e) => e.currentTarget.showPicker?.()}
       />
     </div>
   );
