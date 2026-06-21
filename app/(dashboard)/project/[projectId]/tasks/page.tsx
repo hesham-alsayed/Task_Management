@@ -10,48 +10,50 @@ import { useProjectForm } from "@/hooks/useProjectForm";
 import { useProjectTasks } from "@/hooks/useProjectTasks";
 import { useSearchParams } from "next/navigation";
 import TasksBoardViewSkeleton from "@/components/skeleton/TasksBoardViewSkeleton";
+import { useEffect } from "react";
+import TaskCardMobile from "@/components/tasks/TaskCardMobile";
+import { Task } from "@/components/epicDetails/EpicModalDetails";
 
 export default function Page() {
   const { initialProject } = useProjectForm();
   const searchParams = useSearchParams();
   const currentView = searchParams.get("view") as "board" | "list";
-  const { formattedData, status, tasks, error, retryLoading, retylLoadTasks } =
+  const { boardData, listData, length, boardStatus, listStatus, error, retylLoadTasks } =
     useProjectTasks();
 
-  if (status === "loading" || retryLoading) {
-    return currentView === "list" ? (
-      <TasksListViewSkeleton />
-    ) : (
-      <TasksBoardViewSkeleton />
-    );
+  if (currentView === "board" && boardStatus === "loading") {
+    return <TasksBoardViewSkeleton />;
   }
 
+  if (currentView === "list" && listStatus === "loading") {
+    return <TasksListViewSkeleton />;
+  }
   if (status === "error") {
-    return (
-      <ErrorNetworkState
-        error={error}
-        retryFunction={retylLoadTasks}
-        isLoading={retryLoading}
-      />
-    );
+    return <ErrorNetworkState error={error} retryFunction={retylLoadTasks} isLoading={false} />;
   }
 
-  if (status === "success" && tasks.length === 0) {
+  if (status === "success" && length === 0) {
     return <TasksEmptyState projectId={initialProject?.id} />;
   }
 
   return (
-    <>
-      <HeaderTasks
-        projectId={initialProject?.id || ""}
-        projectName={initialProject?.name || ""}
-      />
+    <main className="max-lg:mx-6">
+      <HeaderTasks projectId={initialProject?.id || ""} projectName={initialProject?.name || ""} />
 
       {currentView === "board" ? (
-        <TasksBoardView formattedData={formattedData} />
+        <TasksBoardView boardData={boardData} />
       ) : (
-        <TasksListView tasks={tasks} />
+        <>
+          <div className="hidden sm:block">
+            <TasksListView tasks={listData} />
+          </div>
+          <div className="sm:hidden flex flex-col gap-6 w-full mt-6">
+            {listData.map((task: Task) => (
+              <TaskCardMobile key={task.id} task={task} />
+            ))}
+          </div>
+        </>
       )}
-    </>
+    </main>
   );
 }

@@ -15,7 +15,7 @@ type Props = {
 
 export default function TasksListView({ tasks }: Props) {
   return (
-    <div className=" mt-6 overflow-x-auto  ">
+    <div className=" mt-6 overflow-x-auto w-full  ">
       <table className="w-full  min-w-[1000px] ">
         <thead className="bg-[#F1F3FF80]">
           <tr className=" text-left text-[11px] font-bold text-[#434654] uppercase">
@@ -80,7 +80,7 @@ export default function TasksListView({ tasks }: Props) {
         </tbody>
       </table>
 
-      <div className="flex py-10 items-center justify-between rounded-b-2xl bg-[#FFFFFF] border-t border-gray-100 px-6 py-4">
+      <div className="flex min-w-[1000px] py-10 items-center justify-between rounded-b-2xl bg-[#FFFFFF] border-t border-gray-100 px-6 py-4">
         <p className="text-sm text-slate-500">
           Showing 5 of {tasks.length} tasks
         </p>

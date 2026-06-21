@@ -6,7 +6,7 @@ export default function NavbarDesktopSkeleton() {
   return (
     <header
       className="
-        fixed top-0 right-0 z-40 h-16 px-6 py-3 
+        fixed w-full bg-[#f9f9ff] top-0 right-0 z-40 h-16 px-6 py-3 
         border-b border-b-[#0000001A]
         animate-pulse
       "

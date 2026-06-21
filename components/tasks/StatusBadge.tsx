@@ -4,7 +4,7 @@ type Props = {
   status: string;
 };
 export default function StatusBadge({ status }: Props) {
-  const styles: Record<string, string> = {
+const styles: Record<string, string> = {
     TO_DO: "bg-[#D7E2FF] text-[#434654]",
 
     IN_PROGRESS: "bg-[#CDDDFF] text-[#374763]",

@@ -11,14 +11,14 @@ type OneStatus = {
 };
 
 type Props = {
-  formattedData: OneStatus[];
+  boardData: OneStatus[];
 };
 
-export default function TasksBoardView({ formattedData }: Props) {
+export default function TasksBoardView({ boardData }: Props) {
   return (
     <div className="mt-4 overflow-x-auto">
       <div className="flex gap-4 w-max">
-        {formattedData.map((status: any) => (
+        {boardData.map((status: any) => (
           <div key={status.key} className="w-[320px] flex-shrink-0">
             <HeaderStatusColumn
               status={status.name}

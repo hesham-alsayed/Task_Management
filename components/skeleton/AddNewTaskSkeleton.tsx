@@ -10,7 +10,7 @@ function SkeletonBox({ className }: { className: string }) {
 
 export default function AddNewTaskSkeleton() {
   return (
-    <div className="max-w-[940px] mx-auto">
+    <div className="max-w-[940px] mx-auto max-sm:mt-8 max-md:mt-3">
       <div className="space-y-3">
         <SkeletonBox className="h-4 w-32" />
         <SkeletonBox className="h-8 w-64" />

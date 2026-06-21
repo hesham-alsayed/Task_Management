@@ -4,10 +4,7 @@ import { apiFetch } from "@/lib/api-client";
 import { accessToken } from "@/lib/constant";
 import { cookies } from "next/headers";
 
-export const getAllProjectTasksAction = async (
-  proejctId: string,
-  status: string,
-) => {
+export const getAllProjectTasksAction = async (proejctId: string, status?: string) => {
   try {
     const cookieStore = await cookies();
     const token = cookieStore.get(accessToken)?.value;
@@ -16,10 +13,12 @@ export const getAllProjectTasksAction = async (
     if (!token) {
       throw "Unauthorized: missing access token";
     }
-
+    const finalPath = status
+      ? `/rest/v1/project_tasks?project_id=eq.${proejctId}&status=eq.${status}`
+      : `/rest/v1/project_tasks?project_id=eq.${proejctId}`;
     const result = await apiFetch({
       method: "GET",
-      path: `/rest/v1/project_tasks?project_id=eq.${proejctId}&status=eq.${status}`,
+      path: finalPath,
       headers: {
         Authorization: `Bearer ${token}`,
       },

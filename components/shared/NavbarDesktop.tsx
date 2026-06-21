@@ -13,7 +13,7 @@ export type User = {
 
 type NavbarProps = {
   collapsed: boolean;
-  user?: User; // مهم: optional
+  user?: User; 
   isLoading?: boolean;
 };
 
@@ -36,7 +36,6 @@ export default function NavbarDesktop({
     >
       <div className="flex items-center justify-end h-full">
         <div className="flex items-center gap-4">
-          {/* Text */}
           <div className="flex flex-col text-right">
             <h2 className="text-sm font-semibold text-[#041B3C] uppercase">
               {user?.name}
@@ -49,7 +48,6 @@ export default function NavbarDesktop({
             )}
           </div>
 
-          {/* Avatar */}
           <Avatar user={user} />
         </div>
       </div>
