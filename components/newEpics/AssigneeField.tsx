@@ -1,5 +1,5 @@
 import { UseFormRegister } from "react-hook-form";
-import { NewEpicFormData } from "@/hooks/useNewEpicForm";
+import { NewEpicFormData } from "@/hooks/useEpicForm";
 import DropDownIcon from "../icons/DropDownIcon";
 import { ProjectMember } from "../projectMembers/MembersTable";
 

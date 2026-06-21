@@ -1,6 +1,6 @@
 "use client";
 
-import  {  useState } from "react";
+import { useState } from "react";
 import { EpicDetails } from "./EpicModalDetails";
 
 import EpicDescription from "./EpicDescription";
@@ -10,53 +10,25 @@ import EpicDeadline from "./EpicDeadline";
 import EpicCreatedAt from "./EpicCreatedAt";
 import { useMembersProject } from "@/hooks/useMembersProject";
 import { Epic } from "@/hooks/useGetAllEpics";
+import { ProjectMember } from "../projectMembers/MembersTable";
 
 type Props = {
-  epic: EpicDetails; 
-    setEpics: React.Dispatch<React.SetStateAction<Epic[]>>;
-  
+  epic: Epic; 
+  members : ProjectMember[]
 };
-
-export default function EpicMainInfo({ epic , setEpics }: Props) {
-  const { description, created_by, assignee, deadline, created_at } = epic;
-  const { data } = useMembersProject();
-  const [descriptionValue, setDescriptionValue] = useState(
-    description || "No description provided",
-  );
-
-  const [assigned, setAssigned] = useState({
-    id: assignee?.sub || "unassigned",
-    name: assignee?.name || "Unassigned",
-  });
-
-  const [deadlineValue, setDedlineValue] = useState(deadline || "");
-  const [editingAssignee, setEditingAssignee] = useState(false);
-  const [editingDeadline, setEditingDeadline] = useState(false);
- 
-
+export default function EpicMainInfo({ epic , members }: Props) {
+  const { created_by, assignee,  created_at } = epic;
 
   return (
     <div className="pt-3 p-6">
-      <EpicDescription initialValue={descriptionValue} />
+      <EpicDescription />
 
       <div className="grid grid-cols-2 md:grid-cols-3 gap-6 mt-4">
         <EpicCreatedBy created_by={created_by} />
 
-        <EpicAssignee
-          assigned={assigned}
-          setAssigned={setAssigned}
-          editingAssignee={editingAssignee}
-          setEditingAssignee={setEditingAssignee}
-          members={data}
-          setEpics={setEpics}
-        />
+        <EpicAssignee members={members}  />
 
-        <EpicDeadline
-          deadlineValue={deadlineValue}
-          setDedlineValue={setDedlineValue}
-          editingDeadline={editingDeadline}
-          setEditingDeadline={setEditingDeadline}
-        />
+        <EpicDeadline />
 
         <EpicCreatedAt created_at={created_at} />
       </div>

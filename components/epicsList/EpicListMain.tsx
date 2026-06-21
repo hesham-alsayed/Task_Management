@@ -12,7 +12,7 @@ import Loader from "../shared/Loader";
 import { useParams, useRouter } from "next/navigation";
 import EpicModalDetails from "../epicDetails/EpicModalDetails";
 import { useEffect, useState } from "react";
-import { useAppDispatch } from "@/app/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/app/store/hooks";
 import { setAllEpics } from "@/app/store/features/epics/epicsSlice";
 
 export default function EpicListMain() {
@@ -38,21 +38,20 @@ export default function EpicListMain() {
   const projectId = params.projectId as string;
 
   const hasEpics = (data?.length ?? 0) > 0;
-  console.log(data);
   const isLoading = status === "loading";
   const isError = status === "error";
   const isSuccess = status === "success";
   const isEmpty = isSuccess && !hasEpics;
 
-  const [epics, setEpics] = useState(data);
+  const {epics} = useAppSelector((state) => state.epics);
+
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    setEpics(data);
-    dispatch(setAllEpics(data));
+    dispatch(setAllEpics(data)); 
+    
   }, [data]);
 
-  console.log(data);
   if (isLoading) {
     return <EpicListSkeleton />;
   }
@@ -111,7 +110,7 @@ export default function EpicListMain() {
           />
         </div>
       )}
-      <EpicModalDetails epics={epics} setEpics={setEpics} />
+      <EpicModalDetails   />
     </div>
   );
 }

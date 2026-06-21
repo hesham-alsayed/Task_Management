@@ -1,5 +1,5 @@
 import { UseFormRegister } from "react-hook-form";
-import { NewEpicFormData } from "@/hooks/useNewEpicForm";
+import { NewEpicFormData } from "@/hooks/useEpicForm";
 
 type Props = {
   register: UseFormRegister<NewEpicFormData>;

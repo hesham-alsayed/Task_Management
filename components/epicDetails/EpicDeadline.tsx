@@ -1,121 +1,87 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
-import DateEpicIcon from "../icons/DateEpicIcon";
-import { formatDate } from "@/lib/helper/formate-date";
-import { updateEpicAction } from "@/server-actions/epics/updateEpic";
-import { useAppSelector } from "@/app/store/hooks";
+import React, { useRef } from "react";
+import { Controller, useFormContext } from "react-hook-form";
 import toast from "react-hot-toast";
 
-type Props = {
-  deadlineValue: string;
-  setDedlineValue: React.Dispatch<React.SetStateAction<string>>;
-  editingDeadline: boolean;
-  setEditingDeadline: React.Dispatch<React.SetStateAction<boolean>>;
-};
+import DateEpicIcon from "../icons/DateEpicIcon";
+import { formatDate } from "@/lib/helper/formate-date";
+import { EpicForm, useEpicForm } from "@/hooks/useEpicForm";
 
-export default function EpicDeadline({
-  deadlineValue,
-  setDedlineValue,
-  editingDeadline,
-  setEditingDeadline,
-}: Props) {
-  const deadlineRef = useRef<HTMLInputElement>(null);
+export default function EpicDeadline() {
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  const { selectedEpicId } = useAppSelector((state) => state.ui);
+  const { loading, updateField } = useEpicForm();
 
-  const [loading, setLoading] = useState(false);
-  const prevRef = useRef(deadlineValue);
+  const {
+    control,
+    trigger,
+    formState: { errors },
+  } = useFormContext<EpicForm>();
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        deadlineRef.current &&
-        !deadlineRef.current.contains(event.target as Node)
-      ) {
-        setEditingDeadline(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [setEditingDeadline]);
-
-  const handleSave = async (value: string) => {
+  const openPicker = () => {
     if (loading) return;
 
-    setDedlineValue(value);
-    setEditingDeadline(false);
+    const input = inputRef.current;
+    if (!input) return;
 
-    if (!selectedEpicId) return;
+    input.focus();
+    input.showPicker?.();
+  };
 
-    const prevValue = prevRef.current;
+  const handleSave = async (value: string) => {
+    const isValid = await trigger("deadline");
 
-    if (value === prevValue) {
-      setEditingDeadline(false);
+    if (!isValid) {
+      toast.error(errors.deadline?.message || "Invalid deadline");
       return;
     }
 
-    setLoading(true);
-
-    const res = await updateEpicAction(selectedEpicId, {
-      deadline: value || null,
-    });
-
-    if (!res?.success) {
-      setDedlineValue(prevValue);
-      toast.error("Failed to update epic. Please try again.");
-      setLoading(false);
-      return;
-    }
-
-    prevRef.current = value;
-    toast.success("Epic updated successfully");
-
-    setLoading(false);
+    await updateField("deadline", value);
   };
 
   return (
-    <div>
-      <span className="uppercase text-[10px] font-bold text-[#4F5F7B]">
-        Deadline
-      </span>
+    <div className="flex flex-col gap-1">
+      <span className="uppercase text-[10px] font-bold text-[#4F5F7B]">Deadline</span>
 
-      {editingDeadline ? (
-        <div
-          className={`transition-opacity ${
-            loading ? "opacity-50 pointer-events-none" : ""
-          }`}
-        >
-          <input
-            ref={deadlineRef}
-            type="date"
-            value={deadlineValue}
-            disabled={loading}
-            onChange={(e) => handleSave(e.target.value)}
-            onFocus={(e) => !loading && e.currentTarget.showPicker?.()}
-            className={`border-none focus:outline-none focus:ring-0 ${
-              loading ? "cursor-not-allowed" : "cursor-pointer"
-            }`}
-          />
-        </div>
-      ) : (
-        <div
-          onClick={() => !loading && setEditingDeadline(true)}
-          className={`flex items-center gap-2 mt-2 ${
-            loading ? "opacity-60 cursor-not-allowed" : "cursor-pointer"
-          }`}
-        >
-          <DateEpicIcon />
+      <Controller
+        name="deadline"
+        control={control}
+        render={({ field }) => {
+          const value = field.value ?? "";
 
-          <span className="text-sm font-medium">
-            {deadlineValue ? formatDate(deadlineValue) : "No Deadline"}
-          </span>
-        </div>
-      )}
+          return (
+            <div
+              className={`
+    flex items-center gap-2 mt-2
+    ${loading ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}
+  `}
+              onClick={openPicker}
+            >
+              <DateEpicIcon />
+
+              <span className="text-sm font-medium text-main">
+                {value ? formatDate(value) : "No Deadline"}
+              </span>
+
+              <input
+                ref={inputRef}
+                type="date"
+                value={value}
+                min={new Date().toISOString().split("T")[0]}
+                disabled={loading}
+                onChange={(e) => {
+                  field.onChange(e.target.value);
+                  handleSave(e.target.value);
+                }}
+                className="absolute opacity-0 w-1 h-1 pointer-events-none"
+              />
+            </div>
+          );
+        }}
+      />
+
+      {errors.deadline && <p className="text-xs text-red-500 mt-1">{errors.deadline.message}</p>}
     </div>
   );
 }

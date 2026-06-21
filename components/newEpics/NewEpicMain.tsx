@@ -3,7 +3,7 @@ import React from "react";
 import HeaderNewEpics from "./HeaderNewEpics";
 import NewEpicsForm from "./NewEpicForm";
 import { useProjectForm } from "@/hooks/useProjectForm";
-import { useNewEpicForm } from "@/hooks/useNewEpicForm";
+import { useNewEpicForm } from "@/hooks/useEpicForm";
 import HeaderNewEpicsSkeleton from "../skeleton/HeaderNewEpicSkeleton";
 import HeaderNewEpicSkeleton from "../skeleton/HeaderNewEpicSkeleton";
 import { useMembersProject } from "@/hooks/useMembersProject";

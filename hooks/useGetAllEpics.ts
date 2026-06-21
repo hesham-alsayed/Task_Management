@@ -40,7 +40,7 @@ export const useGetAllEpics = () => {
   const pagination = usePaginationData(getAllEpicsAction, 4, {
     projectId,
   });
-
+  
   return {
     ...pagination,
   };

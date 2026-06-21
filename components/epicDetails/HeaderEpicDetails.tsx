@@ -1,124 +1,79 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
+import { EpicForm, useEpicForm } from "@/hooks/useEpicForm";
+import { useFormContext } from "react-hook-form";
 import EpicIcon from "../icons/EpicIcon";
-import { EpicDetails } from "./EpicModalDetails";
 import CloseIcon from "../icons/CloseIcon";
-import { useAppDispatch, useAppSelector } from "@/app/store/hooks";
-import {
-  setOpenEpicModal,
-  setSelectedEpicId,
-} from "@/app/store/features/ui/uiSlice";
-import { updateEpicAction } from "@/server-actions/epics/updateEpic";
-import { Epic } from "@/hooks/useGetAllEpics";
-import toast from "react-hot-toast";
+import { useAppDispatch } from "@/app/store/hooks";
+import { setOpenEpicModal, setSelectedEpicId } from "@/app/store/features/ui/uiSlice";
+import ExclamationIcon from "../icons/ExclamationIcon";
 
-type Props = {
-  epic: EpicDetails;
-  setEpics: React.Dispatch<React.SetStateAction<Epic[]>>;
-};
+export default function HeaderEpicDetails() {
+  const { updateField, loading } = useEpicForm();
 
-export default function HeaderEpicDetails({ epic, setEpics }: Props) {
-  const { epic_id, title } = epic;
+  const {
+    register,
+    watch,
+    trigger,
+    formState: { errors },
+  } = useFormContext<EpicForm>();
 
   const dispatch = useAppDispatch();
-  const { selectedEpicId } = useAppSelector((state) => state.ui);
-
-  const [value, setValue] = useState(title);
   const [isFocused, setIsFocused] = useState(false);
-  const [loading, setLoading] = useState(false);
 
-  const initialValueRef = useRef(title);
+  const value = watch("title");
+  const hasError = !!errors.title;
 
-  const handleSaveChange = async () => {
+  const handleChangeValue = async () => {
     setIsFocused(false);
 
-    if (value === initialValueRef.current) return;
-    if (!selectedEpicId) return;
+    const isValid = await trigger("title");
 
-    const prevTitle = epic.title;
-    const newTitle = value;
+    if (!isValid) return;
 
-    setEpics((prev) =>
-      prev.map((item) =>
-        item.id === selectedEpicId ? { ...item, title: newTitle } : item,
-      ),
-    );
-
-    setLoading(true);
-
-    const res = await updateEpicAction(selectedEpicId, {
-      title: newTitle,
-    });
-
-    if (!res?.success) {
-      setEpics((prev) =>
-        prev.map((item) =>
-          item.id === selectedEpicId ? { ...item, title: prevTitle } : item,
-        ),
-      );
-
-      setValue(prevTitle);
-      toast.error("Failed to update epic. Please try again.");
-      setLoading(false);
-      return;
-    }
-
-    initialValueRef.current = newTitle;
-
-    setLoading(false);
-    toast.success("Epic updated successfully");
+    updateField("title", value);
   };
 
   return (
-    <div className="space-y-3 md:border-b p-6 rounded-t-xl max-md:bg-[#F1F3FF] md:border-b-[#7a7a7a26] md:pb-8">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <span className="hidden md:block">
-            <EpicIcon />
-          </span>
-
-          <span className="text-[12px] font-bold max-md:text-[#003D9B] text-[#041B3C99]">
-            {epic_id}
-          </span>
-        </div>
+    <div className="space-y-3 p-6">
+      <div className="flex justify-between">
+        <EpicIcon />
 
         <button
           onClick={() => {
             dispatch(setSelectedEpicId(null));
             dispatch(setOpenEpicModal(false));
           }}
-          className="cursor-pointer"
         >
           <CloseIcon />
         </button>
       </div>
 
-      <input
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-        onFocus={() => !loading && setIsFocused(true)}
-        onBlur={handleSaveChange}
-        disabled={loading}
-        className={`
-          w-full
-          text-[24px]
-          font-bold
-          text-main
-          border-b
-          transition-all
-          duration-200
-          outline-none
+      <div className="relative">
+        <input
+          {...register("title")}
+          onFocus={() => setIsFocused(true)}
+          onBlur={handleChangeValue}
+          disabled={loading}
+          className={`
+            w-full text-[24px] font-bold outline-none border-b pr-6
+            transition-all
 
-          ${
-            loading
-              ? "opacity-50 cursor-not-allowed border-transparent"
-              : isFocused
-                ? "border-b border-[#7a7a7a26] cursor-text"
-                : "border-transparent cursor-text"
-          }
-        `}
-      />
+            ${loading ? "opacity-50" : ""}
+
+            ${hasError ? "border-red-500 " : isFocused ? "border-gray-300" : "border-transparent"}
+          `}
+        />
+
+        {hasError && (
+          <span className="absolute right-0 top-1/2 -translate-y-1/2 ">
+            <ExclamationIcon />
+          </span>
+        )}
+      </div>
+
+      {hasError && <p className="text-xs text-red-500 font-medium">{errors.title?.message}</p>}
     </div>
   );
 }

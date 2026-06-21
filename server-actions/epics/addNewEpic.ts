@@ -1,5 +1,5 @@
 "use server";
-import { RequestEpicBody } from "@/hooks/useNewEpicForm";
+import { RequestEpicBody } from "@/hooks/useEpicForm";
 import { apiFetch } from "@/lib/api-client";
 import { accessToken } from "@/lib/constant";
 import { cookies } from "next/headers";

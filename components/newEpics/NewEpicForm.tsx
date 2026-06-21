@@ -1,5 +1,5 @@
 import { UseFormReturn } from "react-hook-form";
-import { NewEpicFormData } from "@/hooks/useNewEpicForm";
+import { NewEpicFormData } from "@/hooks/useEpicForm";
 
 import TitleField from "./TitleField";
 import FormFieldError from "./FormFieldError";
@@ -16,13 +16,7 @@ type Props = {
   loading: boolean;
   members: ProjectMember[];
 };
-export default function NewEpicForm({
-  form,
-  loading,
-  onSubmit,
-  handleResetForm,
-  members,
-}: Props) {
+export default function NewEpicForm({ form, loading, onSubmit, handleResetForm, members }: Props) {
   const {
     register,
     handleSubmit,
@@ -33,16 +27,9 @@ export default function NewEpicForm({
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
         <TitleField register={register} />
 
-        <FormFieldError
-          isSubmitted={isSubmitted}
-          message={errors.title?.message}
-        />
+        <FormFieldError isSubmitted={isSubmitted} message={errors.title?.message} />
 
-        <FormFieldError
-          isSubmitted={isSubmitted}
-          mobile
-          message={errors.title?.message}
-        />
+        <FormFieldError isSubmitted={isSubmitted} mobile message={errors.title?.message} />
 
         <DescriptionField register={register} />
 

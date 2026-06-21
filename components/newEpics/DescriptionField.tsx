@@ -1,5 +1,5 @@
 import { UseFormRegister } from "react-hook-form";
-import { NewEpicFormData } from "@/hooks/useNewEpicForm";
+import { NewEpicFormData } from "@/hooks/useEpicForm";
 
 type Props = {
   register: UseFormRegister<NewEpicFormData>;
@@ -13,9 +13,7 @@ export default function DescriptionField({ register }: Props) {
           Description
         </label>
 
-        <span className="text-[11px] font-medium text-[#4F5F7B99]">
-          Optional
-        </span>
+        <span className="text-[11px] font-medium text-[#4F5F7B99]">Optional</span>
       </div>
 
       <textarea

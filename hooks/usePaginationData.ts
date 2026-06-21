@@ -12,7 +12,7 @@ type FunctionCall = (params: Record<string, unknown>) => Promise<{
 export const usePaginationData = (
   functionCall: FunctionCall,
   limit: number,
-  anotherParams?: Record<string, unknown>,
+  anotherParams?: Record<string, unknown>
 ) => {
   const searchParams = useSearchParams();
   const desktopPage = Number(searchParams.get("page") || 1);
@@ -23,7 +23,7 @@ export const usePaginationData = (
 
   const limitUrl = Number(searchParams.get("limit") || limit);
 
-  const finalLimit = isMobile ? limit : Math.min(limitUrl, MAX_LIMIT); 
+  const finalLimit = isMobile ? limit : Math.min(limitUrl, MAX_LIMIT);
   const [data, setData] = useState<any[]>([]);
   const [status, setStatus] = useState<Status>("loading");
   const [error, setError] = useState<string | null>(null);
@@ -74,33 +74,32 @@ export const usePaginationData = (
     });
   };
 
+  const loadinitialData = async () => {
+    try {
+      setStatus("loading");
+      setError(null);
+
+      const page = isMobile ? 1 : desktopPage;
+
+      const result = await fetchData(page);
+      console.log(result);
+      setData(result.data ?? []);
+      console.log(result.totalCount);
+      setTotalCount(result.totalCount ?? 0);
+      hasMoreRef.current = (result.data?.length ?? 0) < (result.totalCount ?? 0);
+      pageRef.current = page;
+      setStatus("success");
+      return result.data;
+    } catch (err: any) {
+      setError(err.message);
+      setStatus("error");
+    }
+  };
+
   useEffect(() => {
     if (isMobile === null) return;
 
-    const loadInitial = async () => {
-      try {
-        setStatus("loading");
-        setError(null);
-
-        const page = isMobile ? 1 : desktopPage;
-
-        const result = await fetchData(page);
-        console.log(result);
-        setData(result.data ?? []);
-        console.log(result.totalCount);
-        setTotalCount(result.totalCount ?? 0);
-        hasMoreRef.current =
-          (result.data?.length ?? 0) < (result.totalCount ?? 0);
-        pageRef.current = page;
-
-        setStatus("success");
-      } catch (err: any) {
-        setError(err.message);
-        setStatus("error");
-      }
-    };
-
-    loadInitial();
+    loadinitialData();
   }, [desktopPage, isMobile]);
 
   const retryGetData = async () => {
@@ -185,7 +184,7 @@ export const usePaginationData = (
         root: null,
         rootMargin: "0px",
         threshold: 0.8,
-      },
+      }
     );
 
     observer.observe(element);
@@ -217,5 +216,6 @@ export const usePaginationData = (
     loadMoreRef,
 
     loadingMore,
+    loadinitialData,
   };
 };
