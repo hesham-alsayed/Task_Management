@@ -4,12 +4,16 @@ type UIState = {
   sidebarCollapsed: boolean;
   openEpicModal: boolean;
   selectedEpicId: string | null;
+  openTaskModal: boolean;
+  selectedTaskId: string | null;
 };
 
 const initialState: UIState = {
   sidebarCollapsed: false,
   openEpicModal: false,
   selectedEpicId: null,
+  openTaskModal: false,
+  selectedTaskId: null,
 };
 
 const uiSlice = createSlice({
@@ -31,6 +35,13 @@ const uiSlice = createSlice({
     setSelectedEpicId: (state, action: PayloadAction<string | null>) => {
       state.selectedEpicId = action.payload;
     },
+    setOpenTaskModal: (state, action: PayloadAction<boolean>) => {
+      state.openTaskModal = action.payload;
+    },
+
+    setSelectedTaskId: (state, action: PayloadAction<string | null>) => {
+      state.selectedTaskId = action.payload;
+    },
   },
 });
 
@@ -39,6 +50,8 @@ export const {
   setSidebarCollapsed,
   setOpenEpicModal,
   setSelectedEpicId,
+  setOpenTaskModal,
+  setSelectedTaskId,
 } = uiSlice.actions;
 
 export default uiSlice.reducer;

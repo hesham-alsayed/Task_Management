@@ -142,7 +142,7 @@ export default function EpicModalDetails() {
             </div>
           </div>
 
-          <div className=" sm:hidden flex items-center justify-between ">
+          <div className=" mx-6 sm:hidden flex items-center justify-between ">
             <h1 className=" text-[11px] md:text-[18px] font-semibold text-[#4F5F7B] md:text-main">
               Tasks
             </h1>

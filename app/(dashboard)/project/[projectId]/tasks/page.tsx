@@ -13,6 +13,8 @@ import TasksBoardViewSkeleton from "@/components/skeleton/TasksBoardViewSkeleton
 import { useEffect } from "react";
 import TaskCardMobile from "@/components/tasks/TaskCardMobile";
 import { Task } from "@/components/epicDetails/EpicModalDetails";
+import { useAppDispatch } from "@/app/store/hooks";
+import { setOpenTaskModal, setSelectedTaskId } from "@/app/store/features/ui/uiSlice";
 
 export default function Page() {
   const { initialProject } = useProjectForm();
@@ -21,6 +23,11 @@ export default function Page() {
   const { boardData, listData, length, boardStatus, listStatus, error, retylLoadTasks } =
     useProjectTasks();
 
+  const dispatch = useAppDispatch();
+  const handleTaskClick = (taskId: string) => {
+    dispatch(setSelectedTaskId(taskId));
+    dispatch(setOpenTaskModal(true));
+  };
   if (currentView === "board" && boardStatus === "loading") {
     return <TasksBoardViewSkeleton />;
   }
@@ -49,7 +56,13 @@ export default function Page() {
           </div>
           <div className="sm:hidden flex flex-col gap-6 w-full mt-6">
             {listData.map((task: Task) => (
-              <TaskCardMobile key={task.id} task={task} />
+              <div
+                className="hover:cursor-pointer"
+                key={task.id}
+                onClick={() => handleTaskClick(task.id)}
+              >
+                <TaskCardMobile task={task} />
+              </div>
             ))}
           </div>
         </>
