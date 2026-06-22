@@ -10,12 +10,17 @@ import PrevArrow from "../icons/PrevArrow";
 import NextArrow from "../icons/NextArrow";
 import { useAppDispatch } from "@/app/store/hooks";
 import { setOpenTaskModal, setSelectedTaskId } from "@/app/store/features/ui/uiSlice";
+import PlusIcon from "../icons/PlusIcon";
+import Link from "next/link";
+import { useParams } from "next/navigation";
 
 type Props = {
   tasks: Task[];
 };
 
-export default function TasksListView({ tasks }: Props) {
+export default function TasksListView({ tasks }: Props) { 
+  const params = useParams();
+  const projectId = params.projectId as string;
   const dispatch = useAppDispatch();
   const handleTaskClick = (taskId: string) => {
     dispatch(setSelectedTaskId(taskId));
@@ -90,6 +95,11 @@ export default function TasksListView({ tasks }: Props) {
           <span>Page 1 of 5</span>
           <NextArrow />
         </div>
+      </div>
+      <div className="fixed bottom-6 right-6 ">
+        <Link href={`/project/${projectId}/tasks/new`} className="btn-primary rounded-lg py-7 px-6 flex items-center justify-center gap-2">
+          <PlusIcon />
+        </Link>
       </div>
     </div>
   );
