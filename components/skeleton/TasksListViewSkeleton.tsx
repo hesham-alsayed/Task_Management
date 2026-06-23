@@ -1,34 +1,39 @@
 "use client";
 
-export default function TasksListViewSkeleton() {
+type Props = {
+  showHeader?: boolean;
+};
+export default function TasksListViewSkeleton({ showHeader = true }: Props) {
   return (
     <div className="mt-6 animate-pulse">
-      <div className="spcace-y-4 max-sm:mt-10">
-        <div className="hidden lg:block bg-skeleton w-30 h-2 rounded"></div>
+      {showHeader && (
+        <div className="spcace-y-4 max-sm:mt-10">
+          <div className="hidden lg:block bg-skeleton w-30 h-2 rounded"></div>
 
-        <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
-          <div>
-            <div className="h-9 mt-6 rounded bg-skeleton w-[280px] max-md:mx-auto max-sm:mx-0 max-sm:w-full"></div>
+          <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+            <div>
+              <div className="h-9 mt-6 rounded bg-skeleton w-[280px] max-md:mx-auto max-sm:mx-0 max-sm:w-full"></div>
 
-            <div className="hidden md:block h-4 mt-3 rounded bg-skeleton w-[420px]"></div>
-          </div>
-
-          <div className="flex items-end gap-4 justify-end xl:mt-8">
-            <div className="relative max-md:w-[180px] max-md:w-full max-md:mt-0 max-lg:-mt-40 w-[256px] max-sm:w-full">
-              <div className="bg-skeleton w-full h-10 rounded-md"></div>
+              <div className="hidden md:block h-4 mt-3 rounded bg-skeleton w-[420px]"></div>
             </div>
 
-            <div className="hidden lg:flex gap-2">
-              <div className="bg-skeleton w-10 h-10 rounded-sm"></div>
-              <div className="bg-skeleton w-10 h-10 rounded-sm"></div>
-            </div>
-          </div>
+            <div className="flex items-end gap-4 justify-end xl:mt-8">
+              <div className="relative max-md:w-[180px] max-md:w-full max-md:mt-0 max-lg:-mt-40 w-[256px] max-sm:w-full">
+                <div className="bg-skeleton w-full h-10 rounded-md"></div>
+              </div>
 
-          <div className="sm:hidden w-full">
-            <div className="bg-skeleton w-full h-[48px] rounded-md mt-3"></div>
+              <div className="hidden lg:flex gap-2">
+                <div className="bg-skeleton w-10 h-10 rounded-sm"></div>
+                <div className="bg-skeleton w-10 h-10 rounded-sm"></div>
+              </div>
+            </div>
+
+            <div className="sm:hidden w-full">
+              <div className="bg-skeleton w-full h-[48px] rounded-md mt-3"></div>
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       <div className="hidden sm:block mt-6 bg-white rounded-lg overflow-hidden">
         <div className="divide-y divide-gray-100">

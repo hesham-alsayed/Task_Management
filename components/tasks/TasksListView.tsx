@@ -16,9 +16,25 @@ import { useParams } from "next/navigation";
 
 type Props = {
   tasks: Task[];
+  hasNextPage: boolean;
+  hasPrevPage: boolean;
+  totalCount: number;
+  totalPages: number;
+  page: number;
+  handleNextPage: () => void;
+  handlePrevPage: () => void;
 };
 
-export default function TasksListView({ tasks }: Props) { 
+export default function TasksListView({
+  tasks,
+  hasNextPage,
+  hasPrevPage,
+  totalCount,
+  totalPages,
+  page,
+  handleNextPage,
+  handlePrevPage,
+}: Props) {
   const params = useParams();
   const projectId = params.projectId as string;
   const dispatch = useAppDispatch();
@@ -87,17 +103,42 @@ export default function TasksListView({ tasks }: Props) {
         </tbody>
       </table>
 
-      <div className="flex min-w-[1000px] py-10 items-center justify-between rounded-b-2xl bg-[#FFFFFF] border-t border-gray-100 px-6 py-4">
-        <p className="text-sm text-slate-500">Showing 5 of {tasks.length} tasks</p>
+      <div className="flex min-w-[1000px] py-6 items-center justify-between rounded-b-2xl bg-[#FFFFFF] border-t border-gray-100 px-6 ">
+        <p className="text-sm text-slate-500">
+          Showing {tasks.length} of {totalCount} tasks
+        </p>
 
         <div className="flex items-center gap-4 font-medium text-[12px] text-[#434654]">
-          <PrevArrow />
-          <span>Page 1 of 5</span>
-          <NextArrow />
+          <button
+            disabled={!hasPrevPage}
+            onClick={handlePrevPage}
+            className={`flex h-8 w-8 items-center justify-center rounded-md transition-colors ${
+              hasPrevPage ? "cursor-pointer hover:bg-gray-100" : "cursor-not-allowed opacity-40"
+            }`}
+          >
+            <PrevArrow />
+          </button>
+
+          <span>
+            Page {page} of {totalPages}
+          </span>
+
+          <button
+            disabled={!hasNextPage}
+            onClick={handleNextPage}
+            className={`flex h-8 w-8 items-center justify-center rounded-md transition-colors ${
+              hasNextPage ? "cursor-pointer hover:bg-gray-100" : "cursor-not-allowed opacity-40"
+            }`}
+          >
+            <NextArrow />
+          </button>
         </div>
       </div>
       <div className="fixed bottom-6 right-6 ">
-        <Link href={`/project/${projectId}/tasks/new`} className="btn-primary rounded-lg py-7 px-6 flex items-center justify-center gap-2">
+        <Link
+          href={`/project/${projectId}/tasks/new`}
+          className="btn-primary rounded-lg py-7 px-6 flex items-center justify-center gap-2"
+        >
           <PlusIcon />
         </Link>
       </div>

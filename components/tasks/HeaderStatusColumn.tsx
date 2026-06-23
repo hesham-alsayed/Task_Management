@@ -14,7 +14,7 @@ type StatusType =
   | "DONE";
 
 type Props = {
-  status: StatusType;
+  status: string;
   count: number;
   onAdd?: (status: StatusType) => void;
   value: string;

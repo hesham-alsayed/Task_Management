@@ -1,4 +1,4 @@
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams, usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 
@@ -12,13 +12,15 @@ type FunctionCall = (params: Record<string, unknown>) => Promise<{
 export const usePaginationData = (
   functionCall: FunctionCall,
   limit: number,
-  anotherParams?: Record<string, unknown>
+  anotherParams?: Record<string, unknown>,
+  enabled = true
 ) => {
   const searchParams = useSearchParams();
   const desktopPage = Number(searchParams.get("page") || 1);
   const [isMobile, setIsMobile] = useState<boolean | null>(null);
   const [mobilePage, setMobilePage] = useState(1);
-
+  const router = useRouter();
+  const pathname = usePathname();
   const MAX_LIMIT = 5;
 
   const limitUrl = Number(searchParams.get("limit") || limit);
@@ -97,15 +99,15 @@ export const usePaginationData = (
   };
 
   useEffect(() => {
+    if (!enabled) return;
     if (isMobile === null) return;
 
     loadinitialData();
-  }, [desktopPage, isMobile]);
+  }, [desktopPage, isMobile, enabled]);
 
   const retryGetData = async () => {
     try {
-      setRetryLoading(true);
-
+      setStatus("loading");
       const page = isMobile ? 1 : desktopPage;
 
       const result = await fetchData(page);
@@ -117,12 +119,30 @@ export const usePaginationData = (
 
       setStatus("success");
     } catch (err: any) {
+      setStatus("error");
       setError(err.message);
-    } finally {
-      setRetryLoading(false);
     }
   };
 
+  const nextPage = () => {
+    if (!hasNextPage) return;
+
+    const params = new URLSearchParams(searchParams.toString());
+
+    params.set("page", String(desktopPage + 1));
+
+    router.push(`${pathname}?${params.toString()}`);
+  };
+
+  const prevPage = () => {
+    if (!hasPrevPage) return;
+
+    const params = new URLSearchParams(searchParams.toString());
+
+    params.set("page", String(desktopPage - 1));
+
+    router.push(`${pathname}?${params.toString()}`);
+  };
   const loadMore = useCallback(async () => {
     if (!isMobile || isFetchingRef.current || !hasMoreRef.current) return;
 
@@ -169,6 +189,8 @@ export const usePaginationData = (
   }, [isMobile, data.length, totalCount]);
 
   useEffect(() => {
+    if (!enabled) return;
+
     if (!isMobile) return;
 
     const element = loadMoreRef.current;
@@ -217,5 +239,7 @@ export const usePaginationData = (
 
     loadingMore,
     loadinitialData,
+    nextPage,
+    prevPage,
   };
 };

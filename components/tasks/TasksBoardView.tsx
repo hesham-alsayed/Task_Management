@@ -5,45 +5,40 @@ import TaskCard from "./TaskCard";
 import { Task } from "../epicDetails/EpicModalDetails";
 import { useAppDispatch } from "@/app/store/hooks";
 import { setOpenTaskModal, setSelectedTaskId } from "@/app/store/features/ui/uiSlice";
+import StatusColumn from "./StatusColumn";
 
 type OneStatus = {
   name: string;
-  tasks: Task[];
   key: string;
+  tasks: Task[];
+
+  loading: boolean;
+  loaded: boolean;
+
+  offset: number;
+  totalCount: number;
+
+  hasMore: boolean;
+  loadingMore: boolean;
 };
 
 type Props = {
   boardData: OneStatus[];
+  loadStatusTasks: (status: string) => Promise<void>;
+  loadMoreStatusTasks: (status: string) => Promise<void>;
 };
 
-export default function TasksBoardView({ boardData }: Props) {
-  const dispatch = useAppDispatch();
-  const handleTaskClick = (taskId: string) => {
-    dispatch(setSelectedTaskId(taskId));
-    dispatch(setOpenTaskModal(true));
-  };
-
+export default function TasksBoardView({ boardData, loadStatusTasks, loadMoreStatusTasks }: Props) {
   return (
     <div className="mt-4 overflow-x-auto">
       <div className="flex gap-4 w-max">
-        {boardData.map((status: any) => (
-          <div key={status.key} className="w-[320px] flex-shrink-0">
-            <HeaderStatusColumn
-              status={status.name}
-              value={status.key}
-              count={status.tasks.length}
-            />
-
-            <div className="mt-3 flex flex-col gap-3">
-              <AddNewTask value={status.key} />
-
-              {status.tasks.map((task: any) => (
-                <div className="hover:cursor-pointer" key={task.id} onClick={() => handleTaskClick(task.id)}>
-                  <TaskCard task={task} />
-                </div>
-              ))}
-            </div>
-          </div>
+        {boardData?.map((status) => (
+          <StatusColumn
+            key={status.key}
+            status={status}
+            loadStatusTasks={loadStatusTasks}
+            loadMoreStatusTasks={loadMoreStatusTasks}
+          />
         ))}
       </div>
     </div>

@@ -4,7 +4,19 @@ import { apiFetch } from "@/lib/api-client";
 import { accessToken } from "@/lib/constant";
 import { cookies } from "next/headers";
 
-export const getAllProjectTasksAction = async (proejctId: string, status?: string) => {
+type GetTasksParams = {
+  projectId?: string;
+  status?: string;
+  limit?: string;
+  offset?: string;
+};
+
+export const getAllProjectTasksAction = async ({
+  projectId,
+  status,
+  limit,
+  offset,
+}: GetTasksParams) => {
   try {
     const cookieStore = await cookies();
     const token = cookieStore.get(accessToken)?.value;
@@ -14,16 +26,20 @@ export const getAllProjectTasksAction = async (proejctId: string, status?: strin
       throw "Unauthorized: missing access token";
     }
     const finalPath = status
-      ? `/rest/v1/project_tasks?project_id=eq.${proejctId}&status=eq.${status}`
-      : `/rest/v1/project_tasks?project_id=eq.${proejctId}`;
+      ? `/rest/v1/project_tasks?project_id=eq.${projectId}&status=eq.${status}&limit=${limit}&offset=${offset}`
+      : `/rest/v1/project_tasks?project_id=eq.${projectId}&limit=${limit}&offset=${offset}`;
     const result = await apiFetch({
       method: "GET",
       path: finalPath,
       headers: {
         Authorization: `Bearer ${token}`,
+        Prefer: "count=exact",
       },
     });
-    return result.data;
+    return {
+      data: result.data,
+      totalCount: Number(result.headers["content-range"]?.split("/")[1]),
+    };
   } catch (error) {
     throw error;
   }

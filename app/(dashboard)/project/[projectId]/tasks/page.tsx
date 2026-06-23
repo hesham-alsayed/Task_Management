@@ -15,31 +15,64 @@ import TaskCardMobile from "@/components/tasks/TaskCardMobile";
 import { Task } from "@/components/epicDetails/EpicModalDetails";
 import { useAppDispatch } from "@/app/store/hooks";
 import { setOpenTaskModal, setSelectedTaskId } from "@/app/store/features/ui/uiSlice";
+import Loader from "@/components/shared/Loader";
 
 export default function Page() {
   const { initialProject } = useProjectForm();
   const searchParams = useSearchParams();
   const currentView = searchParams.get("view") as "board" | "list";
-  const { boardData, listData, length, boardStatus, listStatus, error, retylLoadTasks } =
-    useProjectTasks();
+  const {
+    boardData,
 
+    initialRender,
+    error: boardError,
+    loadStatusTasks,
+    loadMoreStatusTasks,
+    pagination,
+  } = useProjectTasks();
+  const {
+    data: listData,
+    hasNextPage,
+    hasPrevPage,
+    totalCount,
+    totalPages,
+    status,
+    loadMoreRef,
+    loadingMore,
+    page,
+    nextPage,
+    prevPage,
+    error,
+
+    retryGetData: retylLoadTasks,
+  } = pagination;
   const dispatch = useAppDispatch();
   const handleTaskClick = (taskId: string) => {
     dispatch(setSelectedTaskId(taskId));
     dispatch(setOpenTaskModal(true));
   };
-  if (currentView === "board" && boardStatus === "loading") {
+  if (currentView === "board" && !initialRender) {
     return <TasksBoardViewSkeleton />;
   }
 
-  if (currentView === "list" && listStatus === "loading") {
+  if (currentView === "list" && listData.length === 0 && status === "loading") {
     return <TasksListViewSkeleton />;
   }
-  if (status === "error") {
-    return <ErrorNetworkState error={error} retryFunction={retylLoadTasks} isLoading={false} />;
+  if (currentView === "list" && listData.length > 0 && status === "loading") {
+    return <TasksListViewSkeleton showHeader={false} />;
   }
 
-  if (status === "success" && length === 0) {
+  if (status === "error" || boardError) {
+    return (
+      <ErrorNetworkState
+        error={error || boardError}
+        retryFunction={retylLoadTasks}
+        isLoading={false}
+      />
+    );
+  }
+
+  if (status === "success" && listData.length === 0) {
     return <TasksEmptyState projectId={initialProject?.id} />;
   }
 
@@ -48,11 +81,24 @@ export default function Page() {
       <HeaderTasks projectId={initialProject?.id || ""} projectName={initialProject?.name || ""} />
 
       {currentView === "board" ? (
-        <TasksBoardView boardData={boardData} />
+        <TasksBoardView
+          boardData={boardData}
+          loadStatusTasks={loadStatusTasks}
+          loadMoreStatusTasks={loadMoreStatusTasks}
+        />
       ) : (
         <>
           <div className="hidden sm:block">
-            <TasksListView tasks={listData} />
+            <TasksListView
+              tasks={listData}
+              hasNextPage={hasNextPage}
+              hasPrevPage={hasPrevPage}
+              totalCount={totalCount}
+              totalPages={totalPages}
+              page={page}
+              handleNextPage={nextPage}
+              handlePrevPage={prevPage}
+            />
           </div>
           <div className="sm:hidden flex flex-col gap-6 w-full mt-6">
             {listData.map((task: Task) => (
@@ -64,6 +110,14 @@ export default function Page() {
                 <TaskCardMobile task={task} />
               </div>
             ))}
+
+            <div ref={loadMoreRef} className="h-20 flex items-center justify-center sm:hidden">
+              {loadingMore && (
+                <div className="flex items-center gap-2">
+                  <Loader />
+                </div>
+              )}
+            </div>
           </div>
         </>
       )}
