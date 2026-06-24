@@ -9,11 +9,13 @@ import EpicEmptyState from "./EpicEmptyState";
 import ErrorNetworkState from "../projects/ErrorNetworkState";
 import Pagination from "../shared/Pagination";
 import Loader from "../shared/Loader";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import EpicModalDetails from "../epicDetails/EpicModalDetails";
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/app/store/hooks";
 import { setAllEpics } from "@/app/store/features/epics/epicsSlice";
+import SearchEmptyState from "../shared/SearchEmptyState";
+import SearchErrorState from "../shared/SearchErrorState";
 
 export default function EpicListMain() {
   const { initialProject } = useProjectForm();
@@ -36,30 +38,35 @@ export default function EpicListMain() {
   const router = useRouter();
   const params = useParams();
   const projectId = params.projectId as string;
+  const searchParams = useSearchParams();
+
+  const searchValue = searchParams.get("title")?.trim() || "";
 
   const hasEpics = (data?.length ?? 0) > 0;
   const isLoading = status === "loading";
-  const isError = status === "error";
+  const isGlobalError = status === "error" && !searchValue;
   const isSuccess = status === "success";
-  const isEmpty = isSuccess && !hasEpics;
+  const isEmptyProject = isSuccess && !hasEpics && !searchValue;
 
-  const {epics} = useAppSelector((state) => state.epics);
+  const isEmptySearch = isSuccess && !hasEpics && searchValue;
+  const isErrorSearch = status === "error" && searchValue;
+
+  const { epics } = useAppSelector((state) => state.epics);
 
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(setAllEpics(data)); 
-    
+    dispatch(setAllEpics(data));
   }, [data]);
 
   if (isLoading) {
     return <EpicListSkeleton />;
   }
-  if (isEmpty) {
+  if (isEmptyProject) {
     return <EpicEmptyState />;
   }
 
-  if (isError) {
+  if (isGlobalError) {
     return (
       <ErrorNetworkState
         retryFunction={retryGetData}
@@ -77,11 +84,9 @@ export default function EpicListMain() {
         />
       </div>
       <EpicList data={epics} />
-
-      <div
-        ref={loadMoreRef}
-        className="h-20 flex items-center justify-center sm:hidden"
-      >
+      {isEmptySearch && <SearchEmptyState searchValue={searchValue} typeData="Epics" />}
+      {isErrorSearch && <SearchErrorState searchValue={searchValue} error={error || ""} />}
+      <div ref={loadMoreRef} className="h-20 flex items-center justify-center sm:hidden">
         {loadingMore && (
           <div className="flex items-center gap-2">
             <Loader />
@@ -110,7 +115,7 @@ export default function EpicListMain() {
           />
         </div>
       )}
-      <EpicModalDetails   />
+      <EpicModalDetails />
     </div>
   );
 }

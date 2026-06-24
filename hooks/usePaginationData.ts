@@ -23,6 +23,8 @@ export const usePaginationData = (
   const pathname = usePathname();
   const MAX_LIMIT = 5;
 
+  const searchValue = anotherParams?.searchValue;
+
   const limitUrl = Number(searchParams.get("limit") || limit);
 
   const finalLimit = isMobile ? limit : Math.min(limitUrl, MAX_LIMIT);
@@ -84,9 +86,9 @@ export const usePaginationData = (
       const page = isMobile ? 1 : desktopPage;
 
       const result = await fetchData(page);
-      console.log(result);
-      setData(result.data ?? []);
+      console.log(result.data);
       console.log(result.totalCount);
+      setData(result.data ?? []);
       setTotalCount(result.totalCount ?? 0);
       hasMoreRef.current = (result.data?.length ?? 0) < (result.totalCount ?? 0);
       pageRef.current = page;
@@ -103,7 +105,7 @@ export const usePaginationData = (
     if (isMobile === null) return;
 
     loadinitialData();
-  }, [desktopPage, isMobile, enabled]);
+  }, [desktopPage, isMobile, enabled, searchValue]);
 
   const retryGetData = async () => {
     try {

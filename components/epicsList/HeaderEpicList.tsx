@@ -1,9 +1,10 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import CurrentLocation from "../shared/CurrentLocation";
 import SearchIcon from "../icons/SearchIcon";
 import PlusIcon from "../icons/PlusIcon";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, usePathname, useRouter, useSearchParams } from "next/navigation";
+import useDebounceSearch from "@/customHooks/useDebounceSearch";
 
 type Props = {
   projectId: string;
@@ -11,8 +12,25 @@ type Props = {
 };
 
 export default function HeaderEpicList({ projectId, projectName }: Props) {
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const router = useRouter();
   const params = useParams();
+  const [value, setValue] = useState(searchParams.get("title") || "");
+  const debounceValue = useDebounceSearch(value, 1000);
+  useEffect(() => {
+    const params = new URLSearchParams(searchParams);
+
+    debounceValue.trim()
+      ? params.set("title", debounceValue.toLowerCase())
+      : params.delete("title");
+
+    params.set("page", "1");
+    const query = params.toString();
+
+    router.replace(query ? `${pathname}?${query}` : pathname);
+  }, [debounceValue]);
+
   const currentProjectId = (params.projectId as string) || projectId;
   const items = [
     {
@@ -43,6 +61,8 @@ export default function HeaderEpicList({ projectId, projectName }: Props) {
 
           <input
             type="text"
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
             placeholder="Search epics..."
             className="input-form w-full pl-9"
           />

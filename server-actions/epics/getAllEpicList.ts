@@ -7,13 +7,10 @@ type Params = {
   projectId?: string;
   limit?: string;
   offset?: string;
+  searchValue?: string;
 };
 
-export const getAllEpicsAction = async ({
-  projectId,
-  limit,
-  offset,
-}: Params) => {
+export const getAllEpicsAction = async ({ projectId, limit, offset, searchValue }: Params) => {
   try {
     const cookieStore = await cookies();
     const token = cookieStore.get(accessToken)?.value;
@@ -25,13 +22,17 @@ export const getAllEpicsAction = async ({
 
     const fullDataPath = `/rest/v1/project_epics?project_id=eq.${projectId}`;
     const PginationPath = `/rest/v1/project_epics?project_id=eq.${projectId}&limit=${limit}&offset=${offset}`;
+    const searchPath = `/rest/v1/project_epics?project_id=eq.${projectId}&title=ilike.%25${searchValue}%25&limit=${limit}&offset=${offset}`;
 
-    let path;
-    if (limit && offset) {
+    let path = fullDataPath;
+
+    if (limit && offset && searchValue) {
+      path = searchPath;
+    } else if (limit && offset) {
       path = PginationPath;
-    } else {
-      path = fullDataPath;
     }
+    console.log(path);
+    console.log(searchValue);
     const result = await apiFetch({
       path: path,
       method: "GET",

@@ -16,6 +16,7 @@ import { Task } from "@/components/epicDetails/EpicModalDetails";
 import { useAppDispatch } from "@/app/store/hooks";
 import { setOpenTaskModal, setSelectedTaskId } from "@/app/store/features/ui/uiSlice";
 import Loader from "@/components/shared/Loader";
+import ButtonAddNewTask from "@/components/tasks/ButtonAddNewTask";
 
 export default function Page() {
   const { initialProject } = useProjectForm();
@@ -23,7 +24,6 @@ export default function Page() {
   const currentView = searchParams.get("view") as "board" | "list";
   const {
     boardData,
-
     initialRender,
     error: boardError,
     loadStatusTasks,
@@ -46,6 +46,7 @@ export default function Page() {
 
     retryGetData: retylLoadTasks,
   } = pagination;
+  const showDesktopAddButton = currentView === "list";
   const dispatch = useAppDispatch();
   const handleTaskClick = (taskId: string) => {
     dispatch(setSelectedTaskId(taskId));
@@ -56,25 +57,49 @@ export default function Page() {
   }
 
   if (currentView === "list" && listData.length === 0 && status === "loading") {
-    return <TasksListViewSkeleton />;
+    return (
+      <>
+        <TasksListViewSkeleton />
+        {showDesktopAddButton && <ButtonAddNewTask projectId={initialProject?.id || ""} />}
+      </>
+    );
   }
   if (currentView === "list" && listData.length > 0 && status === "loading") {
-    return <TasksListViewSkeleton showHeader={false} />;
+    return (
+      <>
+        <TasksListViewSkeleton showHeader={false} />
+        {showDesktopAddButton && <ButtonAddNewTask projectId={initialProject?.id || ""} />}
+      </>
+    );
   }
 
   if (status === "error" || boardError) {
-    return (
+  return (
+    <>
       <ErrorNetworkState
         error={error || boardError}
         retryFunction={retylLoadTasks}
         isLoading={false}
       />
-    );
-  }
+
+      {showDesktopAddButton && (
+        <ButtonAddNewTask projectId={initialProject?.id || ""} />
+      )}
+    </>
+  );
+}
 
   if (status === "success" && listData.length === 0) {
-    return <TasksEmptyState projectId={initialProject?.id} />;
-  }
+  return (
+    <>
+      <TasksEmptyState projectId={initialProject?.id} />
+
+      {showDesktopAddButton && (
+        <ButtonAddNewTask projectId={initialProject?.id || ""} />
+      )}
+    </>
+  );
+}
 
   return (
     <main className="max-lg:mx-6">

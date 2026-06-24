@@ -11,7 +11,7 @@ import {
   setOpenTaskModal,
   setSelectedTaskId,
 } from "@/app/store/features/ui/uiSlice";
-import TaskDetailsModal from "@/hooks/taskDetails/TaskDetailsModal";
+import TaskDetailsModal from "@/components/taskDetails/TaskDetailsModal";
 
 type Props = {
   tasks: Task[];

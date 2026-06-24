@@ -134,14 +134,7 @@ export default function TasksListView({
           </button>
         </div>
       </div>
-      <div className="fixed bottom-6 right-6 ">
-        <Link
-          href={`/project/${projectId}/tasks/new`}
-          className="btn-primary rounded-lg py-7 px-6 flex items-center justify-center gap-2"
-        >
-          <PlusIcon />
-        </Link>
-      </div>
-    </div>
+    </div> 
+    
   );
 }

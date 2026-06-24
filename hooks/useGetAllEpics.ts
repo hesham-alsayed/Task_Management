@@ -1,6 +1,6 @@
 "use client";
 
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { usePaginationData } from "./usePaginationData";
 import { getAllEpicsAction } from "@/server-actions/epics/getAllEpicList";
 
@@ -34,13 +34,17 @@ export type Epic = {
 
 export const useGetAllEpics = () => {
   const params = useParams();
-
   const projectId = params.projectId as string;
+
+  const searchParams = useSearchParams();
+  const title = searchParams.get("title") || "";
 
   const pagination = usePaginationData(getAllEpicsAction, 4, {
     projectId,
+    searchkey: "title",
+    searchValue: title,
   });
-  
+
   return {
     ...pagination,
   };
