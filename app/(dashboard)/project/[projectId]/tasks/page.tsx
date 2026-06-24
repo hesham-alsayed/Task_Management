@@ -18,6 +18,7 @@ import { setOpenTaskModal, setSelectedTaskId } from "@/app/store/features/ui/uiS
 import Loader from "@/components/shared/Loader";
 import ButtonAddNewTask from "@/components/tasks/ButtonAddNewTask";
 import SearchEmptyState from "@/components/shared/SearchEmptyState";
+import SearchErrorState from "@/components/shared/SearchErrorState";
 
 export default function Page() {
   const { initialProject } = useProjectForm();
@@ -51,11 +52,49 @@ export default function Page() {
 
   const searchTitle = searchParams.get("title");
   const noSearchMatchingList = listData.length === 0 && searchTitle && status === "success";
+  const isErrorinSearchList = status === "error" && searchTitle;
+  const isErrorinBoardList = boardError && searchTitle;
+
   const dispatch = useAppDispatch();
   const handleTaskClick = (taskId: string) => {
     dispatch(setSelectedTaskId(taskId));
     dispatch(setOpenTaskModal(true));
   };
+
+  if (currentView === "list" && isErrorinSearchList) {
+    return (
+      <>
+        <HeaderTasks
+          projectId={initialProject?.id || ""}
+          projectName={initialProject?.name || ""}
+        />
+
+        <div className="mt-20">
+          <SearchErrorState searchValue={searchTitle} error={error || "Failed to search tasks"} />
+        </div>
+
+        {showDesktopAddButton && <ButtonAddNewTask projectId={initialProject?.id || ""} />}
+      </>
+    );
+  }
+
+  if (currentView === "board" && isErrorinBoardList) {
+    return (
+      <>
+        <HeaderTasks
+          projectId={initialProject?.id || ""}
+          projectName={initialProject?.name || ""}
+        />
+
+        <div className="mt-20">
+          <SearchErrorState
+            searchValue={searchTitle}
+            error={boardError || "Failed to search tasks"}
+          />
+        </div>
+      </>
+    );
+  }
   if (currentView === "board" && !initialRender) {
     return <TasksBoardViewSkeleton />;
   }
