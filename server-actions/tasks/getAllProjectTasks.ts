@@ -9,6 +9,7 @@ type GetTasksParams = {
   status?: string;
   limit?: string;
   offset?: string;
+  searchValue?: string;
 };
 
 export const getAllProjectTasksAction = async ({
@@ -16,6 +17,7 @@ export const getAllProjectTasksAction = async ({
   status,
   limit,
   offset,
+  searchValue,
 }: GetTasksParams) => {
   try {
     const cookieStore = await cookies();
@@ -26,8 +28,11 @@ export const getAllProjectTasksAction = async ({
       throw "Unauthorized: missing access token";
     }
     const finalPath = status
-      ? `/rest/v1/project_tasks?project_id=eq.${projectId}&status=eq.${status}&limit=${limit}&offset=${offset}`
-      : `/rest/v1/project_tasks?project_id=eq.${projectId}&limit=${limit}&offset=${offset}`;
+      ? `/rest/v1/project_tasks?project_id=eq.${projectId}&title=ilike.%25${searchValue}%25&status=eq.${status}&limit=${limit}&offset=${offset}`
+      : `/rest/v1/project_tasks?project_id=eq.${projectId}&title=ilike.%25${searchValue}%25&limit=${limit}&offset=${offset}`;
+
+    console.log("finalPath", finalPath);
+    console.log("searchvalue", searchValue);
     const result = await apiFetch({
       method: "GET",
       path: finalPath,

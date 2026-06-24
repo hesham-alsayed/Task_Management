@@ -17,6 +17,7 @@ import { useAppDispatch } from "@/app/store/hooks";
 import { setOpenTaskModal, setSelectedTaskId } from "@/app/store/features/ui/uiSlice";
 import Loader from "@/components/shared/Loader";
 import ButtonAddNewTask from "@/components/tasks/ButtonAddNewTask";
+import SearchEmptyState from "@/components/shared/SearchEmptyState";
 
 export default function Page() {
   const { initialProject } = useProjectForm();
@@ -47,6 +48,9 @@ export default function Page() {
     retryGetData: retylLoadTasks,
   } = pagination;
   const showDesktopAddButton = currentView === "list";
+
+  const searchTitle = searchParams.get("title");
+  const noSearchMatchingList = listData.length === 0 && searchTitle && status === "success";
   const dispatch = useAppDispatch();
   const handleTaskClick = (taskId: string) => {
     dispatch(setSelectedTaskId(taskId));
@@ -74,32 +78,28 @@ export default function Page() {
   }
 
   if (status === "error" || boardError) {
-  return (
-    <>
-      <ErrorNetworkState
-        error={error || boardError}
-        retryFunction={retylLoadTasks}
-        isLoading={false}
-      />
+    return (
+      <>
+        <ErrorNetworkState
+          error={error || boardError}
+          retryFunction={retylLoadTasks}
+          isLoading={false}
+        />
 
-      {showDesktopAddButton && (
-        <ButtonAddNewTask projectId={initialProject?.id || ""} />
-      )}
-    </>
-  );
-}
+        {showDesktopAddButton && <ButtonAddNewTask projectId={initialProject?.id || ""} />}
+      </>
+    );
+  }
 
-  if (status === "success" && listData.length === 0) {
-  return (
-    <>
-      <TasksEmptyState projectId={initialProject?.id} />
+  if (status === "success" && listData.length === 0 && !searchTitle) {
+    return (
+      <>
+        <TasksEmptyState projectId={initialProject?.id} />
 
-      {showDesktopAddButton && (
-        <ButtonAddNewTask projectId={initialProject?.id || ""} />
-      )}
-    </>
-  );
-}
+        {showDesktopAddButton && <ButtonAddNewTask projectId={initialProject?.id || ""} />}
+      </>
+    );
+  }
 
   return (
     <main className="max-lg:mx-6">
@@ -113,37 +113,46 @@ export default function Page() {
         />
       ) : (
         <>
-          <div className="hidden sm:block">
-            <TasksListView
-              tasks={listData}
-              hasNextPage={hasNextPage}
-              hasPrevPage={hasPrevPage}
-              totalCount={totalCount}
-              totalPages={totalPages}
-              page={page}
-              handleNextPage={nextPage}
-              handlePrevPage={prevPage}
-            />
-          </div>
-          <div className="sm:hidden flex flex-col gap-6 w-full mt-6">
-            {listData.map((task: Task) => (
-              <div
-                className="hover:cursor-pointer"
-                key={task.id}
-                onClick={() => handleTaskClick(task.id)}
-              >
-                <TaskCardMobile task={task} />
-              </div>
-            ))}
-
-            <div ref={loadMoreRef} className="h-20 flex items-center justify-center sm:hidden">
-              {loadingMore && (
-                <div className="flex items-center gap-2">
-                  <Loader />
-                </div>
-              )}
+          {noSearchMatchingList ? (
+            <div className="mt-20">
+              <SearchEmptyState searchValue={searchTitle} typeData="tasks" />
             </div>
-          </div>
+          ) : (
+            <>
+              <div className="hidden sm:block">
+                <TasksListView
+                  tasks={listData}
+                  hasNextPage={hasNextPage}
+                  hasPrevPage={hasPrevPage}
+                  totalCount={totalCount}
+                  totalPages={totalPages}
+                  page={page}
+                  handleNextPage={nextPage}
+                  handlePrevPage={prevPage}
+                />
+              </div>
+              {showDesktopAddButton && <ButtonAddNewTask projectId={initialProject?.id || ""} />}
+              <div className="sm:hidden flex flex-col gap-6 w-full mt-6">
+                {listData.map((task: Task) => (
+                  <div
+                    className="hover:cursor-pointer"
+                    key={task.id}
+                    onClick={() => handleTaskClick(task.id)}
+                  >
+                    <TaskCardMobile task={task} />
+                  </div>
+                ))}
+
+                <div ref={loadMoreRef} className="h-20 flex items-center justify-center sm:hidden">
+                  {loadingMore && (
+                    <div className="flex items-center gap-2">
+                      <Loader />
+                    </div>
+                  )}
+                </div>
+              </div>
+            </>
+          )}
         </>
       )}
     </main>

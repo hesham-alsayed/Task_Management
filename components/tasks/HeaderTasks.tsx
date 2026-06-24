@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import PyramidsIcon from "../icons/PyramidsIcon";
@@ -9,6 +9,7 @@ import CurrentLocation from "../shared/CurrentLocation";
 import SelectView from "./SelectView";
 import PlusIcon from "../icons/PlusIcon";
 import Link from "next/link";
+import useDebounceSearch from "@/customHooks/useDebounceSearch";
 
 type Props = {
   projectId: string;
@@ -16,9 +17,30 @@ type Props = {
 };
 
 export default function HeaderTasks({ projectId, projectName }: Props) {
+  const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
+  const [value, setValue] = useState(searchParams.get("title") || "");
+  const debounceValue = useDebounceSearch(value, 1000);
+  useEffect(() => {
+    const currentTitle = searchParams.get("title") || "";
+
+    if (currentTitle === debounceValue.toLowerCase()) {
+      return;
+    }
+
+    const params = new URLSearchParams(searchParams);
+
+    if (debounceValue.trim()) {
+      params.set("title", debounceValue.toLowerCase());
+    } else {
+      params.delete("title");
+    }
+
+    params.set("page", "1");
+
+    router.replace(`${pathname}?${params.toString()}`);
+  }, [debounceValue]);
 
   const handleToggleView = () => {
     const params = new URLSearchParams(searchParams.toString());
@@ -94,7 +116,13 @@ export default function HeaderTasks({ projectId, projectName }: Props) {
               <SearchIcon />
             </div>
 
-            <input type="text" placeholder="Search Task" className="input-form w-full pl-9 h-10" />
+            <input
+              type="text"
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
+              placeholder="Search Task"
+              className="input-form w-full pl-9 h-10"
+            />
           </div>
 
           <div className="hidden lg:flex gap-2">

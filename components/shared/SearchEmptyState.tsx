@@ -19,7 +19,7 @@ export default function SearchEmptyState({ searchValue, typeData }: Props) {
 
         <p className="mt-3 text-sm leading-6 text-secondary">
           We couldn't find any {typeData} matching{" "}
-          <span className="font-medium text-main">"{searchValue}"</span>.
+          <span className="font-medium text-main">"{searchValue}"</span>
         </p>
       </div>
     </div>

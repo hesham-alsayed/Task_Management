@@ -14,9 +14,8 @@ export const useProjectTasks = () => {
   const searchParams = useSearchParams();
   const [listStatus, setListStatus] = useState<Status>("loading");
   const [error, setError] = useState<string | null>(null);
-  const [boardReady, setBoardReady] = useState(false);
   const [initialRender, setInitialRender] = useState(false);
-
+  const searchTitle = searchParams.get("title") || "";
   const statuses = [
     "TO_DO",
     "IN_PROGRESS",
@@ -27,7 +26,6 @@ export const useProjectTasks = () => {
     "READY_FOR_PRODUCTION",
     "DONE",
   ];
-
 
   type BoardItem = {
     key: string;
@@ -49,7 +47,7 @@ export const useProjectTasks = () => {
       tasks: [],
 
       offset: 0,
-      limit: 2,
+      limit: 1,
       totalCount: 0,
 
       loading: false,
@@ -60,6 +58,22 @@ export const useProjectTasks = () => {
     }))
   );
 
+  useEffect(() => {
+    setBoardData(
+      statuses.map((status) => ({
+        key: status,
+        name: status.split("_").join(" "),
+        tasks: [],
+        offset: 0,
+        limit: 1,
+        totalCount: 0,
+        loading: false,
+        loadingMore: false,
+        loaded: false,
+        hasMore: true,
+      }))
+    );
+  }, [searchTitle]);
   const loadStatusTasks = async (status: string) => {
     const currentStatus = boardData.find((s) => s.key === status);
 
@@ -78,6 +92,7 @@ export const useProjectTasks = () => {
         status,
         limit,
         offset,
+        searchValue: searchTitle,
       });
 
       setBoardData((prev) =>
@@ -131,6 +146,7 @@ export const useProjectTasks = () => {
         status,
         limit,
         offset,
+        searchValue: searchTitle,
       });
       setBoardData((prev) =>
         prev.map((item) => {
@@ -156,6 +172,7 @@ export const useProjectTasks = () => {
     }
   };
 
+  useEffect(() => {}, []);
   const enabled = searchParams.get("view") === "list";
 
   const pagination = usePaginationData(
@@ -163,6 +180,8 @@ export const useProjectTasks = () => {
     5,
     {
       projectId,
+      searchkey: "title",
+      searchValue: searchTitle,
     },
     enabled
   );

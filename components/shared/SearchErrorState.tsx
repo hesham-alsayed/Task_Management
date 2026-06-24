@@ -1,7 +1,6 @@
 "use client";
 
-import ExclamationIcon from "../icons/ExclamationIcon";
-import SearchIcon from "../icons/SearchIcon";
+
 
 type Props = {
   searchValue: string;
