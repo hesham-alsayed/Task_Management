@@ -1,5 +1,4 @@
 import { UseFormReturn } from "react-hook-form";
-import { NewEpicFormData } from "@/hooks/useEpicForm";
 
 import TitleField from "./TitleField";
 import FormFieldError from "./FormFieldError";
@@ -8,10 +7,11 @@ import AssigneeField from "./AssigneeField";
 import DeadlineField from "./DeadlineField";
 import FormActions from "./FormAction";
 import { ProjectMember } from "../projectMembers/MembersTable";
+import { EpicForm } from "@/hooks/useEpicForm";
 
 type Props = {
-  form: UseFormReturn<NewEpicFormData>;
-  onSubmit: (data: NewEpicFormData) => Promise<void>;
+  form: UseFormReturn<EpicForm>;
+  onSubmit: (data: EpicForm) => Promise<void>;
   handleResetForm: () => void;
   loading: boolean;
   members: ProjectMember[];

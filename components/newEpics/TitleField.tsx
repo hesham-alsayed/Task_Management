@@ -1,8 +1,8 @@
+import { EpicForm } from "@/hooks/useEpicForm";
 import { UseFormRegister } from "react-hook-form";
-import { NewEpicFormData } from "@/hooks/useEpicForm";
 
 type Props = {
-  register: UseFormRegister<NewEpicFormData>;
+  register: UseFormRegister<EpicForm>;
 };
 
 export default function TitleField({ register }: Props) {

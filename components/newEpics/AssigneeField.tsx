@@ -1,10 +1,10 @@
 import { UseFormRegister } from "react-hook-form";
-import { NewEpicFormData } from "@/hooks/useEpicForm";
 import DropDownIcon from "../icons/DropDownIcon";
 import { ProjectMember } from "../projectMembers/MembersTable";
+import { EpicForm } from "@/hooks/useEpicForm";
 
 type Props = {
-  register: UseFormRegister<NewEpicFormData>;
+  register: UseFormRegister<EpicForm>;
   members: ProjectMember[];
 };
 
@@ -21,7 +21,7 @@ export default function AssigneeField({ register, members }: Props) {
           id="assignee"
           className="input-form w-full appearance-none pr-10"
           defaultValue=""
-          {...register("assignee")}
+          {...register("assignee_id")}
         >
           <option value="" disabled>
             Select a member
