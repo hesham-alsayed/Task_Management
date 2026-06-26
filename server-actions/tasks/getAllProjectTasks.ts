@@ -28,8 +28,8 @@ export const getAllProjectTasksAction = async ({
       throw "Unauthorized: missing access token";
     }
     const finalPath = status
-      ? `/rest/v1/project_tasks?project_id=eq.${projectId}&title=ilike.%25${searchValue}%25&status=eq.${status}&limit=${limit}&offset=${offset}`
-      : `/rest/v1/project_tasks?project_id=eq.${projectId}&title=ilike.%25${searchValue}%25&limit=${limit}&offset=${offset}`;
+      ? `/rest/v1/project_tasks?project_id=eq.${projectId}&title=ilike.%25${searchValue}%25&status=eq.${status}&limit=${limit}&offset=${offset}&order=created_at.desc`
+      : `/rest/v1/project_tasks?project_id=eq.${projectId}&title=ilike.%25${searchValue}%25&limit=${limit}&offset=${offset}&order=created_at.desc`;
 
     console.log("finalPath", finalPath);
     console.log("searchvalue", searchValue);

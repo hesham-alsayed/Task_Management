@@ -1,3 +1,5 @@
+import { Task } from "@/components/epicDetails/EpicModalDetails";
+
 export interface IUser {
   id: string | null;
   name: string | null;
@@ -33,3 +35,16 @@ export interface ITaskDetails {
   created_by: IUser;
   epic: IEpic;
 }
+
+export type BoardItem = {
+  key: string;
+  name: string;
+  tasks: Task[];
+  offset: number;
+  limit: number;
+  totalCount: number;
+  loading: boolean;
+  loadingMore: boolean;
+  loaded: boolean;
+  hasMore: boolean;
+};

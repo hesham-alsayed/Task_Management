@@ -30,7 +30,8 @@ export default function Page() {
     error: boardError,
     loadStatusTasks,
     loadMoreStatusTasks,
-    pagination,
+    pagination, 
+    setBoardData
   } = useProjectTasks();
   const {
     data: listData,
@@ -148,7 +149,8 @@ export default function Page() {
         <TasksBoardView
           boardData={boardData}
           loadStatusTasks={loadStatusTasks}
-          loadMoreStatusTasks={loadMoreStatusTasks}
+          loadMoreStatusTasks={loadMoreStatusTasks} 
+          setBoardData={setBoardData}
         />
       ) : (
         <>

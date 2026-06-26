@@ -5,6 +5,8 @@ import { getAllProjectTasksAction } from "@/server-actions/tasks/getAllProjectTa
 import { useParams, usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { usePaginationData } from "./usePaginationData";
+import { BoardItem } from "@/types/task";
+import { updateTaskStatusAction } from "@/server-actions/tasks/updateTaskStatus";
 
 type Status = "loading" | "success" | "error";
 
@@ -27,18 +29,7 @@ export const useProjectTasks = () => {
     "DONE",
   ];
 
-  type BoardItem = {
-    key: string;
-    name: string;
-    tasks: Task[];
-    offset: number;
-    limit: number;
-    totalCount: number;
-    loading: boolean;
-    loadingMore: boolean;
-    loaded: boolean;
-    hasMore: boolean;
-  };
+
   const [boardData, setBoardData] = useState<BoardItem[]>(
     statuses.map((status) => ({
       key: status,
@@ -190,8 +181,10 @@ export const useProjectTasks = () => {
     setInitialRender(true);
   }, []);
 
+ 
   return {
     boardData,
+    setBoardData,
     listStatus,
     error,
     loadStatusTasks,

@@ -2,6 +2,7 @@
 
 import React, { useMemo } from "react";
 import { Task } from "../epicDetails/EpicModalDetails";
+import { CSS } from "@dnd-kit/utilities";
 
 import DateIcon from "../icons/DateIcon";
 import UnAssignedIcon from "../icons/UnAssignedIcon";
@@ -11,6 +12,8 @@ import { getShortName } from "@/lib/helper/get-shortname";
 import { formatEpicTitle } from "@/lib/helper/formatEpicTitle";
 import { getDueDateStatus } from "@/lib/helper/check-dueDate";
 import { formatMonthDay } from "@/lib/helper/formate-date";
+import { useSearchParams } from "next/navigation";
+import { useDraggable } from "@dnd-kit/core";
 
 type Props = {
   task: Task;
@@ -46,10 +49,33 @@ export default function TaskCard({ task }: Props) {
     return "#94A3B8";
   }, [isToday, isDone]);
 
+  const { setNodeRef, attributes, listeners, isDragging, transform } = useDraggable({
+    id: task.id,
+    data: {
+      task,
+      currentStatus: status,
+    },
+  });
+
+  
+
+  const style: React.CSSProperties = {
+    transform: CSS.Translate.toString(transform),
+    zIndex: isDragging ? 9999 : 1,
+  };
   return (
     <div
-      className={` ${isBlocked ? "bg-[#FFDAD633] border-[#BA1A1A1A]" : "bg-white"} flex flex-col justify-between h-[114px]  border-gray-100 relative rounded-lg p-4 border transition-all
-      `}
+      ref={setNodeRef}
+      style={style}
+      {...attributes}
+      {...listeners}
+      className={`
+    ${isDragging ? "opacity-70 border-[#7a7a7a26]" : "transition-all"}
+    ${isBlocked ? "bg-[#FFDAD633] border-[#BA1A1A1A]" : "bg-white"}
+    flex flex-col justify-between h-[114px]
+    border-gray-100 relative rounded-lg p-4 border
+   
+  `}
     >
       {isInProgress && (
         <div className="absolute left-0 top-0 h-full w-1 bg-primary rounded-l-2xl" />
