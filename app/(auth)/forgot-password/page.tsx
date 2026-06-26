@@ -1,4 +1,4 @@
-import ForgotPasswordForm from "@/components/forgot-password/ForgotPasswordForm";
+import ForgotPasswordForm from "@/components/forgotPassword/ForgotPasswordForm";
 import React from "react";
 
 export default function ForgotPasswordPage() {

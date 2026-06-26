@@ -2,7 +2,7 @@
 
 import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-import ResetPasswordForm from "@/components/reset-password/ResetPasswordForm";
+import ResetPasswordForm from "@/components/resetPassword/ResetPasswordForm";
 import ToastMessage from "@/components/shared/ToastMessage";
 
 function ResetPasswordContent() {
