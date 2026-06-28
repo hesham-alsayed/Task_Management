@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useAppDispatch } from "@/app/store/hooks";
 import { loginUser } from "@/app/store/features/auth/authThunks";
 
@@ -15,15 +15,15 @@ const loginSchema = z.object({
   rememberMe: z.boolean(),
 });
 
-
-
 export type LoginFormData = z.infer<typeof loginSchema>;
 
 export function useLoginForm() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const dispatch = useAppDispatch() 
+  const dispatch = useAppDispatch();
+  const searchParams = useSearchParams();
 
+  const redirect = searchParams.get("redirect");
   const form = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -33,25 +33,20 @@ export function useLoginForm() {
     },
   });
 
-  
   const onSubmit = async (data: LoginFormData) => {
-  try {
-    setIsLoading(true);
+    try {
+      setIsLoading(true);
 
-    await dispatch(loginUser(data)).unwrap();
+      await dispatch(loginUser(data)).unwrap();
 
-    toast.success("Logged in successfully");
-    router.push("/project");
-  } catch (err) {
-    toast.error(
-      typeof err === "string"
-        ? err
-        : "Invalid credentials"
-    );
-  } finally {
-    setIsLoading(false);
-  }
-};
+      toast.success("Logged in successfully");
+      router.push(redirect || "/project");
+    } catch (err) {
+      toast.error(typeof err === "string" ? err : "Invalid credentials");
+    } finally {
+      setIsLoading(false);
+    }
+  };
   return {
     form,
     onSubmit,

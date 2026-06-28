@@ -6,7 +6,14 @@ import { Task } from "../epicDetails/EpicModalDetails";
 import { useAppDispatch } from "@/app/store/hooks";
 import { setOpenTaskModal, setSelectedTaskId } from "@/app/store/features/ui/uiSlice";
 import StatusColumn from "./StatusColumn";
-import { DndContext, DragEndEvent, DragMoveEvent } from "@dnd-kit/core";
+import {
+  DndContext,
+  DragEndEvent,
+  DragMoveEvent,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
 import { BoardItem } from "@/types/task";
 import { updateTaskStatusAction } from "@/server-actions/tasks/updateTaskStatus";
 import toast from "react-hot-toast";
@@ -79,8 +86,15 @@ export default function TasksBoardView({
     }
   };
 
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 2,
+      },
+    })
+  );
   return (
-    <DndContext onDragEnd={handleDragEnd}>
+    <DndContext onDragEnd={handleDragEnd} sensors={sensors}>
       <div className="mt-4 overflow-x-auto">
         <div className="flex gap-4 w-max">
           {boardData?.map((status) => (

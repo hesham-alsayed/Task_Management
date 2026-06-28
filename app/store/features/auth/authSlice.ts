@@ -21,7 +21,6 @@ const initialState: AuthState = {
 
   loading: false,
   error: null,
-
   logoutLoading: false,
   logoutError: null,
 };

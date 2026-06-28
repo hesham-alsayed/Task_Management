@@ -6,18 +6,21 @@ import MembersTable from "./MembersTable";
 import { useMembersProject } from "@/hooks/useMembersProject";
 import ErrorNetworkState from "../projects/ErrorNetworkState";
 import MembersPageSkeleton from "../skeleton/MembersPageSkeleton";
-import { useAppSelector } from "@/app/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/app/store/hooks";
 import MobileMembersCard from "./MobileMembersCard";
 import MobileMembersSkeleton from "../skeleton/MobileMembersSkeleton";
+import InviteModal from "./InviteModal";
+import PlusIcon from "../icons/PlusIcon";
+import { setOpenInviteModal } from "@/app/store/features/ui/uiSlice";
 
 export default function MembersMain() {
   const { initialProject } = useProjectForm();
-  const { data, retryLoading, status, retryGetMembersProject, error } =
-    useMembersProject();
+  const { data, retryLoading, status, retryGetMembersProject, error } = useMembersProject();
 
   const isLoading = status === "loading" || !initialProject;
   const isError = status === "error";
-  const collapsed = useAppSelector((state) => state.ui.sidebarCollapsed);
+  const { sidebarCollapsed: collapsed, openInviteModal } = useAppSelector((state) => state.ui);
+  const dispatch = useAppDispatch();
   if (isLoading) {
     return (
       <>
@@ -52,13 +55,22 @@ export default function MembersMain() {
         Project Members
       </div>
       <div
-        className={` hidden sm:flex items-center justify-center sm:mx-auto md:mx-15   mt-[70px] ${collapsed ? "lg:mx-[100px]" : "lg:mx-10"}`}
+        className={` hidden sm:flex items-center justify-center sm:mx-auto md:mx-15   mt-[20px] ${collapsed ? "lg:mx-[100px]" : "lg:mx-10"}`}
       >
         <MembersTable data={data} />
       </div>
       <div className="sm:hidden mt-5">
         <MobileMembersCard data={data} />
       </div>
+      <div
+        onClick={() => dispatch(setOpenInviteModal(true))}
+        className="sm:hidden fixed bottom-20 right-6 z-500"
+      >
+        <button className="btn-primary rounded-lg py-7 px-6 flex items-center justify-center gap-2">
+          <PlusIcon />
+        </button>
+      </div>
+      {openInviteModal && <InviteModal />}
     </main>
   );
 }

@@ -21,7 +21,6 @@ export async function apiFetch({ path, ...options }: FetchOptions) {
     throw data?.message || data?.msg || "Something went wrong";
   }
 
-
   return {
     data,
     headers: Object.fromEntries(res.headers.entries()),

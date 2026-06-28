@@ -339,3 +339,19 @@ body {
     opacity: 0;
   }
 }
+
+
+
+@keyframes invite-modal {
+  0% {
+    transform: translateY(100%);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.animate-invite-modal {
+  animation: bottom-sheet 350ms cubic-bezier(0.22, 1, 0.36, 1);
+}

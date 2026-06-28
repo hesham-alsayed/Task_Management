@@ -39,7 +39,7 @@ export default function HeaderPage({
             className="btn-primary capitalize  h-10 rounded-sm text-sm font-bold flex items-center justify-center gap-2 py-2 px-4 w-45"
           >
             {buttonIcon}
-            {buttonText}
+            {buttonText} 
           </button>
         </div>
       )}

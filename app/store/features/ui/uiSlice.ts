@@ -6,6 +6,7 @@ type UIState = {
   selectedEpicId: string | null;
   openTaskModal: boolean;
   selectedTaskId: string | null;
+  openInviteModal: boolean;
 };
 
 const initialState: UIState = {
@@ -14,6 +15,7 @@ const initialState: UIState = {
   selectedEpicId: null,
   openTaskModal: false,
   selectedTaskId: null,
+  openInviteModal: false,
 };
 
 const uiSlice = createSlice({
@@ -42,6 +44,9 @@ const uiSlice = createSlice({
     setSelectedTaskId: (state, action: PayloadAction<string | null>) => {
       state.selectedTaskId = action.payload;
     },
+    setOpenInviteModal : (state , action:PayloadAction<boolean>)=>{
+        state.openInviteModal = action.payload
+    }        
   },
 });
 
@@ -51,7 +56,8 @@ export const {
   setOpenEpicModal,
   setSelectedEpicId,
   setOpenTaskModal,
-  setSelectedTaskId,
+  setSelectedTaskId, 
+  setOpenInviteModal
 } = uiSlice.actions;
 
 export default uiSlice.reducer;
