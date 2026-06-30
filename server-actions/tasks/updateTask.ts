@@ -15,6 +15,12 @@ export const updateTaskAction = async (taskId: string, data: RequestFormData) =>
   try {
     const cookieStore = await cookies();
     const token = cookieStore.get(accessToken)?.value;
+    if (!token) {
+      return {
+        success: false,
+        error: "Unauthorized: missing access token",
+      };
+    }
     const result = await apiFetch({
       path: `/rest/v1/tasks?id=eq.${taskId}`,
       method: "PATCH",
@@ -23,7 +29,6 @@ export const updateTaskAction = async (taskId: string, data: RequestFormData) =>
       },
       body: JSON.stringify(data),
     });
-    console.log("result update task", result);
     return {
       success: true,
       data: result.data,

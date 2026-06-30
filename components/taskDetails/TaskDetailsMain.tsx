@@ -3,15 +3,11 @@
 import { setOpenTaskModal, setSelectedTaskId } from "@/app/store/features/ui/uiSlice";
 import { useAppDispatch, useAppSelector } from "@/app/store/hooks";
 import useLockBodyScroll from "@/customHooks/useLockBodyScroll";
-import { getTaskDetailsAction } from "@/server-actions/tasks/getTaskDetails";
-import { ITaskDetails } from "@/types/task";
-import { useParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import TaskDetailsModal from "./TaskDetailsModal";
 import TaskDetailsModalMobile from "./TaskDetailsModalMobile";
 import { useTaskForm } from "@/hooks/useTaskForm";
 import { FormProvider } from "react-hook-form";
-import { useProjectTasks } from "@/hooks/useProjectTasks";
 
 export default function TaskDetailsMain() {
   const { openTaskModal: open, selectedTaskId } = useAppSelector((state) => state.ui);
@@ -27,8 +23,6 @@ export default function TaskDetailsMain() {
     membersOptions,
   } = useTaskForm();
   const dispatch = useAppDispatch();
-  const params = useParams();
-  const projectId = params.projectId as string;
   const [isMounted, setIsMounted] = useState(false);
 
   useLockBodyScroll(open);

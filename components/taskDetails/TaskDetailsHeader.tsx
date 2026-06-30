@@ -8,6 +8,7 @@ import { useEffect, useRef, useState } from "react";
 import { Epic } from "@/hooks/useGetAllEpics";
 import ArrowMenu from "../shared/ArrowMenu";
 import DropDownIcon from "../icons/DropDownIcon";
+import { useClickOutside } from "@/customHooks/useClickOutside";
 
 type Props = {
   task: ITaskDetails | null;
@@ -36,20 +37,8 @@ export default function TaskDetailsHeader({ task, updateField, epics }: Props) {
   const [loadingEpic, setLoadingEpic] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
-      }
-    }
-
-    document.addEventListener("mousedown", handleClickOutside);
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-   const handleChangeValue = async () => {
+  useClickOutside({ ref: dropdownRef, isOpen, setIsOpen });
+  const handleChangeValue = async () => {
     setIsFocused(false);
 
     const isValid = await trigger("title");
@@ -63,7 +52,6 @@ export default function TaskDetailsHeader({ task, updateField, epics }: Props) {
     }
   };
 
-  console.log(epics);
   const epicOptions = epics.map((epic) => ({
     value: epic.id,
     label: `${epic.epic_id} (${epic.title})`,
@@ -116,19 +104,7 @@ export default function TaskDetailsHeader({ task, updateField, epics }: Props) {
                     <button
                       onClick={(e) => handleChangeEpic(epic.value)}
                       type="button"
-                      className=" hover:cursor-pointer
-              w-full
-              px-4
-              py-3
-              text-left
-              text-sm
-              font-medium
-              text-[#434654]
-              transition-colors
-              duration-150
-              hover:bg-[#F5F7FA]
-              hover:text-primary
-            "
+                      className=" hover:cursor-pointer w-full px-4 py-3 text-left text-sm font-medium text-[#434654] transition-colors duration-150 hover:bg-[#F5F7FA] hover:text-primary "
                     >
                       {epic.label}
                     </button>

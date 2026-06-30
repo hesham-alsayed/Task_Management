@@ -150,7 +150,6 @@ export const useTaskForm = () => {
 
   const onSubmit = async (data: NewTaskFormData) => {
     try {
-      console.log(data);
       setLoading(true);
       await addNewTaskAction(data);
       form.reset({
@@ -175,7 +174,6 @@ export const useTaskForm = () => {
       setError(null);
       const data = await getTaskDetailsAction(projectId, selectedTaskId);
       const taskData = data[0];
-      console.log(taskData);
       form.reset({
         title: taskData.title,
         description: taskData.description,
@@ -243,10 +241,8 @@ export const useTaskForm = () => {
         ...task,
         [field]: normalizedValue,
       };
-      console.log(updatedTask);
       if (field === "assignee_id") {
         const member = membersOptions.find((m) => m.value === normalizedValue);
-
         updatedTask.assignee = member
           ? {
               ...task?.assignee,
@@ -255,8 +251,7 @@ export const useTaskForm = () => {
             }
           : null;
       }
-      console.log(previousValue);
-      console.log(normalizedValue);
+      
       if (currentView === "board") {
         if (field === "status") {
           dispatch(
