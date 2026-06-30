@@ -21,7 +21,6 @@ export default function MemberRow({member}: {member :ProjectMember}) {
   const { email, role, metadata } = member;
   return (
     <div className="grid grid-cols-[1fr_180px_80px] bg-[#FFFFFF] items-center  px-8 py-6">
-      {/* Member */}
       <div className="flex items-center gap-4">
         <div
           className={`flex text-sm h-12 w-12 items-center justify-center rounded-xl  font-bold ${avatarStyles[role]}`}
@@ -35,7 +34,6 @@ export default function MemberRow({member}: {member :ProjectMember}) {
         </div>
       </div>
 
-      {/* Role */}
       <div>
         <span
           className={`inline-flex rounded-full px-4 py-1 text-xs font-semibold uppercase tracking-wide ${roleStyles[role]}`}
@@ -44,7 +42,6 @@ export default function MemberRow({member}: {member :ProjectMember}) {
         </span>
       </div>
 
-      {/* Actions */}
       <div className="flex justify-end">
         {role !== "owner" && (
           <button className="text-slate-500 transition hover:text-slate-800">

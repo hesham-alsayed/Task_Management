@@ -7,6 +7,8 @@ import { useEffect, useState } from "react";
 import { usePaginationData } from "./usePaginationData";
 import { BoardItem } from "@/types/task";
 import { updateTaskStatusAction } from "@/server-actions/tasks/updateTaskStatus";
+import { useAppDispatch, useAppSelector } from "@/app/store/hooks";
+import { setGlobalBoardData, setGlobalListData } from "@/app/store/features/tasks/taskSlice";
 
 type Status = "loading" | "success" | "error";
 
@@ -14,9 +16,10 @@ export const useProjectTasks = () => {
   const params = useParams();
   const projectId = params.projectId as string;
   const searchParams = useSearchParams();
-  const [listStatus, setListStatus] = useState<Status>("loading");
+  const dispatch = useAppDispatch();
+
   const [error, setError] = useState<string | null>(null);
-  const [initialRender, setInitialRender] = useState(false);
+  const [initialRender, setInitialRender] = useState(true);
   const searchTitle = searchParams.get("title") || "";
   const statuses = [
     "TO_DO",
@@ -28,7 +31,6 @@ export const useProjectTasks = () => {
     "READY_FOR_PRODUCTION",
     "DONE",
   ];
-
 
   const [boardData, setBoardData] = useState<BoardItem[]>(
     statuses.map((status) => ({
@@ -101,11 +103,6 @@ export const useProjectTasks = () => {
             : item
         )
       );
-      console.log({
-        status,
-        dataLength: data.length,
-        totalCount,
-      });
     } catch (error: any) {
       setBoardData((prev) =>
         prev.map((item) => (item.key === status ? { ...item, loading: false } : item))
@@ -115,6 +112,9 @@ export const useProjectTasks = () => {
     }
   };
 
+  useEffect(() => {
+    dispatch(setGlobalBoardData(boardData));
+  }, [boardData]);
   const loadMoreStatusTasks = async (status: string) => {
     const current = boardData.find((item) => item.key === status);
     const isReturned = !current || current.loadingMore || current.loading || !current.hasMore;
@@ -163,7 +163,10 @@ export const useProjectTasks = () => {
     }
   };
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    dispatch(setGlobalBoardData(boardData));
+  }, [boardData]);
+  console.log(boardData);
   const enabled = searchParams.get("view") === "list";
 
   const pagination = usePaginationData(
@@ -178,14 +181,15 @@ export const useProjectTasks = () => {
   );
 
   useEffect(() => {
-    setInitialRender(true);
+    dispatch(setGlobalListData(pagination.data));
+  }, [pagination.data]);
+  useEffect(() => {
+    setInitialRender(false);
   }, []);
 
- 
   return {
     boardData,
     setBoardData,
-    listStatus,
     error,
     loadStatusTasks,
     initialRender,

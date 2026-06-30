@@ -3,11 +3,11 @@
 import { useParams } from "next/navigation";
 
 import { useProjectForm } from "@/hooks/useProjectForm";
-import { useAddNewTask } from "@/hooks/useAddNewTask";
 
 import HeaderNewTask from "./HeaderNewTask";
 import AddNewTaskSkeleton from "../skeleton/AddNewTaskSkeleton";
 import TaskForm from "./TaskForm";
+import { useTaskForm } from "@/hooks/useTaskForm";
 
 export default function AddNewTaskMain() {
   const params = useParams();
@@ -15,8 +15,7 @@ export default function AddNewTaskMain() {
 
   const { initialProject } = useProjectForm();
 
-  const { membersOptions, epicOptions, loadingEpics, form, onSubmit, loading } =
-    useAddNewTask();
+  const { membersOptions, epicOptions, loadingEpics, form, onSubmit, loading } = useTaskForm();
 
   const selectStyles = {
     control: (base: any) => ({

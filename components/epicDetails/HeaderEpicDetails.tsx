@@ -17,13 +17,13 @@ export default function HeaderEpicDetails() {
     watch,
     trigger,
     formState: { errors },
-  } = useFormContext<EpicForm>();
+  } = useFormContext<EpicForm>(); 
 
   const dispatch = useAppDispatch();
   const [isFocused, setIsFocused] = useState(false);
 
   const value = watch("title");
-  const hasError = !!errors.title;
+  const hasError = !!errors.title; 
 
   const handleChangeValue = async () => {
     setIsFocused(false);

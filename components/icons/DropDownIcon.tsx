@@ -1,19 +1,13 @@
 import React from "react";
 
-export default function DropDownIcon() {
+type Props = {
+  color?: string;
+};
+export default function DropDownIcon({ color }: Props) {
+  const finalColor = color || "#434654";
   return (
-    <svg
-      width="12"
-      height="8"
-      viewBox="0 0 12 8"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        d="M6 7.4L0 1.4L1.4 0L6 4.6L10.6 0L12 1.4L6 7.4Z"
-        fill="#434654"
-        fillOpacity="0.6"
-      />
+    <svg width="12" height="8" viewBox="0 0 12 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M6 7.4L0 1.4L1.4 0L6 4.6L10.6 0L12 1.4L6 7.4Z" fill={finalColor} fillOpacity="0.6" />
     </svg>
   );
 }
