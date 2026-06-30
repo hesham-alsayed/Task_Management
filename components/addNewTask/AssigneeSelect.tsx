@@ -1,6 +1,6 @@
 "use client";
 
-import { MemberOptions } from "@/hooks/useAddNewTask";
+import { MemberOptions } from "@/hooks/useTaskForm";
 import { NewTaskFormData } from "@/schema/task.schema";
 import { Control, Controller } from "react-hook-form";
 import Select from "react-select";
@@ -11,11 +11,7 @@ type Props = {
   selectStyles: any;
 };
 
-export default function AssigneeSelect({
-  control,
-  membersOptions,
-  selectStyles,
-}: Props) {
+export default function AssigneeSelect({ control, membersOptions, selectStyles }: Props) {
   return (
     <div>
       <label className="label-form">Assignee</label>

@@ -13,7 +13,7 @@ import TasksBoardViewSkeleton from "@/components/skeleton/TasksBoardViewSkeleton
 import { useEffect } from "react";
 import TaskCardMobile from "@/components/tasks/TaskCardMobile";
 import { Task } from "@/components/epicDetails/EpicModalDetails";
-import { useAppDispatch } from "@/app/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/app/store/hooks";
 import { setOpenTaskModal, setSelectedTaskId } from "@/app/store/features/ui/uiSlice";
 import Loader from "@/components/shared/Loader";
 import ButtonAddNewTask from "@/components/tasks/ButtonAddNewTask";
@@ -24,17 +24,19 @@ export default function Page() {
   const { initialProject } = useProjectForm();
   const searchParams = useSearchParams();
   const currentView = searchParams.get("view") as "board" | "list";
+  const { globalBoardData: boardData, globalListData: listData } = useAppSelector(
+    (state) => state.tasks
+  );
+  console.log(boardData);
   const {
-    boardData,
     initialRender,
     error: boardError,
     loadStatusTasks,
     loadMoreStatusTasks,
-    pagination, 
-    setBoardData
+    pagination,
+    setBoardData,
   } = useProjectTasks();
   const {
-    data: listData,
     hasNextPage,
     hasPrevPage,
     totalCount,
@@ -61,6 +63,27 @@ export default function Page() {
     dispatch(setSelectedTaskId(taskId));
     dispatch(setOpenTaskModal(true));
   };
+
+  if ((currentView === "board" && initialRender) || !initialProject) {
+    return <TasksBoardViewSkeleton />;
+  }
+
+  if (currentView === "list" && listData.length === 0 && status === "loading") {
+    return (
+      <>
+        <TasksListViewSkeleton />
+        {showDesktopAddButton && <ButtonAddNewTask projectId={initialProject?.id || ""} />}
+      </>
+    );
+  }
+  if (currentView === "list" && listData.length > 0 && status === "loading") {
+    return (
+      <>
+        <TasksListViewSkeleton showHeader={false} />
+        {showDesktopAddButton && <ButtonAddNewTask projectId={initialProject?.id || ""} />}
+      </>
+    );
+  }
 
   if (currentView === "list" && isErrorinSearchList) {
     return (
@@ -93,26 +116,6 @@ export default function Page() {
             error={boardError || "Failed to search tasks"}
           />
         </div>
-      </>
-    );
-  }
-  if (currentView === "board" && !initialRender) {
-    return <TasksBoardViewSkeleton />;
-  }
-
-  if (currentView === "list" && listData.length === 0 && status === "loading") {
-    return (
-      <>
-        <TasksListViewSkeleton />
-        {showDesktopAddButton && <ButtonAddNewTask projectId={initialProject?.id || ""} />}
-      </>
-    );
-  }
-  if (currentView === "list" && listData.length > 0 && status === "loading") {
-    return (
-      <>
-        <TasksListViewSkeleton showHeader={false} />
-        {showDesktopAddButton && <ButtonAddNewTask projectId={initialProject?.id || ""} />}
       </>
     );
   }
@@ -149,7 +152,7 @@ export default function Page() {
         <TasksBoardView
           boardData={boardData}
           loadStatusTasks={loadStatusTasks}
-          loadMoreStatusTasks={loadMoreStatusTasks} 
+          loadMoreStatusTasks={loadMoreStatusTasks}
           setBoardData={setBoardData}
         />
       ) : (

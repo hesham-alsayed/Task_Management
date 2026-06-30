@@ -97,12 +97,13 @@ export default function TasksBoardView({
     <DndContext onDragEnd={handleDragEnd} sensors={sensors}>
       <div className="mt-4 overflow-x-auto">
         <div className="flex gap-4 w-max">
-          {boardData?.map((status) => (
+          {boardData?.map((status, index) => (
             <StatusColumn
-              key={status.key}
+              key={index}
               status={status}
               loadStatusTasks={loadStatusTasks}
               loadMoreStatusTasks={loadMoreStatusTasks}
+              
             />
           ))}
         </div>

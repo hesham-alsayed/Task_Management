@@ -17,3 +17,9 @@ export function formatMonthDay(dateInput: string) {
 
   return `${month} ${day}`;
 }
+
+export const formatDateForInput = (date: string | null | undefined) => {
+  if (!date) return null;
+
+  return date.split("T")[0];
+};

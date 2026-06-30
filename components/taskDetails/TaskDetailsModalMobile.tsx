@@ -4,9 +4,11 @@ import { ITaskDetails } from "@/types/task";
 import TaskHeaderMobile from "./TaskHeaderMobile";
 import TaskStatusMobile from "./TaskStatusMobile";
 import TaskInfoMobile from "./TaskInfoMobile";
-import TaskDescriptionMobile from "./TaskDescriptionMobile";
 import TaskDetailsSkeletonMobile from "@/components/skeleton/TaskDetailsSkeletonMobile";
 import TaskErrorState from "./TaskErrorState";
+import { Field, MemberOptions } from "@/hooks/useTaskForm";
+import { Epic } from "@/hooks/useGetAllEpics";
+import TaskDescription from "./TaskDescription";
 
 type Props = {
   onClose: () => void;
@@ -14,9 +16,21 @@ type Props = {
   isLoading: boolean;
   error: string | null;
   isOpen: boolean;
+  updateField: (field: Field, value: string | null) => Promise<void>;
+  epics: Epic[];
+  membersOptions: MemberOptions[];
 };
 
-export default function TaskDetailsModalMobile({ onClose, task, isLoading, error, isOpen }: Props) {
+export default function TaskDetailsModalMobile({
+  onClose,
+  task,
+  isLoading,
+  error,
+  isOpen,
+  updateField,
+  epics,
+  membersOptions,
+}: Props) {
   const isError = !isLoading && error !== null;
 
   return (
@@ -54,9 +68,13 @@ export default function TaskDetailsModalMobile({ onClose, task, isLoading, error
           ) : (
             <div>
               <TaskHeaderMobile onClose={onClose} task={task} />
-              <TaskStatusMobile task={task} />
-              <TaskInfoMobile task={task} />
-              <TaskDescriptionMobile task={task} />
+              <TaskStatusMobile epics={epics} updateField={updateField} />
+              <TaskInfoMobile
+                membersOptions={membersOptions}
+                updateField={updateField}
+                task={task}
+              />
+              <TaskDescription task={task} updateField={updateField} mobile={true} />
             </div>
           )}
         </div>

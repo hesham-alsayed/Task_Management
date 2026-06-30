@@ -9,7 +9,7 @@ import TaskDescription from "./TaskDescription";
 
 import { useRouter } from "next/navigation";
 import TaskActions from "./TaskActions";
-import { EpicOptions, MemberOptions } from "@/hooks/useAddNewTask";
+import { EpicOptions, MemberOptions } from "@/hooks/useTaskForm";
 import { UseFormReturn } from "react-hook-form";
 import { NewTaskFormData } from "@/schema/task.schema";
 
@@ -43,11 +43,7 @@ export default function TaskForm({
 
   return (
     <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
-      <TaskTitleInput
-        register={register}
-        errors={errors}
-        isSubmitted={isSubmitted}
-      />
+      <TaskTitleInput register={register} errors={errors} isSubmitted={isSubmitted} />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <StatusSelect control={control} selectStyles={selectStyles} />
@@ -58,11 +54,7 @@ export default function TaskForm({
         />
       </div>
 
-      <EpicSelect
-        control={control}
-        epicOptions={epicOptions}
-        selectStyles={selectStyles}
-      />
+      <EpicSelect control={control} epicOptions={epicOptions} selectStyles={selectStyles} />
 
       <TaskDateInput register={register} />
       <TaskDescription register={register} />

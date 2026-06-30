@@ -1,7 +1,7 @@
 "use client";
 
 import TaskDetailsModalSkeleton from "@/components/skeleton/TaskDetailsModalSkeleton";
-import { ITaskDetails } from "@/types/task";
+import { BoardItem, ITaskDetails } from "@/types/task";
 import TaskDetailsHeader from "./TaskDetailsHeader";
 import TaskDescription from "./TaskDescription";
 import TaskFooter from "./TaskFooter";
@@ -10,6 +10,9 @@ import TaskAssignee from "./TaskAssignee";
 import TaskReporter from "./TaskReporter";
 import TaskDates from "./TaskDates";
 import TaskErrorState from "./TaskErrorState";
+import { Field, MemberOptions } from "@/hooks/useTaskForm";
+import { Epic } from "@/hooks/useGetAllEpics";
+import { Task } from "../epicDetails/EpicModalDetails";
 
 type Props = {
   onClose: () => void;
@@ -17,9 +20,22 @@ type Props = {
   isLoading: boolean;
   error: string | null;
   isOpen: boolean;
+  loadingUpdate: boolean;
+  updateField: (field: Field, value: string | null) => Promise<void>;
+  epics: Epic[];
+  membersOptions: MemberOptions[];
 };
 
-export default function TaskDetailsModal({ onClose, task, isLoading, error, isOpen }: Props) {
+export default function TaskDetailsModal({
+  onClose,
+  task,
+  isLoading,
+  error,
+  isOpen,
+  updateField,
+  epics,
+  membersOptions,
+}: Props) {
   const isError = !isLoading && error !== null;
 
   return (
@@ -56,18 +72,18 @@ export default function TaskDetailsModal({ onClose, task, isLoading, error, isOp
           <div className="flex h-full">
             <div className="w-[65%] flex flex-col justify-between h-full">
               <div className="bg-[#FFFFFF]">
-                <TaskDetailsHeader task={task} />
-                <TaskDescription task={task} />
+                <TaskDetailsHeader  epics={epics} task={task} updateField={updateField} />
+                <TaskDescription task={task} updateField={updateField} />
               </div>
 
               <TaskFooter onClose={onClose} />
             </div>
 
             <div className="w-[35%] bg-[#F1F3FF] border-l border-l-[#E8EDFF] py-6 px-4">
-              <TaskStatusSelect />
-              <TaskAssignee task={task} />
+              <TaskStatusSelect updateField={updateField} />
+              <TaskAssignee membersOptions={membersOptions} task={task} updateField={updateField} />
               <TaskReporter task={task} />
-              <TaskDates task={task} />
+              <TaskDates updateField={updateField} task={task} />
             </div>
           </div>
         )}

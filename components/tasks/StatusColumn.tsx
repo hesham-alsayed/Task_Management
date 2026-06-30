@@ -88,7 +88,7 @@ export default function StatusColumn({ status, loadStatusTasks, loadMoreStatusTa
     return () => observer.disconnect();
   }, [status.key, status.loadingMore, status.loading, status.hasMore, status.loaded]);
 
-  const isLoading = status.loading && status.tasks.length === 0;
+  const isLoading = (status.loading && status.tasks.length === 0) || !status.loaded;
 
   const noSearchResults =
     !status.loading && status.loaded && status.tasks.length === 0 && isSearchMode;
@@ -149,9 +149,9 @@ export default function StatusColumn({ status, loadStatusTasks, loadMoreStatusTa
                 </div>
               ) : (
                 <div className="space-y-4">
-                  {status.tasks?.map((task) => (
+                  {status.tasks?.map((task, index) => (
                     <div
-                      key={task.id}
+                      key={task.id + index}
                       className="mb-4 cursor-pointer"
                       onClick={() => handleTaskClick(task.id)}
                     >

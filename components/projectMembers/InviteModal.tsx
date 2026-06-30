@@ -45,7 +45,7 @@ export default function InviteModal() {
         sm:px-8
         animate-invite-modal"
         >
-          <div className="flex items-center justify-center">
+          <div className="flex items-center justify-center sm:hidden">
             <div className="bg-[#C3C6D64D] w-16 h-1 flex items-senter justify-center rounded-lg items-center " />
           </div>
           <div className="flex items-center justify-between">

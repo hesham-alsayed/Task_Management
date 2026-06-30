@@ -9,36 +9,29 @@ import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import TaskDetailsModal from "./TaskDetailsModal";
 import TaskDetailsModalMobile from "./TaskDetailsModalMobile";
+import { useTaskForm } from "@/hooks/useTaskForm";
+import { FormProvider } from "react-hook-form";
+import { useProjectTasks } from "@/hooks/useProjectTasks";
 
 export default function TaskDetailsMain() {
   const { openTaskModal: open, selectedTaskId } = useAppSelector((state) => state.ui);
-
+  const {
+    task,
+    fetchTaskDetails,
+    loading,
+    error,
+    form,
+    updateField,
+    loadingUpdate,
+    epics,
+    membersOptions,
+  } = useTaskForm();
   const dispatch = useAppDispatch();
-
-  const [task, setTask] = useState<ITaskDetails | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
   const params = useParams();
   const projectId = params.projectId as string;
   const [isMounted, setIsMounted] = useState(false);
 
   useLockBodyScroll(open);
-
-  const fetchTaskDetails = async () => {
-    try {
-      if (!selectedTaskId) return;
-
-      setError(null);
-
-      const data = await getTaskDetailsAction(projectId, selectedTaskId);
-      setTask(data[0]);
-    } catch {
-      setError("Task Id Not Found OR Error in Network");
-    } finally {
-      setLoading(false);
-    }
-  };
 
   useEffect(() => {
     if (!selectedTaskId) return;
@@ -75,28 +68,36 @@ export default function TaskDetailsMain() {
   }, [open]);
 
   if (!isMounted && !open) return null;
-
   return (
     <main>
-      <div className="hidden sm:block">
-        <TaskDetailsModal
-          onClose={handleClose}
-          error={error}
-          isLoading={loading}
-          task={task}
-          isOpen={open}
-        />
-      </div>
+      <FormProvider {...form}>
+        <div className="hidden sm:block">
+          <TaskDetailsModal
+            onClose={handleClose}
+            error={error}
+            isLoading={loading}
+            task={task}
+            isOpen={open}
+            loadingUpdate={loadingUpdate}
+            updateField={updateField}
+            epics={epics}
+            membersOptions={membersOptions}
+          />
+        </div>
 
-      <div className="sm:hidden">
-        <TaskDetailsModalMobile
-          onClose={handleClose}
-          error={error}
-          isLoading={loading}
-          task={task}
-          isOpen={open}
-        />
-      </div>
+        <div className="sm:hidden">
+          <TaskDetailsModalMobile
+            onClose={handleClose}
+            error={error}
+            isLoading={loading}
+            task={task}
+            isOpen={open}
+            epics={epics}
+            membersOptions={membersOptions} 
+            updateField={updateField}
+          />
+        </div>
+      </FormProvider>
     </main>
   );
 }

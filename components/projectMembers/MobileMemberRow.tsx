@@ -40,7 +40,6 @@ export default function MobileMemberRow({ member }: { member: ProjectMember }) {
         </div>
       </div>
 
-      {/* Right: Role + Menu */}
       <div className="flex flex-col items-end justify-end gap-3">
         <span
           className={`rounded-lg px-3 py-1 text-xs font-semibold uppercase ${roleStyles[role]}`}

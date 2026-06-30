@@ -243,5 +243,6 @@ export const usePaginationData = (
     loadinitialData,
     nextPage,
     prevPage,
+    setData,
   };
 };
